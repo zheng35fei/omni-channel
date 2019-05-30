@@ -1,0 +1,114 @@
+{
+  "data": [
+    {
+      "funName": "商户管理",
+      "funCode": "merchant",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "商户管理",
+          "funCode": "merchant2",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "商户管理",
+              "funCode": "merchantManage",
+              "functionType": "column"
+            },
+            {
+              "funName": "菜单管理",
+              "funCode": "menu",
+              "functionType": "button"
+            },
+            {
+              "funName": "商户渠道管理",
+              "funCode": "merchantChannel",
+              "functionType": "column"
+            },
+            {
+              "funName": "商户场景管理",
+              "funCode": "merchantScene",
+              "functionType": "column"
+            },
+            {
+              "funName": "关联商户管理",
+              "funCode": "merchantAssociate",
+              "functionType": "column"
+            },
+            {
+              "funName": "添加商户",
+              "funCode": "merchantAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加渠道",
+              "funCode": "merchantChannelAdd",
+              "functionType": "button"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "funName": "产品渠道管理",
+      "funCode": "productChannel",
+      "functionType": "menu",
+      "list": [
+        {
+          "funName": "渠道管理",
+          "funCode": "channel",
+          "functionType": "column",
+          "list": [
+            {
+              "funName": "渠道管理",
+              "funCode": "channelManage",
+              "functionType": "column"
+            },
+            {
+              "funName": "渠道产品管理",
+              "funCode": "channelProductManage",
+              "functionType": "column"
+            },
+            {
+              "funName": "添加渠道",
+              "funCode": "channelAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加渠道产品",
+              "funCode": "channelProductAddEditDetail",
+              "functionType": "button"
+            }
+          ]
+        },
+        {
+          "funName": "支付产品管理",
+          "funCode": "payProduct",
+          "functionType": "menu",
+          "list": [
+            {
+              "funName": "支付产品管理",
+              "funCode": "payProductManage",
+              "functionType": "column"
+            },
+            {
+              "funName": "渠道产品管理",
+              "funCode": "payChannelManage",
+              "functionType": "column"
+            },
+            {
+              "funName": "添加支付产品",
+              "funCode": "payProductAddEditDetail",
+              "functionType": "button"
+            },
+            {
+              "funName": "添加支付产品渠道",
+              "funCode": "payProductChannelAddDetail",
+              "functionType": "button"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

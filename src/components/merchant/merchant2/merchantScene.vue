@@ -1,0 +1,144 @@
+<template>
+  <div>
+    <list ref="gridTable"
+          :columns="columns"
+          :url="url"
+          :params="params"
+          :searchItems="searchItems"
+          :hannleItems="hannleItems"></list>
+    <confirm ref="confirmModel"
+             :content="content"
+             :sucessMsg="sucessMsg"
+             :mode="mode"></confirm>
+    <modalForm v-model="formShow"
+               :formItems="formItems"
+               :url="formUrl"
+               :title="formTitle"
+               json></modalForm>
+  </div>
+</template>
+<script>
+  import { apiGet, apiPost } from '@/fetch/api'
+  import list from '@/components/global/list'
+  import confirm from '@/components/global/confirm'
+  import modalForm from '@/components/global/modalForm'
+  export default {
+    data () {
+      return {
+        columns: [
+          {
+            title: '序号',
+            type:'index'
+          },
+          {
+            title: '商户编号',
+            key: 'merchantNo',
+            sortable: true,
+          },
+          {
+            title: '商户名称',
+            key: 'merchantName',
+            sortable: true,
+          },
+          {
+            title: '场景编号',
+            key: 'no',
+            sortable: true,
+          },
+          {
+            title: '场景名称',
+            key: 'name',
+            sortable: true,
+          },
+          {
+            title: '场景描述',
+            key: 'description',
+            sortable: true,
+          },
+          {
+            title: '创建时间',
+            key: 'createTime',
+            sortable: true,
+          },
+          {
+            title: '操作',
+            key: 'action',
+            render: (h, params) => {
+              const actions = [
+                {
+                  title: "删除",
+                  action: () => {
+                    this.mode = "delete";
+                    this.sucessMsg = "删除成功！";
+                    this.content = "确定删除？";
+                    this.$refs.confirmModel.confirm(
+                      "/merchant/scenario/delete/125"
+                    );
+                  }
+                }
+              ];
+              return this.common.columnsHandle(h, actions);
+            }
+          }
+        ],
+        params: {},
+        url: '/merchant/scenario/grid',
+        searchItems: [
+          {
+            label: '商户名称',
+            type: 'input',
+            name: 'merchantName'
+          },
+          {
+            label: '商户编号',
+            type: 'merchantNo',
+            name: 'roleName'
+          }
+        ],
+        hannleItems: [
+          {
+            title: '添加商户场景',
+            icon: 'md-add',
+            callback: () => {
+              this.formShow = true
+            }
+          }
+        ],
+
+        mode: "",
+        content: "",
+        sucessMsg: "",
+
+        formTitle:"添加场景",
+        formShow: false,
+        formItems: [
+          {
+            title: '商户号',
+            name: 'merchantNo',
+            type: 'input',
+            rules: [{ required: true, message: '请输入商户号', trigger: 'blur' }]
+          },
+          {
+            title: '场景名称',
+            name: 'sceneName',
+            type: 'input',
+            rules: [{ required: true, message: '请输入场景名称', trigger: 'blur' }]
+          },
+          {
+            title: '场景说明',
+            name: 'sceneRemark',
+            type: 'textarea',
+            rules: [{ required: true, message: '请输入场景说明', trigger: 'blur' }]
+          },
+        ],
+        formUrl: '/merchant/scenario/save'
+      }
+    },
+    mounted () {
+
+    },
+    components: {list,confirm,modalForm},
+    methods: {
+    }
+  }
+</script>
