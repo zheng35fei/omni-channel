@@ -150,8 +150,7 @@ export default {
                                         name: "main",
                                         component: Main,
                                         children: [
-                                            ...this.$store.state.menu
-                                                .asyncRouter
+                                            ...this.$store.state.menu.asyncRouter
                                         ]
                                     }
                                 ]); // 动态加载路由

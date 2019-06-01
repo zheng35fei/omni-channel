@@ -43,15 +43,15 @@ export const loginRouter = [
     }
   },
   {
-    path: '/main',
-    name: ' Main',
+    path: '/mainDefault',
+    name: ' MainDefault',
     component: Main,
     children: [
       {
         path: '/addMenu',
         name: 'addmenu',
         meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
+          breadcrumbList: ['菜单管理', '菜单管理'],
           belongTab: 'system',
           openName: 'account'
         },
@@ -63,7 +63,7 @@ export const loginRouter = [
         path: '/menu',
         name: 'Menu',
         meta: {
-          breadcrumbList: ['用户管理', '菜单管理'],
+          breadcrumbList: ['菜单管理', '菜单管理'],
           belongTab: 'system',
           openName: 'account'
         },

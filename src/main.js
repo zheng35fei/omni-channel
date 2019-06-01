@@ -25,14 +25,17 @@ router.beforeEach(async (to, from, next) => {
       store.dispatch('setUserIdAction', userId);
       await store.dispatch('getMenu'); // 获取权限
       store.dispatch('formaterRouterHandle'); // 根据权限获取路由
+      console.log('asyncRouter', store.state.menu.asyncRouter, router)
       router.addRoutes([
         {
-          path: '/main',
+          path: '/wwwwwwasdasd',
           name: 'main',
           component: Main,
           children: [...store.state.menu.asyncRouter]
         }
       ]);
+      console.log(to )
+      // next()
       next({
         ...to,
         replace: true
@@ -44,9 +47,7 @@ router.beforeEach(async (to, from, next) => {
         next();
       } else {
         next('/404');
-        // next()
       }
-      // next()
     }
   } else {
     // 没登录过
@@ -55,7 +56,6 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next({ name: 'login' });
     }
-    // next()
   }
 });
 

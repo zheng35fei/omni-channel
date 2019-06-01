@@ -22,5 +22,50 @@ let dic = {
     {label:"按交易笔数（元/笔）",value:0},
     {label:"按交易金额（%）",value:1},
   ],
+  funType: [
+    {
+      label: '系统管理员',
+      value: 'superAdmin'
+    },
+    {
+      label: '景区管理员',
+      value: 'parkAdmin'
+    },
+    {
+      label: '分销商',
+      value: 'dist'
+    },
+    {
+      label: '推广员',
+      value: 'extension'
+    },
+  ],
+  functionType: [
+    {
+      label: '菜单',
+      value: 'menu'
+    },{
+      label: '栏目',
+      value: 'column'
+    },{
+      label: '按钮',
+      value: 'button'
+    },
+  ],
+  hierarchy: [
+    {
+      label: '一级菜单',
+      value: '0'
+    },{
+      label: '二级菜单',
+      value: '1'
+    },{
+      label: '三级菜单',
+      value: '2'
+    },{
+      label: '四级菜单',
+      value: '3'
+    }
+  ]
 }
 export default dic

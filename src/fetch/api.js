@@ -3,7 +3,6 @@ import qs from 'qs'
 import common from '@/common/index'
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? common.apiPrefix : '';
-console.log( process )
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 
 // request 拦截器
@@ -25,8 +24,12 @@ axios.interceptors.response.use(
     if(error.response.data.status==401){
       setCookies('userId','',-1)
       setCookies('token','',-1)
-      console.log(error.response.data)
       // return  window.location.href='http://pms.sendinfo.com.cn/login'
+    }else if(error.response.status === 500) {
+      if(error.response.data.message.includes('用户登录超时')) {
+        setCookies('userId','',-1)
+        setCookies('token','',-1)
+      }
     }
     return Promise.reject(error)
   }
