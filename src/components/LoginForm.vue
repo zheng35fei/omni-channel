@@ -146,8 +146,8 @@ export default {
                                 this.$store.dispatch("formaterRouterHandle"); // 根据权限获取路由
                                 this.$router.addRoutes([
                                     {
-                                        path: "/main",
-                                        name: "main",
+                                        path: "/wqdwqdwqdwa",
+                                        name: "qwdwqd",
                                         component: Main,
                                         children: [
                                             ...this.$store.state.menu.asyncRouter

@@ -34,6 +34,7 @@
                     </div>
                     <div class="layout-nav">
                         <MenuItem
+                            v-if="item.functionType !== 'button'"
                             v-for="item in menuList"
                             :key="item.id"
                             :name="item.funCode"
@@ -108,9 +109,10 @@
                                     </template>
                                     <template v-for="sitem in item.list">
                                         <MenuItem
-                                            v-if="sitem.functionType === 'column'"
+                                            v-if="sitem.functionType !== 'button'"
                                             :name="sitem.funCode"
                                             :key="sitem.id"
+                                            :to="item.funUrl"
                                         >
                                             <span>{{sitem.funName}}</span>
                                         </MenuItem>
@@ -119,9 +121,10 @@
                             </template>
                             <template v-else>
                                 <MenuItem
-                                    v-if="item.functionType === 'column'"
+                                    v-if="item.functionType !== 'button'"
                                     :name="item.funCode"
                                     :key="item.id"
+                                    :to="item.funUrl"
                                 >
                                     <span>{{item.funName}}</span>
                                 </MenuItem>
@@ -355,11 +358,13 @@ export default {
                 active = "peizhi";
             }
             // this.$emit("on-change", active);
-            this.$router.push("/" + active);
+            console.log(active)
+            // this.$router.push("/" + active);
             this.subMenuList.list.forEach(element => {
                 element.list.forEach(item => {
                     if (item.funCode === active) {
                         this.$cookies.set("openName", element.funCode);
+                        this.$router.push(item.funUrl);
                     }
                 });
             });

@@ -28,8 +28,8 @@ router.beforeEach(async (to, from, next) => {
       console.log('asyncRouter', store.state.menu.asyncRouter, router)
       router.addRoutes([
         {
-          path: '/wwwwwwasdasd',
-          name: 'main',
+          path: '/wqdwqdwda',
+          name: 'wwwwwwasdasd',
           component: Main,
           children: [...store.state.menu.asyncRouter]
         }
