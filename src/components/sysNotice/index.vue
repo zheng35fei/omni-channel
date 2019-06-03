@@ -1,6 +1,6 @@
 <template>
     <div>
-aaa
+系統公告
     </div>
 </template>
 <script>

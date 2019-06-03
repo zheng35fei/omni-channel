@@ -1,26 +1,34 @@
-'use strict'
+'use strict';
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/api/admin':{
-            // target:'http://pms.sendinfo.com.cn/',
-            target:'http://192.168.66.104:8099/',
-            // target:'http://192.168.66.246:6071/',
-            // target:'http://192.168.200.55:6071/',
-            changeOrigin:true,
-            pathRewrite: {
-              '^/api/admin': ''
-            }
-          },
+      '/baseInfo': {
+        target: 'http://baseInfo.channel.com:8092/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/baseInfo': '/baseInfo'
+        }
+      },
+      '/apiBaseInfo': {
+        target: 'http://admin.channel.com:8099/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/apiBaseInfo': ''
+        }
+      },
+      '/sysMenu': 'http://admin.channel.com:8099/',
+      '/sysRole': 'http://admin.channel.com:8099/',
+      '/userInfo': 'http://admin.channel.com:8099/',
+      '/api': 'http://admin.channel.com:8099/',
+      '/login': 'http://admin.channel.com:8099/'
     },
 
     // Various Dev Server settings
@@ -30,7 +38,6 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
 
     /**
      * Source Maps
@@ -77,4 +84,4 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   }
-}
+};

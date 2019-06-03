@@ -25,7 +25,6 @@ router.beforeEach(async (to, from, next) => {
       store.dispatch('setUserIdAction', userId);
       await store.dispatch('getMenu'); // 获取权限
       store.dispatch('formaterRouterHandle'); // 根据权限获取路由
-      console.log('asyncRouter', store.state.menu.asyncRouter, router)
       router.addRoutes([
         {
           path: '/wqdwqdwda',
@@ -34,7 +33,6 @@ router.beforeEach(async (to, from, next) => {
           children: [...store.state.menu.asyncRouter]
         }
       ]);
-      console.log(to )
       // next()
       next({
         ...to,

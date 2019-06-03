@@ -1,9 +1,8 @@
 <template>
     <div class="layout">
-        <!-- {{testName}} -->
         <Layout>
             <Header>
-                <Menu mode="horizontal" :active-name="testName" @on-select="changeTab">
+                <Menu mode="horizontal" :active-name="activeName" @on-select="changeTab">
                     <div @click="goHome" class="layout-logo">
                         <!-- <img v-if='imgUrl' :src="imgUrl" alt> -->
                         <!-- <img src="./../assets/images/index-logo.png" alt> -->
@@ -33,12 +32,14 @@
                         </Dropdown>
                     </div>
                     <div class="layout-nav">
-                        <MenuItem
-                            v-if="item.functionType !== 'button'"
-                            v-for="item in menuList"
-                            :key="item.id"
-                            :name="item.funCode"
-                        >{{item.funName}}</MenuItem>
+                        <template v-for="item in menuList">
+                            <MenuItem
+                                v-if="item.functionType !== 'button'"
+                                :key="item.id"
+                                :name="item.funCode"
+                                :to="item.funUrl"
+                            >{{item.funName}}</MenuItem>
+                        </template>
                     </div>
                 </Menu>
             </Header>
@@ -102,7 +103,7 @@
                     >
                         <template v-for="item in subMenuList.list">
                             <template v-if="item.list && item.list.length > 0">
-                                <Submenu :name="item.funCode" :key="item.id">
+                                <Submenu :name="item.funCode" :key="item.id" :to="item.funUrl">
                                     <template slot="title">
                                         <!-- <Icon type="ios-navigate"></Icon> -->
                                         {{item.funName}}
@@ -112,7 +113,8 @@
                                             v-if="sitem.functionType !== 'button'"
                                             :name="sitem.funCode"
                                             :key="sitem.id"
-                                            :to="item.funUrl"
+                                            :to="sitem.funUrl"
+                                            :target="sitem.openType"
                                         >
                                             <span>{{sitem.funName}}</span>
                                         </MenuItem>
@@ -125,6 +127,7 @@
                                     :name="item.funCode"
                                     :key="item.id"
                                     :to="item.funUrl"
+                                    :target="item.openType"
                                 >
                                     <span>{{item.funName}}</span>
                                 </MenuItem>
@@ -207,10 +210,8 @@ export default {
             },
             subMenuList: [],
             openNames: "",
-            activeName: "",
             padding: "",
             bgheight: ""
-            // testName:this.$store.state.menu.activeName
         };
     },
     // beforeRouteUpdate (to, from, next) {
@@ -228,27 +229,11 @@ export default {
         }
 
         let domain = domainURI(document.location.href);
-        // apiGet(
-        //   "/manage/admin/admin/service/userLoginConfig/getLogo?domain=" + domain
-        // ).then(res => {
-        //   if (res.message) {
-        //     this.imgUrl = res.message;
-        //   }
-        //   this.show = true;
-        // });
-        // this.$store.dispatch("getCurrentUser", {
-        //   url: "/manage/admin/getCurrentUser"
-        // });
         //firefox
         var agent = navigator.userAgent.toLowerCase();
         if (agent.indexOf("firefox") > 0) {
             this.padding = "80px";
         }
-    },
-    updated() {
-        // this.$store.dispatch("getCurrentUser", {
-        //   url: "/manage/admin/getCurrentUser"
-        // });
     },
     store,
     computed: {
@@ -258,7 +243,7 @@ export default {
         vexOpenNames() {
             return this.$store.state.menu.openName;
         },
-        testName() {
+        activeName() {
             return this.$store.state.menu.activeName;
         },
         menuList() {
@@ -266,36 +251,19 @@ export default {
         },
         breadcrumbList() {
             return this.$store.state.menu.breadcrumbList;
-            // return this.$route.meta.breadcrumbList;
         }
     },
     watch: {
-        // breadcrumbList: {
-        //   handler(newValue, oldValue) {
-        //     console.log(newValue)
-        //     this.breadcrumbList = [...this.$store.state.menu.breadcrumbList];
-        //   },
-        //   deep: true,
-        //   immediate: true
-        // },
         vexOpenNames(newValue) {
-            // this.openName = [newValue]
             this.$nextTick(() => {
                 this.$refs.contactMenu.updateOpened();
                 this.$refs.contactMenu.updateActiveName();
             });
-        },
-        testName(newValue, oldValue) {
-            // this.$store.state.menu.menuList.data.forEach(element => {
-            //   if (element.funCode === newValue) {
-            //     this.subMenuList = element;
-            //   }
-            // });
         }
     },
     mounted() {
         this.loadpage();
-        // this.bgheight = window.innerHeight + "px";
+        console.log(this.$route.name)
     },
     methods: {
         lookingKey() {
@@ -310,13 +278,6 @@ export default {
             this.$cookies.remove("userId");
             this.$cookies.remove("token");
             window.location.href = "";
-            // apiGet("/manage/admin/logout").then(res => {
-            //   if (res.status == 200) {
-            //     this.$cookies.remove("userId");
-            //     this.$cookies.remove("pmsToken");
-            //     window.location.href = "";
-            //   }
-            // });
         },
         updateCorp() {
             this.showCorp = true;
@@ -352,31 +313,29 @@ export default {
             this.showCorp = false;
             this.$refs.formItem.resetFields();
         },
-        changeMenu(active) {
-            if (active === "aa890897878") {
-                // 如果点击店铺设置 - 全员营销 跳转 全员营销 全员配置
-                active = "peizhi";
-            }
+        changeMenu() {
             // this.$emit("on-change", active);
-            console.log(active)
-            // this.$router.push("/" + active);
-            this.subMenuList.list.forEach(element => {
-                element.list.forEach(item => {
-                    if (item.funCode === active) {
-                        this.$cookies.set("openName", element.funCode);
-                        this.$router.push(item.funUrl);
+            // this.pushActiveUrl(this.subMenuList.list, active);
+        },
+        pushActiveUrl(list, active) {
+            list.forEach(item => {
+                if (item.funCode !== active) {
+                    if (item.list && item.list.length > 0) {
+                        this.pushActiveUrl(item.list, active);
                     }
-                });
+                } else {
+                    this.$router.push(item.funUrl);
+                }
             });
         },
         changeTab(active) {
             this.menuPosite(active);
             this.$cookies.set("activeName", active);
-            let curRouter = {}
+            let curRouter = {};
             this.getRouteUrl([this.subMenuList], router => {
-                curRouter = router
-            })
-            this.openNames = curRouter.funCode;
+                curRouter = router;
+            });
+            this.openNames = [curRouter.funCode];
             this.$router.push(curRouter.funUrl);
             this.$nextTick(() => {
                 this.$refs.contactMenu.updateOpened();
@@ -385,14 +344,16 @@ export default {
         },
         // 获取当前选中路由
         getRouteUrl(routeList, cb) {
-            routeList.some( item => {
-                if(item.list && item.list.length > 0) {
-                    this.getRouteUrl(item.list, cb)
-                }else {
-                    cb(item)
-                    return true
+            routeList.some((item, index) => {
+                if(index === 0) {
+                    if (item.list && item.list.length > 0) {
+                        this.getRouteUrl(item.list, cb);
+                    } else {
+                        cb(item);
+                        return true;
+                    }
                 }
-            })
+            });
         },
         async loadpage() {
             this.openNames = [this.$route.meta.openName];
@@ -403,7 +364,9 @@ export default {
             });
         },
         menuPosite(active) {
-            this.subMenuList = this.$store.state.menu.menuList.filter( item => item.funCode === active)[0]
+            this.subMenuList = this.$store.state.menu.menuList.filter(
+                item => item.funCode === active
+            )[0];
         },
         goHome() {
             //   window.location.href = 'http://testwww.lotsmall.cn/admin/index#/distmarket/market/index'
@@ -417,9 +380,6 @@ export default {
 </style>
 
 <style scoped>
-#content {
-}
-
 .down-item {
     padding: 0px;
     height: 30px;

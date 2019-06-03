@@ -11,7 +11,7 @@ function buildComponents(funNameArr, funCodeArr, funUrl, funType) {
   const meta = {
     breadcrumbList: funNameArr,
     belongTab: funCodeArr[0],
-    openName: funCodeArr[funCodeArr.length - 1],
+    openName: funCodeArr[1],
     funType
   };
   const componentsArr = funCodeArr.join('/');
@@ -68,25 +68,29 @@ function switchTree(
  * @param {array} funNameArr 菜单名称层级
  * @param {array} funCodeArr 菜单唯一编码层级 
  */
-function buildMenu(routes, list, funNameArr = [], funCodeArr = []) {
+function buildMenu(routes, list, funNameArr = [], funCodeArr = [], index = 0) {
   list.forEach(item => {
     if(!item.parentId) {
       funNameArr = []
       funCodeArr = []
     }
+    funNameArr.splice(index);
+    funCodeArr.splice(index);
     funNameArr.push(item.funName);
     funCodeArr.push(item.funCode);
     if (!item.list) {
+      let nameArr = [...funNameArr]
+      let codeArr = [...funCodeArr]
+      console.log(index, item.funName, nameArr, codeArr, item.funUrl)
       const itemRouter = buildComponents(
-        funNameArr,
-        funCodeArr,
+        nameArr,
+        codeArr,
         item.funUrl,
         item.functionType
       );
-      console.log(itemRouter)
       routes.push(itemRouter);
     } else {
-      buildMenu(routes, item.list, funNameArr, funCodeArr);
+      buildMenu(routes, item.list, funNameArr, funCodeArr, index + 1);
     }
   });
 }
@@ -147,6 +151,7 @@ const actions = {
       list: []
     }
     switchTree(menuList.data, menuParentObj, 'parentId', 'list')
+    console.log(defaultMenuList.data[0].list[0].list[0].funCode)
     context.state.menuList = [...defaultMenuList.data, ...menuParentObj.list];
   },
   setActiveNameAction({ commit }, name) {
