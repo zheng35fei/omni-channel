@@ -27,8 +27,7 @@ router.beforeEach(async (to, from, next) => {
       store.dispatch('formaterRouterHandle'); // 根据权限获取路由
       router.addRoutes([
         {
-          path: '/wqdwqdwda',
-          name: 'wwwwwwasdasd',
+          path: '/mainDefault',
           component: Main,
           children: [...store.state.menu.asyncRouter]
         }

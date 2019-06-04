@@ -8,64 +8,60 @@
             ref="formItem"
             :rules="ruleForm"
         >
-            <FormItem label="名称：" prop="funName">
-                <Input v-model="formItem.funName" placeholder="填写菜单名称" style="width:33%;"></Input>
+            <FormItem label="登录用户名：" prop="accName">
+                <Input v-model="formItem.accName" placeholder="填写登录用户名" style="width:33%;" />
             </FormItem>
-            <FormItem label="唯一编码：" prop="funCode">
-                <Input v-model="formItem.funCode" style="width:33%;"></Input>
+            <FormItem label="登录密码：" prop="accPass">
+                <Input v-model="formItem.accPass" placeholder="填写登录密码" style="width:33%;" />
             </FormItem>
-            <FormItem label="功能图标：" prop="funIco">
-                <Input v-model="formItem.funIco" style="width:33%;"></Input>
+            <FormItem label="用户编号：" prop="accNo">
+                <Input v-model="formItem.accNo" placeholder="填写用户编号" style="width:33%;" />
             </FormItem>
-            <FormItem label="URL：" prop="funUrl">
-                <Input v-model="formItem.funUrl" style="width:33%;"></Input>
+            <FormItem label="真实姓名：" prop="realName">
+                <Input v-model="formItem.realName" placeholder="填写真实姓名" style="width:33%;" />
             </FormItem>
-            <FormItem label="父ID：" prop="parentId">
-                <Input v-model="formItem.parentId" style="width:33%;"></Input>
-            </FormItem>
-            <FormItem label="所属类型：">
-                <CheckboxGroup v-model="funType">
-                    <Checkbox
-                        v-for="item in funTypes"
-                        :key="item.value"
-                        :label="item.value"
-                        :value="item.value"
-                    >{{item.label}}</Checkbox>
-                </CheckboxGroup>
-            </FormItem>
-            <FormItem label="打开方式：" prop="openType">
-                <Select v-model="formItem.openType" style="width:200px">
+            <FormItem label="用户类型：" prop="accType">
+                <Select v-model="formItem.accType" style="width:200px">
                     <Option
-                        v-for="item in openMode"
+                        v-for="item in accTypes"
                         :value="item.value"
                         :key="item.value"
                     >{{ item.label }}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="标识：">
-                <Input v-model="formItem.optType" style="width:33%;"></Input>
+            <FormItem label="用户状态：" prop="accStatus">
+                <Switch :value="formItem.accStatus === 'T'" true-value="T" false-value="F" @on-change="accStatusSwitch">
+                    <span slot="open">正常</span>
+                    <span slot="close">锁定</span>
+                </Switch>
             </FormItem>
-            <FormItem label="排序：" prop="sortNo">
-                <Input v-model="formItem.sortNo" style="width:33%;" number></Input>
+            <FormItem label="是否管理员：" prop="ifAdmin">
+                <Switch :value="formItem.ifAdmin === 'T'" true-value="T" false-value="F" @on-change="ifAdminSwitch">
+                    <span slot="open">是</span>
+                    <span slot="close">否</span>
+                </Switch>
             </FormItem>
-            <FormItem label="层级深度：" prop="hierarchy">
-                <Select v-model="formItem.hierarchy" style="width:200px">
+
+            
+            <FormItem label="企业编码：" prop="corpCode">
+                <Input v-model="formItem.corpCode" style="width:33%;"></Input>
+            </FormItem>
+            <FormItem label="用户类型：" prop="userType">
+                <Select v-model="formItem.userType" style="width:200px">
                     <Option
-                        v-for="item in Hierarchy"
+                        v-for="item in userTypes"
                         :value="item.value"
                         :key="item.value"
                     >{{ item.label }}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="功能类型" prop="functionType">
-                <Select v-model="formItem.functionType" style="width:200px">
-                    <Option
-                        v-for="item in functionTypes"
-                        :value="item.value"
-                        :key="item.value"
-                    >{{ item.label }}</Option>
-                </Select>
+            <FormItem label="归属的景区ID：" prop="scenicId">
+                <Input v-model="formItem.scenicId" style="width:33%;"></Input>
             </FormItem>
+            <FormItem label="归属的景区编码：" prop="scenicCode">
+                <Input v-model="formItem.scenicCode" style="width:33%;"></Input>
+            </FormItem>
+            
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
                 <Button @click="back">取消</Button>
@@ -79,64 +75,28 @@ import { apiGet } from "@/fetch/api";
 export default {
     data() {
         return {
-            openMode: [
-                {
-                    value: "_blank",
-                    label: "打开新页面"
-                },
-                {
-                    value: "_self",
-                    label: "当前页面打开"
-                }
-            ],
-            Hierarchy: [
+            userTypes: [
                 {
                     value: 0,
-                    label: "一级菜单"
-                },
-                {
-                    value: 1,
-                    label: "二级菜单"
+                    label: "操作员"
                 },
                 {
                     value: 2,
-                    label: "三级菜单"
+                    label: "售票员"
+                },
+            ],
+            accTypes: [
+                {
+                    value: 0,
+                    label: "系统管理"
+                },
+                {
+                    value: 1,
+                    label: "企业管理员"
                 },
                 {
                     value: 3,
-                    label: "四级菜单"
-                }
-            ],
-            funTypes: [
-                {
-                    value: "superAdmin",
-                    label: "系统管理员"
-                },
-                {
-                    value: "parkAdmin",
-                    label: "景区管理员"
-                },
-                {
-                    value: "dist",
                     label: "分销商"
-                },
-                {
-                    value: "extension",
-                    label: "推广员"
-                }
-            ],
-            functionTypes: [
-                {
-                    value: "menu",
-                    label: "菜单"
-                },
-                {
-                    value: "column",
-                    label: "栏目"
-                },
-                {
-                    value: "button",
-                    label: "按钮"
                 }
             ],
             formItem: {
@@ -151,9 +111,7 @@ export default {
                 functionType: "",
                 hierarchy: null,
                 parentId: "",
-                funType: ""
             },
-            funType: [],
             ruleForm: {
                 funName: [
                     { required: true, message: "请输入名称", trigger: "blur" }
@@ -164,36 +122,6 @@ export default {
                         message: "请输入唯一编码",
                         trigger: "blur"
                     }
-                ],
-                openType: [
-                    {
-                        required: true,
-                        message: "请选择打开方式",
-                        trigger: "change"
-                    }
-                ],
-                sortNo: [
-                    {
-                        required: true,
-                        type: "number",
-                        message: "请输入排序",
-                        trigger: "blur"
-                    }
-                ],
-                hierarchy: [
-                    {
-                        required: true,
-                        type: "number",
-                        message: "请选择层级深度",
-                        trigger: "change"
-                    }
-                ],
-                functionType: [
-                    {
-                        required: true,
-                        message: "请选择功能类别",
-                        trigger: "change"
-                    }
                 ]
             },
             type: "add"
@@ -202,25 +130,13 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/sysMenu/toEdit/" + this.$route.query.id).then(res => {
+            apiGet("/userInfo/toEdit/" + this.$route.query.id).then(res => {
                 if (res.status == 200) {
-                    //   this.formItem=res.data
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
                     }
-                    this.funType = res.data.funType
-                        ? res.data.funType.split(",")
-                        : [];
                 }
             });
-        }
-        if (
-            (this.$route.query.parentId || this.$route.query.parentId == 0) &&
-            (this.$route.query.parentHierarchy ||
-                this.$route.query.parentHierarchy == 0)
-        ) {
-            this.formItem.hierarchy = this.$route.query.parentHierarchy;
-            this.formItem.parentId = this.$route.query.parentId;
         }
     },
     methods: {
@@ -228,23 +144,27 @@ export default {
             this.$router.back();
         },
         submit() {
-            let _this = this;
-            this.formItem.funType = this.funType.join(",");
             let url =
-                _this.type === "edit" ? "/sysMenu/update" : "/sysMenu/save";
+                this.type === "edit" ? "/userInfo/update" : "/userInfo/save";
             this.common.formPost(this, {
                 url,
                 params: this.formItem,
                 mold: "modal",
-                callback(res) {
+                callback: res => {
                     if (res.status == 200) {
-                        _this.$Message.success(res.message);
-                        _this.$router.back();
+                        this.$Message.success(res.message);
+                        this.$router.back();
                     } else {
-                        _this.$router.warning(res.message);
+                        this.$router.warning(res.message);
                     }
                 }
             });
+        },
+        accStatusSwitch() {
+
+        },
+        ifAdminSwitch() {
+
         }
     }
 };

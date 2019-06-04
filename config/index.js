@@ -18,17 +18,40 @@ module.exports = {
         }
       },
       '/apiBaseInfo': {
-        target: 'http://admin.channel.com:8099/',
+        target: 'http://admin.channel.com:8090/',
         changeOrigin: true,
         pathRewrite: {
-          '^/apiBaseInfo': ''
+          '^/apiBaseInfo': '/admin'
         }
       },
-      '/sysMenu': 'http://admin.channel.com:8099/',
-      '/sysRole': 'http://admin.channel.com:8099/',
-      '/userInfo': 'http://admin.channel.com:8099/',
-      '/api': 'http://admin.channel.com:8099/',
-      '/login': 'http://admin.channel.com:8099/'
+      '/sysMenu': {
+        target: 'http://admin.channel.com:8090/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/sysMenu': '/admin/sysMenu'
+        }
+      },
+      '/sysRole': {
+        target: 'http://admin.channel.com:8090/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/sysRole': '/admin/sysRole'
+        }
+      },
+      '/userInfo': {
+        target: 'http://admin.channel.com:8090/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/userInfo': '/admin/userInfo'
+        }
+      },
+      '/api': {
+        target: 'http://admin.channel.com:8090/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/admin/api'
+        }
+      },
     },
 
     // Various Dev Server settings

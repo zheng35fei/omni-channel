@@ -66,6 +66,34 @@ let dic = {
       label: '四级菜单',
       value: '3'
     }
+  ],
+  accType: [
+    {
+      label: '系统管理',
+      value: '0'
+    },
+    {
+      label: '企业管理员',
+      value: '1'
+    },
+    {
+      label: '分销商',
+      value: '3'
+    }
+  ],
+  userType: [
+    {
+      label: '操作员',
+      value: 0
+    },
+    {
+      label: '操作员',
+      value: 1
+    },
+    {
+      label: '售票员',
+      value: 2
+    }
   ]
 }
 export default dic

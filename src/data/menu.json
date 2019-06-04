@@ -54,7 +54,7 @@
             {
               "funName": "用户管理",
               "funCode": "user",
-              "functionType": "column",
+              "functionType": "button",
               "funUrl": "/user-list",
               "funType": "superAdmin",
               "id":"0-0-1-5",
@@ -81,7 +81,7 @@
             {
               "funName": "景区管理",
               "funCode": "addScenic",
-              "functionType": "column",
+              "functionType": "button",
               "funUrl": "/addScenic",
               "funType": "superAdmin",
               "id":"0-0-1-8",

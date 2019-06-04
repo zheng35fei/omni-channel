@@ -25,7 +25,7 @@
                 </ButtonGroup>
             </Col>
         </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>

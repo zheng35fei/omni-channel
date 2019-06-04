@@ -9,13 +9,13 @@
             :rules="ruleForm"
         >
             <FormItem label="景区id：" prop="scenicId">
-                <Input v-model="formItem.scenicId" placeholder="填写所属景区" style="width:33%;"></Input>
+                <Input v-model="formItem.scenicId" placeholder="填写所属景区" style="width:33%;" />
             </FormItem>
             <FormItem label="角色名称：" prop="roleName">
-                <Input v-model="formItem.roleName" placeholder="填写角色名称" style="width:33%;"></Input>
+                <Input v-model="formItem.roleName" placeholder="填写角色名称" style="width:33%;" />
             </FormItem>
             <FormItem label="备注：" prop="remark">
-                <Input type="textarea" v-model="formItem.remark" style="width:33%;"></Input>
+                <Input type="textarea" v-model="formItem.remark" style="width:33%;" :rows="4" />
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -38,8 +38,11 @@ export default {
             },
             funType: [],
             ruleForm: {
+                scenicId: [
+                    { required: true, message: "请输入景区id", trigger: "blur" }
+                ],
                 roleName: [
-                    { required: true, message: "请输入名称", trigger: "blur" }
+                    { required: true, message: "请输入角色名称", trigger: "blur" }
                 ],
                 remark: [
                     {

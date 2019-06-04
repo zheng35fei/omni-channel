@@ -7,14 +7,24 @@
         </Row>
         <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setDialogDone">
+            <Form v-model="scenicObj"></Form>
+        </Modal>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
+import { apiGet } from "@/fetch/api.js"
 export default {
     data() {
         return {
+            scenicObj: {},
+            setDialog: {
+                isShow: false,
+                title: '查看景区信息',
+                width: 650
+            },
             columns: [
                 {
                     title: "序号",
@@ -43,10 +53,25 @@ export default {
                 {
                     title: "操作",
                     key: "action",
-                    width: 200,
+                    width: 320,
                     align: "center",
                     render: (h, params) => {
                         const actions = [
+                            {
+                                title: "查看",
+                                action: () => {
+                                    this.viewScenic(params.row.id)
+                                }
+                            },
+                            {
+                                title: "用户管理",
+                                action: () => {
+                                    this.$router.push({
+                                        path: "/user-list",
+                                        query: { id: params.row.id }
+                                    });
+                                }
+                            },
                             {
                                 title: "修改",
                                 action: () => {
@@ -68,9 +93,6 @@ export default {
                                 }
                             }
                         ];
-                        if (params.row.hierarchy === 3) {
-                            actions.splice(0, 1);
-                        }
                         return this.common.columnsHandle(h, actions);
                     }
                 }
@@ -88,12 +110,26 @@ export default {
     },
     components: { gridTable, confirm },
     methods: {
-        splits(test) {
-            return test.split(",");
-        },
-
         showModal() {
             this.$router.push("/addScenic");
+        },
+        // 查看景区信息
+        viewScenic(id) {
+            this.setDialog.isShow = true
+            const url = `/apiBaseInfo/baseInfo/scenicInfo/getScenicDetail/${id}`;
+            apiGet(url).then( res => {
+                if(res.status === 200) {
+                    this.scenicObj = res.data
+                }else {
+                    this.$Notice.error({
+                        desc: res.message
+                    })
+                }
+            })
+        },
+        // 关闭弹窗
+        setDialogDone() {
+
         }
     }
 };

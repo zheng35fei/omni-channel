@@ -1,31 +1,38 @@
 <template>
     <div>
         <Row>
-            <Col :span="12" align="left">
-                <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-                    <FormItem label="用户名：" prop="accName">
-                        <Input v-model="searchForm.accName"/>
+            <Col>
+                <Form :model="searchForm" rel="searchForm" inline :label-width="90">
+                    <FormItem label="分销商名称：" prop="name">
+                        <Input v-model="searchForm.name"/>
                     </FormItem>
-                    <FormItem label="真实姓名：" prop="realName">
-                        <Input v-model="searchForm.realName"/>
+                    <FormItem label="联系人：" prop="linkMan">
+                        <Input v-model="searchForm.linkMan"/>
+                    </FormItem>
+                    <FormItem label="手机号：" prop="linkMobile">
+                        <Input v-model="searchForm.linkMobile"/>
+                    </FormItem>
+                    <FormItem label="渠道：" prop="channelId">
+                        <Select v-model="searchForm.channelId" style="width:200px">
+                            <Option
+                                v-for="item in channelIds"
+                                :value="item.value"
+                                :key="item.value"
+                            >{{ item.label }}</Option>
+                        </Select>
                     </FormItem>
                     <FormItem :label-width="0">
                         <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
                     </FormItem>
                 </Form>
             </Col>
-            <Col :span="12" align="right">
-                <Button @click="showModal" type="primary" icon="md-add" style="margin-right:10px;">添加</Button>
-                
-                <ButtonGroup>
-                    <Button icon="md-play" type="primary" @click="setAccStatus('T')">启用</Button>
-                    <Button icon="md-square" type="primary" @click="setAccStatus('F')">停用</Button>
-                    <Button icon="md-trash" type="primary" @click="deleteRow">删除</Button>
-                    <Button icon="md-refresh" type="primary" @click="resetPwd">密码重置</Button>
-                </ButtonGroup>
+        </Row>
+        <Row style="margin-bottom:10px;">
+            <Col>
+                <Button @click="showModal" type="primary" icon="md-add">添加</Button>
             </Col>
         </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
@@ -36,9 +43,12 @@ import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
+            channelIds: [{label: 'aa', value: '0'}],
             searchForm: {
-                accName: "",
-                realName: ""
+                name: "",
+                linkMan: "",
+                linkMobile: "",
+                channelId: ""
             },
             columns: [
                 {
@@ -48,101 +58,56 @@ export default {
                     width: 60,
                     render: (h, params) => {
                         return h("span", params.index + 1);
-                    },
-                    fixed: 'left'
+                    }
                 },
                 {
-                    title: "登录用户名",
-                    key: "accName",
+                    title: "分销商名称",
+                    key: "name",
                     align: 'center',
-                    width: 100
                 },
                 {
-                    title: "登录密码",
-                    key: "accPass",
+                    title: "联系人",
+                    key: "linkName",
                     align: 'center',
-                    width: 180
                 },
                 {
-                    title: "用户编号",
-                    key: "accNo",
+                    title: "手机号",
+                    key: "linkMobile",
                     sortable: true,
                     align: 'center',
-                    width: 110
                 },
                 {
-                    title: "真实姓名",
-                    key: "realName",
+                    title: "用户名",
+                    key: "userName",
                     align: 'center',
-                    width: 100
                 },
                 {
-                    title: "用户类型",
-                    key: "accType",
+                    title: "渠道规则",
+                    key: "channelId",
                     sortable: true,
                     width: 110,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h("span", this.filter.turn("accType", params.row.accType));
-                    }
+                    align: 'center'
                 },
                 {
-                    title: "用户状态",
-                    key: "accStatus",
-                    width: 90,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h("span", params.row.accStatus === 'T' ? '正常' : '锁定');
-                    }
+                    title: "最后登录时间",
+                    key: "modifyTime",
+                    align: 'center'
                 },
                 {
-                    title: "是否管理员",
-                    key: "ifAdmin",
+                    title: "协议有效期",
+                    key: "createTime",
                     sortable: true,
-                    width: 120,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h("span", params.row.ifAdmin === 'T' ? '是' : '否');
-                    }
+                    align: 'center'
                 },
                 {
-                    title: "企业编码",
+                    title: "状态",
                     key: "corpCode",
-                    width: 100
-                },
-                {
-                    title: "登录时间",
-                    key: "loginDate",
-                    sortable: true,
-                    width: 140
-                },
-                {
-                    title: "角色类型",
-                    key: "userType",
-                    width: 120,
-                    align: 'center',
-                    render: (h, params) => {
-                        return h("span", this.filter.turn("userType", params.row.userType));
-                    }
-                },
-                {
-                    title: "所属景区ID",
-                    key: "scenicId",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "所属景区编码",
-                    key: "scenicCode",
-                    sortable: true,
-                    width: 130
                 },
                 {
                     title: "操作",
                     key: "action",
                     width: 200,
                     align: "center",
-                    fixed: 'right',
                     render: (h, params) => {
                         const actions = [
                             {
@@ -172,7 +137,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/userInfo/grid",
+            url: "/baseInfo/distributor/grid",
             content: "",
             mode: "",
             sucessMsg: ""

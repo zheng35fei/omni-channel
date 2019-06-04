@@ -7,6 +7,9 @@
         </Row>
         <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setAuthDone">
+            <Tree :data="authData"></Tree>
+        </Modal>
     </div>
 </template>
 <script>
@@ -15,6 +18,12 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
+            authData: [],
+            setDialog: {
+                isShow: false,
+                title: '设置',
+                width: 650
+            },
             columns: [
                 {
                     title: "序号",
@@ -41,10 +50,16 @@ export default {
                 {
                     title: "操作",
                     key: "action",
-                    width: 200,
+                    width: 300,
                     align: "center",
                     render: (h, params) => {
                         const actions = [
+                            {
+                                title: "设置",
+                                action: () => {
+                                    this.setRoleAuth()
+                                }
+                            },
                             {
                                 title: "修改",
                                 action: () => {
@@ -66,9 +81,6 @@ export default {
                                 }
                             }
                         ];
-                        if (params.row.hierarchy === 3) {
-                            actions.splice(0, 1);
-                        }
                         return this.common.columnsHandle(h, actions);
                     }
                 }
@@ -86,12 +98,16 @@ export default {
     },
     components: { gridTable, confirm },
     methods: {
-        splits(test) {
-            return test.split(",");
-        },
-
         showModal() {
             this.$router.push("/addRole");
+        },
+        // 设置角色权限
+        setRoleAuth() {
+            this.setDialog.isShow = true;
+        },
+        // 关闭设置界面
+        setAuthDone() {
+            this.setDialog.isShow = false;
         }
     }
 };

@@ -58,7 +58,7 @@ const common = {
           size: 'small'
         },
         style: {
-          margin: '5px',
+          margin: '5px 10px',
           marginLeft: 0
         },
         on: {

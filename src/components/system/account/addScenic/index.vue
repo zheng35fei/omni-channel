@@ -8,14 +8,17 @@
             ref="formItem"
             :rules="ruleForm"
         >
-            <FormItem label="景区id：" prop="scenicId">
-                <Input v-model="formItem.scenicId" placeholder="填写所属景区" style="width:33%;"></Input>
+            <FormItem label="景区编码：" prop="scenicCode">
+                <Input v-model="formItem.scenicCode" placeholder="填写景区编码" style="width:33%;"></Input>
             </FormItem>
-            <FormItem label="角色名称：" prop="roleName">
-                <Input v-model="formItem.roleName" placeholder="填写角色名称" style="width:33%;"></Input>
+            <FormItem label="景区名称：" prop="name">
+                <Input v-model="formItem.name" placeholder="填写景区名称" style="width:33%;"></Input>
             </FormItem>
-            <FormItem label="备注：" prop="remark">
-                <Input type="textarea" v-model="formItem.remark" style="width:33%;"></Input>
+            <FormItem label="联系人:" prop="linkName">
+                <Input v-model="formItem.linkName" placeholder="填写联系人" style="width:33%;"></Input>
+            </FormItem>
+            <FormItem label="联系人电话：" prop="linkMobile">
+                <Input v-model="formItem.linkMobile" placeholder="填写联系人电话" style="width:33%;"></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -31,14 +34,18 @@ export default {
     data() {
         return {
             formItem: {
-                id: "",
-                scenicId: "",
-                roleName: "",
+                scenicCode: "",
+                name: "",
                 remark: "",
+                linkName: "",
+                linkMobile: ""
             },
             funType: [],
             ruleForm: {
-                roleName: [
+                scenicCode: [
+                    { required: true, message: "请输入景区id", trigger: "blur" }
+                ],
+                name: [
                     { required: true, message: "请输入名称", trigger: "blur" }
                 ],
                 remark: [
@@ -48,6 +55,13 @@ export default {
                         trigger: "blur"
                     }
                 ],
+                linkMobile: [
+                    {
+                        type: 'number',
+                        message: "请填写正确的手机号",
+                        trigger: "blur"
+                    }
+                ]
             },
             type: "add"
         };
@@ -55,7 +69,7 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/sysRole/toEdit/" + this.$route.query.id).then(res => {
+            apiGet("/apiBaseInfo/baseInfo/scenicInfo/toEdit/" + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
@@ -70,7 +84,7 @@ export default {
         },
         submit() {
             const url =
-                this.type === "edit" ? "/sysRole/update" : "/sysRole/save";
+                this.type === "edit" ? "/apiBaseInfo/baseInfo/scenicInfo/update" : "/apiBaseInfo/baseInfo/scenicInfo/save";
             let params = {}
             for(let key in this.formItem) {
                 if(this.formItem[key]) {
