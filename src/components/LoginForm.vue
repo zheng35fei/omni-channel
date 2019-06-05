@@ -123,9 +123,9 @@ export default {
                             (params[key] = this.formInline[key]);
                     }
                     if (this.$route.path == "/login") {
-                        url = "/apiBaseInfo/login";
+                        url = '/login';
                     } else if (this.$route.path == "/adminLogin") {
-                        url = "/apiBaseInfo/manage/admin/admin/logining";
+                        url = "/manage/admin/admin/logining";
                     }
                     this.$store
                         .dispatch("login", {

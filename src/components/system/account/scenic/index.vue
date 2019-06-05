@@ -88,7 +88,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/apiBaseInfo/baseInfo/scenicInfo/delete/" + params.row.id
+                                        "/baseInfo/scenicInfo/delete/" + params.row.id
                                     );
                                 }
                             }
@@ -99,7 +99,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/apiBaseInfo/baseInfo/scenicInfo/grid",
+            url: "/baseInfo/scenicInfo/grid",
             content: "",
             mode: "",
             sucessMsg: ""
@@ -116,7 +116,7 @@ export default {
         // 查看景区信息
         viewScenic(id) {
             this.setDialog.isShow = true
-            const url = `/apiBaseInfo/baseInfo/scenicInfo/getScenicDetail/${id}`;
+            const url = `/baseInfo/scenicInfo/getScenicDetail/${id}`;
             apiGet(url).then( res => {
                 if(res.status === 200) {
                     this.scenicObj = res.data

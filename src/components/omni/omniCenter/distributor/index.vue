@@ -163,7 +163,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/baseInfo/distributor/grid",
+            url: "/baseinfo/baseInfo/distributor/grid",
             content: "",
             mode: "",
             sucessMsg: ""

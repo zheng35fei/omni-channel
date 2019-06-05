@@ -69,7 +69,7 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/apiBaseInfo/baseInfo/scenicInfo/toEdit/" + this.$route.query.id).then(res => {
+            apiGet("/baseInfo/scenicInfo/toEdit/" + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
@@ -84,7 +84,7 @@ export default {
         },
         submit() {
             const url =
-                this.type === "edit" ? "/apiBaseInfo/baseInfo/scenicInfo/update" : "/apiBaseInfo/baseInfo/scenicInfo/save";
+                this.type === "edit" ? "/baseInfo/scenicInfo/update" : "/baseInfo/scenicInfo/save";
             let params = {}
             for(let key in this.formItem) {
                 if(this.formItem[key]) {

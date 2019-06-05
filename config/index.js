@@ -11,45 +11,52 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/baseInfo': {
-        target: 'http://baseInfo.channel.com:8092/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/baseInfo': '/baseInfo'
         }
       },
-      '/apiBaseInfo': {
-        target: 'http://admin.channel.com:8090/',
+      '/baseinfo': {
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
-          '^/apiBaseInfo': '/admin'
+          '^/baseinfo': '/baseinfo'
         }
       },
       '/sysMenu': {
-        target: 'http://admin.channel.com:8090/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/sysMenu': '/admin/sysMenu'
         }
       },
       '/sysRole': {
-        target: 'http://admin.channel.com:8090/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/sysRole': '/admin/sysRole'
         }
       },
       '/userInfo': {
-        target: 'http://admin.channel.com:8090/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/userInfo': '/admin/userInfo'
         }
       },
       '/api': {
-        target: 'http://admin.channel.com:8090/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/admin/api'
+        }
+      },
+      '/login': {
+        target: 'http://acd.sendinfo.com.cn/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/login': '/admin/login'
         }
       },
     },
