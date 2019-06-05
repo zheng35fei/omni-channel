@@ -32,7 +32,14 @@
                 <Button @click="showModal" type="primary" icon="md-add">添加</Button>
             </Col>
         </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
+        <gridTable
+            ref="gridTable"
+            :columns="columns"
+            :params="params"
+            :data="data"
+            :url="url"
+            apiType="apiPostJson"
+        ></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
@@ -43,7 +50,7 @@ import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
-            channelIds: [{label: 'aa', value: '0'}],
+            channelIds: [{ label: "aa", value: "0" }],
             searchForm: {
                 name: "",
                 linkMan: "",
@@ -52,7 +59,7 @@ export default {
             },
             columns: [
                 {
-                    type: 'selection',
+                    type: "selection",
                     title: "序号",
                     align: "center",
                     width: 60,
@@ -63,45 +70,63 @@ export default {
                 {
                     title: "分销商名称",
                     key: "name",
-                    align: 'center',
+                    align: "center"
                 },
                 {
                     title: "联系人",
                     key: "linkName",
-                    align: 'center',
+                    align: "center"
                 },
                 {
                     title: "手机号",
                     key: "linkMobile",
                     sortable: true,
-                    align: 'center',
+                    align: "center"
                 },
                 {
-                    title: "用户名",
-                    key: "userName",
-                    align: 'center',
+                    title: "登录用户名",
+                    key: "loginName",
+                    align: "center"
                 },
                 {
                     title: "渠道规则",
                     key: "channelId",
                     sortable: true,
                     width: 110,
-                    align: 'center'
+                    align: "center"
                 },
                 {
                     title: "最后登录时间",
                     key: "modifyTime",
-                    align: 'center'
+                    align: "center"
                 },
                 {
                     title: "协议有效期",
-                    key: "createTime",
+                    key: "validDate",
                     sortable: true,
-                    align: 'center'
+                    align: "center"
                 },
                 {
                     title: "状态",
-                    key: "corpCode",
+                    key: "enabled",
+                    render: (h, params) => {
+                        console.log(params.row.enabled)
+                        return h(
+                            "i-switch",
+                            {
+                                props: {
+                                    'value': params.row.enabled,
+                                    "true-value": "T",
+                                    "false-value": "F"
+                                },
+                                on: {
+                                    "on-change": val => {
+                                        this.enabledRow(val, params.row)
+                                    }
+                                }
+                            }
+                        );
+                    }
                 },
                 {
                     title: "操作",
@@ -114,7 +139,7 @@ export default {
                                 title: "修改",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/addUser",
+                                        path: "/addDistributor",
                                         query: { id: params.row.id }
                                     });
                                 }
@@ -126,7 +151,8 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/userInfo/delete/" + params.row.id
+                                        "/baseInfo/distributor/delete/" +
+                                            params.row.id
                                     );
                                 }
                             }
@@ -149,83 +175,44 @@ export default {
     components: { gridTable, confirm },
     computed: {
         selectedIds() {
-            return this.$refs.gridTable.selection.map( item => item.id)
+            return this.$refs.gridTable.selection.map(item => item.id);
         }
     },
     methods: {
         // 添加用户
         showModal() {
-            this.$router.push("/addUser");
+            this.$router.push("/addDistributor");
         },
         // 搜索查询
         searchTable() {
             this.params = Object.assign({}, this.params, this.searchForm);
-            for(let key in this.params) {
-                if(!this.params[key]) {
-                    delete this.params[key]
+            for (let key in this.params) {
+                if (!this.params[key]) {
+                    delete this.params[key];
                 }
             }
             this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage()
+            this.$refs.gridTable.loadpage();
         },
-        // 开启 停用
-        setAccStatus(status) {
-            const statusName = status === 'T' ? '启用' : '停用';
-            if(!Array.isArray(this.selectedIds) || this.selectedIds.length <= 0) {
-                this.$Message.warning({
-                    content: `请选择${statusName}用户`
-                })
-                return 
-            }
+        enabledRow(val, row) {
+            const statusName = val === 'T' ? '启用' : '禁用';
             this.$Modal.confirm({
-                title: '确认',
-                content: `确认要${statusName}${this.selectedIds}用户吗？`,
+                title: "确认",
+                content: `确认要${statusName}吗？`,
                 onOk: () => {
-                    apiGet(`/userInfo/setAccStatus/${this.selectedIds.join(',')}?accStatus=${status}`).then( res => {
-                        if(res.success) {
-                            this.$refs.gridTable.loadpage()
+                    apiGet(`/baseInfo/distributor/setEnabled/${row.id}?enabled=${val}`).then( res => {
+                        if (res.status === 200) {
                             this.$Message.success({
-                                content: '状态修改成功!'
-                            })
-                        }else {
-                            this.$Message.error({
-                                content: res.message
-                            })
+                                content: "状态修改成功!"
+                            });
+                            this.$refs.gridTable.loadpage('apiPostJson')
                         }
                     })
+                },
+                onCancel: () => {
+                    row.enabled = val === 'T' ? 'F' : 'T'
                 }
-            })
-        },
-        // 删除
-        deleteRow() {
-            if(!Array.isArray(this.selectedIds) || this.selectedIds.length <= 0) {
-                this.$Message.warning({
-                    content: `请选择要删除的用户`
-                })
-                return 
-            }
-            this.$Modal.confirm({
-                title: '确认',
-                content: `确认要删除${this.selectedIds}用户吗？`,
-                onOk: () => {
-                    apiGet(`/userInfo/delete/${this.selectedIds.join(',')}`).then( res => {
-                        if(res.success) {
-                            this.$Notice.success({
-                                content: '删除成功!'
-                            })
-                            this.$refs.gridTable.loadpage()
-                        }else {
-                            this.$Notice.error({
-                                content: res.message
-                            })
-                        }
-                    })
-                }
-            })
-        },
-        // 重置密码
-        resetPwd() {
-
+            });
         }
     }
 };
