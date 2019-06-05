@@ -163,7 +163,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/baseInfo/distributor/grid",
+            url: "/baseinfo/baseInfo/distributor/grid",
             content: "",
             mode: "",
             sucessMsg: ""
@@ -200,7 +200,7 @@ export default {
                 title: "确认",
                 content: `确认要${statusName}吗？`,
                 onOk: () => {
-                    apiGet(`/baseInfo/distributor/setEnabled/${row.id}?enabled=${val}`).then( res => {
+                    apiGet(`/baseinfo/baseInfo/distributor/setEnabled/${row.id}?enabled=${val}`).then( res => {
                         if (res.status === 200) {
                             this.$Message.success({
                                 content: "状态修改成功!"

@@ -11,8 +11,8 @@
             <FormItem label="登录用户名：" prop="userName">
                 <Input v-model="formItem.userName" placeholder="填写分销商名称" style="width:33%;" />
             </FormItem>
-            <FormItem label="登录密码：" prop="name">
-                <Input v-model="formItem.name" placeholder="填写分销商名称" style="width:33%;" />
+            <FormItem label="登录密码：" prop="password">
+                <Input v-model="formItem.password" placeholder="填写分销商名称" style="width:33%;" />
             </FormItem>
             <FormItem label="分销商名称：" prop="name">
                 <Input v-model="formItem.name" placeholder="填写分销商名称" style="width:33%;" />
@@ -60,10 +60,10 @@
             <h3>自定义规则</h3>
 
             <FormItem label="渠道限制规则：" prop="channelRuleId">
-                
+                <Select style="width:33%;"></Select>
             </FormItem>
             <FormItem label="渠道返佣规则：" prop="brokerageRuleId">
-                
+                <Select style="width:33%;"></Select>
             </FormItem>
 
             <FormItem>
@@ -82,9 +82,21 @@ export default {
             formItem: {
                 id: "",
                 name: "",
-                roleName: "",
+                password: "",
+                userName: "",
+                channelId: "",
+                enabled: 'T',
+                validDate: "",
+                linkName: "",
+                linkMobile: "",
+                telephone: "",
+                compAddr: "",
+                fax: "",
                 remark: "",
-                enabled: 'T'
+                busLicensePicCode: "",
+                busPermitPicCode: "",
+                channelRuleId: "",
+                brokerageRuleId: ""
             },
             funType: [],
             ruleForm: {
@@ -108,7 +120,7 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/baseInfo/distributor/toEdit/" + this.$route.query.id).then(res => {
+            apiGet("/baseinfo/baseInfo/distributor/toEdit/" + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
@@ -123,7 +135,7 @@ export default {
         },
         submit() {
             const url =
-                this.type === "edit" ? "/sysRole/update" : "/baseInfo/distributor/save";
+                this.type === "edit" ? "/baseinfo/baseInfo/distributor/update" : "/baseinfo/baseInfo/distributor/save";
             let params = {}
             for(let key in this.formItem) {
                 if(this.formItem[key]) {
