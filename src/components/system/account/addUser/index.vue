@@ -125,7 +125,7 @@ export default {
         this.getRoleList()
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/userInfo/toEdit/" + this.$route.query.id).then(res => {
+            apiGet(this.adminApi.userToEdit + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for (let key in this.formItem) {
                         this.formItem[key] = res.data[key];
@@ -140,7 +140,7 @@ export default {
         },
         submit() {
             let url =
-                this.type === "edit" ? "/userInfo/update" : "/userInfo/save";
+                this.type === "edit" ? this.adminApi.userUpdate : this.adminApi.userSave;
             this.common.formPost(this, {
                 url,
                 params: this.formItem,
@@ -159,7 +159,7 @@ export default {
             this.formItem[name] = val ? 'T' : 'F'
         },
         getRoleList() {
-            apiPost('/sysRole/grid').then( res => {
+            apiPost(this.adminApi.roleList).then( res => {
                 this.accTypes = res.data.rows.map( item => ({label: item.roleName, value: item.id}))
             })
         }

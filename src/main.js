@@ -13,6 +13,8 @@ import common from './common';
 import Main from './components/main';
 import VueClipboard from 'vue-clipboard2';
 import { apiGet, apiPost, apiPostJson } from '@/fetch/api';
+import adminApi from '@/fetch/adminApi'
+import baseinfoApi from '@/fetch/baseinfoApi'
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
@@ -65,6 +67,9 @@ Vue.prototype.filter = filter;
 Vue.prototype.common = common;
 Vue.prototype.apiGet = apiGet;
 Vue.prototype.apiPost = apiPost;
+Vue.prototype.apiPostJson = apiPostJson;
+Vue.prototype.adminApi = adminApi;
+Vue.prototype.baseinfoApi = baseinfoApi;
 
 // Object.keys(filter).forEach(key => {
 //   Vue.filter(key, filter[key])

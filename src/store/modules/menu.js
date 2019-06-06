@@ -1,4 +1,5 @@
 import { apiGet, apiPost } from '../../fetch/api';
+import adminApi from '../../fetch/adminApi.js';
 
 /**
  * 组装路由
@@ -142,7 +143,7 @@ const mutations = {
 const actions = {
   async getMenu(context, userInfoId) {
     let menuList = await apiGet(
-      '/sysMenu/getSysMenuList',
+      adminApi.sysMenuList,
       userInfoId ? { userInfoId: userInfoId } : {}
     );
     const defaultMenuList = require('../../data/menu.json');

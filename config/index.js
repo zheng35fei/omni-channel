@@ -10,11 +10,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/baseInfo': {
+      '/admin': {
         target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
-          '^/baseInfo': '/baseInfo'
+          '^/admin': '/admin'
+        }
+      },
+      '/order': {
+        target: 'http://acd.sendinfo.com.cn/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/order': '/order'
         }
       },
       '/baseinfo': {
@@ -22,41 +29,6 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '^/baseinfo': '/baseinfo'
-        }
-      },
-      '/sysMenu': {
-        target: 'http://acd.sendinfo.com.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/sysMenu': '/admin/sysMenu'
-        }
-      },
-      '/sysRole': {
-        target: 'http://acd.sendinfo.com.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/sysRole': '/admin/sysRole'
-        }
-      },
-      '/userInfo': {
-        target: 'http://acd.sendinfo.com.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/userInfo': '/admin/userInfo'
-        }
-      },
-      '/api': {
-        target: 'http://acd.sendinfo.com.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': '/admin/api'
-        }
-      },
-      '/login': {
-        target: 'http://acd.sendinfo.com.cn/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/login': '/admin/login'
         }
       },
     },

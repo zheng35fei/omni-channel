@@ -113,7 +113,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/sysMenu/delete/" + params.row.id
+                                        this.adminApi.menuDel + params.row.id
                                     );
                                 }
                             }
@@ -127,7 +127,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/sysMenu/grid",
+            url: this.adminApi.menuList,
             content: "",
             mode: "",
             sucessMsg: ""

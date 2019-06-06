@@ -76,7 +76,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/sysRole/delete/" + params.row.id
+                                        this.adminApi.roleDel + params.row.id
                                     );
                                 }
                             }
@@ -87,7 +87,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/sysRole/grid",
+            url: this.adminApi.roleList,
             content: "",
             mode: "",
             sucessMsg: ""

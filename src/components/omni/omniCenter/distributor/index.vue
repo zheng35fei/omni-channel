@@ -46,7 +46,6 @@
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
-import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
@@ -151,7 +150,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/baseInfo/distributor/delete/" +
+                                        this.baseinfoApi.distributorDel +
                                             params.row.id
                                     );
                                 }
@@ -163,7 +162,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/baseinfo/baseInfo/distributor/grid",
+            url: this.baseinfoApi.distributorList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -200,7 +199,7 @@ export default {
                 title: "确认",
                 content: `确认要${statusName}吗？`,
                 onOk: () => {
-                    apiGet(`/baseinfo/baseInfo/distributor/setEnabled/${row.id}?enabled=${val}`).then( res => {
+                    this.apiGet(`${this.baseinfoApi.setDistributorEnabled}${row.id}?enabled=${val}`).then( res => {
                         if (res.status === 200) {
                             this.$Message.success({
                                 content: "状态修改成功!"

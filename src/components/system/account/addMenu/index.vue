@@ -202,9 +202,8 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/sysMenu/toEdit/" + this.$route.query.id).then(res => {
+            apiGet(this.adminApi.menuToEdit + this.$route.query.id).then(res => {
                 if (res.status == 200) {
-                    //   this.formItem=res.data
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
                     }
@@ -231,7 +230,7 @@ export default {
             let _this = this;
             this.formItem.funType = this.funType.join(",");
             let url =
-                _this.type === "edit" ? "/sysMenu/update" : "/sysMenu/save";
+                _this.type === "edit" ? this.adminApi.menuUpdate : this.adminApi.menuSave;
             this.common.formPost(this, {
                 url,
                 params: this.formItem,

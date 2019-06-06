@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { apiGet } from "@/fetch/api";
 export default {
     data() {
         return {
@@ -68,7 +67,7 @@ export default {
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet("/baseinfo/baseInfo/distributor/toEdit/" + this.$route.query.id).then(res => {
+            this.apiGet(this.baseinfoApi.channelToEdit + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for(let key in this.formItem) {
                       this.formItem[key] = res.data[key]
@@ -83,7 +82,7 @@ export default {
         },
         submit() {
             const url =
-                this.type === "edit" ? "/baseinfo/baseInfo/distributor/update" : "/baseinfo/baseInfo/distributor/save";
+                this.type === "edit" ? this.baseinfoApi.channelUpdate : this.baseinfoApi.channelSave;
             let params = {}
             for(let key in this.formItem) {
                 if(this.formItem[key]) {

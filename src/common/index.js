@@ -9,9 +9,10 @@ const common = {
   },
   // 此处'formItem'要改用变量传值，因为一个页面会有多个表单？？？modalName-form ref
   formPost (obj, options) {
+    options.apiType = options.apiType || 'apiPost'
     obj.$refs[options.modalName ? options.modalName : 'formItem'].validate(async (valid) => {
       if (valid) {
-        let res = await api.apiPost(options.url, options.params)
+        let res = await api[options.apiType](options.url, options.params)
         // console.log(res)
         if (res.success) {
           switch (options.mold) {

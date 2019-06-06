@@ -3,20 +3,22 @@
         <Form :model="searchForm" rel="searchForm" inline :label-width="100">
             <Row>
                 <Col :span="20">
-                    <FormItem label="分销商名称：" prop="accName">
+                    <FormItem label="分销商名称：" prop="distName">
+                        <Input v-model="searchForm.distName"/>
+                    </FormItem>
+                    <FormItem label="姓名：" prop="name">
                         <Input v-model="searchForm.name"/>
                     </FormItem>
-                    <FormItem label="姓名：" prop="accName">
-                        <Input v-model="searchForm.name"/>
+                    <FormItem label="身份证：" prop="idCard">
+                        <Input v-model="searchForm.idCard"/>
                     </FormItem>
-                    <FormItem label="身份证：" prop="accName">
-                        <Input v-model="searchForm.name"/>
+                    <FormItem label="手机号：" prop="mobile">
+                        <Input v-model="searchForm.mobile"/>
                     </FormItem>
-                    <FormItem label="手机号：" prop="accName">
-                        <Input v-model="searchForm.name"/>
-                    </FormItem>
-                    <FormItem label="全部渠道：" prop="accName">
-                        <Select v-model="searchForm.name" style="width:160px"/>
+                    <FormItem label="全部渠道：" prop="channelId">
+                        <Select v-model="searchForm.channelId" style="width:160px">
+                            <Option v-for="item in channelIds" :key="item.value" :value="item.value">{{item.label}}</Option>
+                        </Select>
                     </FormItem>
                 </Col>
                 <Col :span="4">
@@ -54,6 +56,7 @@ import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
+            channelIds:[],
             searchForm: {
                 accName: "",
                 realName: ""
@@ -85,20 +88,81 @@ export default {
                 {
                     title: "身份证",
                     key: "idCard",
-                    align: "center"
+                    align: "center",
+                    render: (h, params) => {
+                        return [
+                            h("img", {
+                                attrs: {
+                                    src: params.row.idCardPicUrl
+                                },
+                                style: {
+                                    width: "50px",
+                                    height: "50px"
+                                }
+                            })
+                        ];
+                    }
                 },
                 {
                     title: "导游证",
                     key: "touristCertPicUrl",
-                    align: "center"
+                    align: "center",
+                    render: (h, params) => {
+                        return h(
+                            "div",
+                            {
+                                style: {
+                                    padding: "10px"
+                                }
+                            },
+                            [
+                                h("img", {
+                                    attrs: {
+                                        src: params.row.touristCertPicUrl
+                                    },
+                                    style: {
+                                        width: "50px",
+                                        height: "50px"
+                                    }
+                                })
+                            ]
+                        );
+                    }
                 },
                 {
                     title: "营运",
                     key: "tradeCardPicUrl",
-                    align: "center"
+                    align: "center",
+                    render: (h, params) => {
+                        return [
+                            h("img", {
+                                attrs: {
+                                    src: params.row.tradeCardPicUrl
+                                },
+                                style: {
+                                    width: "50px",
+                                    height: "50px"
+                                }
+                            })
+                        ];
+                    }
                 },
                 {
                     title: "审核状态",
+                    key: "auditStatus",
+                    align: "center",
+                    render: (h, params) => {
+                        return h(
+                            "span",
+                            this.filter.turn(
+                                "auditStatus",
+                                params.row.auditStatus
+                            )
+                        );
+                    }
+                },
+                {
+                    title: "备注",
                     key: "remark",
                     align: "center"
                 },
@@ -129,6 +193,18 @@ export default {
                                         query: { id: params.row.id }
                                     });
                                 }
+                            },
+                            {
+                                title: "删除",
+                                action: () => {
+                                    this.content = "确定删除？";
+                                    this.mode = "done";
+                                    this.sucessMsg = "删除成功！";
+                                    this.$refs.confirmModel.confirm(
+                                        this.baseinfoApi.promoterDel +
+                                            params.row.id
+                                    );
+                                }
                             }
                         ];
                         return this.common.columnsHandle(h, actions);
@@ -137,7 +213,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/baseinfo/baseInfo/promoter/grid",
+            url: this.baseinfoApi.promoterList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -153,9 +229,9 @@ export default {
         }
     },
     methods: {
-        // 添加用户
+        // 添加推广员
         showModal() {
-            this.$router.push("/addChannel");
+            this.$router.push("/addPromoter");
         },
         // 搜索查询
         searchTable() {
@@ -168,9 +244,14 @@ export default {
             this.$store.state.list.params = this.params;
             this.$refs.gridTable.loadpage();
         },
-
-        // 重置密码
-        resetPwd() {}
+        getDistributorList() {
+            const url = this.baseinfoApi.distributorAllList;
+            this.apiGet(url).then( res => {
+                if(res.message) {
+                    this.channelIds = res
+                }
+            })
+        }
     }
 };
 </script>

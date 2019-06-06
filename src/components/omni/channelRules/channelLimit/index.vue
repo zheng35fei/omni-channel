@@ -1,30 +1,44 @@
 <template>
     <div>
-        <Row>
-            <Col :span="12" align="left">
-                <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-                    <FormItem label="渠道名称：" prop="name">
+        <Form :model="searchForm" rel="searchForm" inline :label-width="80">
+            <Row>
+                <Col :span="20">
+                    <FormItem label="规则名称：" prop="name">
                         <Input v-model="searchForm.name"/>
                     </FormItem>
                     <FormItem :label-width="0">
                         <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
                     </FormItem>
-                </Form>
-            </Col>
-            <Col :span="12" align="right">
-                <Button @click="showModal" type="primary" icon="md-add" style="margin-right:10px;">添加</Button>
-            </Col>
-        </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
+                </Col>
+                <Col :span="4" align="right">
+                    <Button
+                        @click="showModal"
+                        type="primary"
+                        icon="md-add"
+                        style="margin-bottom:10px;"
+                    >添加</Button>
+                </Col>
+            </Row>
+        </Form>
+        <gridTable
+            ref="gridTable"
+            :columns="columns"
+            :params="params"
+            :data="data"
+            :url="url"
+            apiType="apiPostJson"
+        ></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
+import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
+            channelIds:[],
             searchForm: {
                 name: ""
             },
@@ -38,45 +52,42 @@ export default {
                     }
                 },
                 {
-                    title: "渠道名称",
+                    title: "规则名称",
                     key: "name",
-                    align: 'center',
+                    align: "center"
                 },
                 {
-                    title: "分销商数量",
-                    key: "distAmount",
-                    align: 'center',
-                    width: 100
+                    title: "推广模式",
+                    key: "promoteWay",
+                    align: "center"
+                },
+                {
+                    title: "用户关联方式",
+                    key: "relevanceWay",
+                    align: "center"
+                },
+                {
+                    title: "屏蔽时间",
+                    key: "blockingTime",
+                    align: "center"
                 },
                 {
                     title: "备注",
                     key: "remark",
-                    align: 'center'
+                    align: "center"
                 },
                 {
                     title: "操作",
                     key: "action",
-                    width: 400,
+                    width: 280,
                     align: "center",
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "添加渠道商",
-                                action: () => {
-                                    this.channelList('add', params.row.id);
-                                }
-                            },
-                            {
-                                title: "查看渠道商",
-                                action: () => {
-                                    this.channelList('view', params.row.id);
-                                }
-                            },
-                            {
                                 title: "修改",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/addChannel",
+                                        path: "/addChannelLimit",
                                         query: { id: params.row.id }
                                     });
                                 }
@@ -88,7 +99,8 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        this.baseinfoApi.channelDel + params.row.id
+                                        this.baseinfoApi.channelRuleDel +
+                                            params.row.id
                                     );
                                 }
                             }
@@ -99,7 +111,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: this.baseinfoApi.channelList,
+            url: this.baseinfoApi.channelRuleList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -111,29 +123,25 @@ export default {
     components: { gridTable, confirm },
     computed: {
         selectedIds() {
-            return this.$refs.gridTable.selection.map( item => item.id)
+            return this.$refs.gridTable.selection.map(item => item.id);
         }
     },
     methods: {
-        // 添加用户
+        // 添加推广员
         showModal() {
-            this.$router.push("/addChannel");
+            this.$router.push("/addChannelLimit");
         },
         // 搜索查询
         searchTable() {
             this.params = Object.assign({}, this.params, this.searchForm);
-            for(let key in this.params) {
-                if(!this.params[key]) {
-                    delete this.params[key]
+            for (let key in this.params) {
+                if (!this.params[key]) {
+                    delete this.params[key];
                 }
             }
             this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage()
+            this.$refs.gridTable.loadpage();
         },
-        // 查看、添加渠道商
-        channelList(status, id) {
-
-        }
     }
 };
 </script>

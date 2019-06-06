@@ -187,7 +187,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        "/userInfo/delete/" + params.row.id
+                                        this.adminApi.userDel + params.row.id
                                     );
                                 }
                             }
@@ -198,7 +198,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: "/userInfo/grid",
+            url: this.adminApi.userList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -250,7 +250,7 @@ export default {
                 content: `确认要${statusName}${this.selectedIds}用户吗？`,
                 onOk: () => {
                     apiGet(
-                        `/userInfo/setAccStatus/${this.selectedIds.join(
+                        `${this.adminApi.setAccStatus}${this.selectedIds.join(
                             ","
                         )}?accStatus=${status}`
                     ).then(res => {

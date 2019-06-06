@@ -108,10 +108,7 @@ export default {
         getCode() {
             this.formInline.key = new Date().getTime();
             this.codeImg =
-                this.common.apiPrefix +
-                "/api/checkCode?key=" +
-                this.formInline.key;
-            //   this.codeImg = "/checkCode";
+                this.adminApi.checkCode + "?key=" + this.formInline.key;
         },
         handleSubmit() {
             this.$refs.formInline.validate(async valid => {
@@ -123,7 +120,7 @@ export default {
                             (params[key] = this.formInline[key]);
                     }
                     if (this.$route.path == "/login") {
-                        url = '/login';
+                        url = this.adminApi.login;
                     } else if (this.$route.path == "/adminLogin") {
                         url = "/manage/admin/admin/logining";
                     }
@@ -150,7 +147,8 @@ export default {
                                         name: "qwdwqd",
                                         component: Main,
                                         children: [
-                                            ...this.$store.state.menu.asyncRouter
+                                            ...this.$store.state.menu
+                                                .asyncRouter
                                         ]
                                     }
                                 ]); // 动态加载路由

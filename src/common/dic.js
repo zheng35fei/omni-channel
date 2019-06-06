@@ -94,6 +94,20 @@ let dic = {
       label: '售票员',
       value: 2
     }
+  ],
+  auditStatus: [
+    {
+      label: '待审核',
+      value: 1
+    },
+    {
+      label: '审核通过',
+      value: 2
+    },
+    {
+      label: '审核驳回',
+      value: 3
+    }
   ]
 }
 export default dic
