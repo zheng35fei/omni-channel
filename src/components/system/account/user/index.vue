@@ -284,7 +284,7 @@ export default {
                 content: `确认要删除${this.selectedIds}用户吗？`,
                 onOk: () => {
                     apiGet(
-                        `/userInfo/delete/${this.selectedIds.join(",")}`
+                        `${this.adminApi.userDel}${this.selectedIds.join(",")}`
                     ).then(res => {
                         if (res.success) {
                             this.$Notice.success({

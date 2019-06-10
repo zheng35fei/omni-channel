@@ -3,7 +3,7 @@
         <Form :model="searchForm" rel="searchForm" inline :label-width="80">
             <Row>
                 <Col :span="20">
-                    <FormItem label="规则名称：" prop="name">
+                    <FormItem label="分组名称：" prop="name">
                         <Input v-model="searchForm.name"/>
                     </FormItem>
                     <FormItem :label-width="0">
@@ -28,13 +28,12 @@
             :url="url"
             apiType="apiPostJson"
         ></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode" apiType="apiPostJson"></confirm>
+        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
-import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
@@ -52,23 +51,13 @@ export default {
                     }
                 },
                 {
-                    title: "规则名称",
+                    title: "返佣规则名称",
                     key: "name",
                     align: "center"
                 },
                 {
-                    title: "推广模式",
-                    key: "promoteWay",
-                    align: "center"
-                },
-                {
-                    title: "用户关联方式",
-                    key: "relevanceWay",
-                    align: "center"
-                },
-                {
-                    title: "屏蔽时间",
-                    key: "blockingTime",
+                    title: "返佣商品数量",
+                    key: "productNum",
                     align: "center"
                 },
                 {
@@ -84,10 +73,19 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
+                                title: "设置分佣",
+                                action: () => {
+                                    this.$router.push({
+                                        path: "/rakeBackMoney",
+                                        query: { id: params.row.id }
+                                    });
+                                }
+                            },
+                            {
                                 title: "修改",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/addChannelLimit",
+                                        path: "/addRakeBack",
                                         query: { id: params.row.id }
                                     });
                                 }
@@ -99,7 +97,7 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        this.baseinfoApi.channelRuleDel +
+                                        this.baseinfoApi.brokerageRuleDel +
                                             params.row.id
                                     );
                                 }
@@ -111,7 +109,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: this.baseinfoApi.channelRuleList,
+            url: this.baseinfoApi.brokerageRuleList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -129,7 +127,7 @@ export default {
     methods: {
         // 添加推广员
         showModal() {
-            this.$router.push("/addChannelLimit");
+            this.$router.push("/addRakeBack");
         },
         // 搜索查询
         searchTable() {

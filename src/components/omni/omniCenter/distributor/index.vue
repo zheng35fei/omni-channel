@@ -16,9 +16,10 @@
                         <Select v-model="searchForm.channelId" style="width:200px">
                             <Option
                                 v-for="item in channelIds"
-                                :value="item.value"
-                                :key="item.value"
-                            >{{ item.label }}</Option>
+                                :value="item.id"
+                                :key="item.id"
+                                :label="item.name"
+                            ></Option>
                         </Select>
                     </FormItem>
                     <FormItem :label-width="0">
@@ -49,7 +50,7 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
-            channelIds: [{ label: "aa", value: "0" }],
+            channelIds: [],
             searchForm: {
                 name: "",
                 linkMan: "",
@@ -109,22 +110,19 @@ export default {
                     title: "状态",
                     key: "enabled",
                     render: (h, params) => {
-                        console.log(params.row.enabled)
-                        return h(
-                            "i-switch",
-                            {
-                                props: {
-                                    'value': params.row.enabled,
-                                    "true-value": "T",
-                                    "false-value": "F"
-                                },
-                                on: {
-                                    "on-change": val => {
-                                        this.enabledRow(val, params.row)
-                                    }
+                        console.log(params.row.enabled);
+                        return h("i-switch", {
+                            props: {
+                                value: params.row.enabled,
+                                "true-value": "T",
+                                "false-value": "F"
+                            },
+                            on: {
+                                "on-change": val => {
+                                    this.enabledRow(val, params.row);
                                 }
                             }
-                        );
+                        });
                     }
                 },
                 {
@@ -170,6 +168,7 @@ export default {
     },
     mounted() {
         // this.loadpage(this.params)
+        this.getChannelList();
     },
     components: { gridTable, confirm },
     computed: {
@@ -194,22 +193,34 @@ export default {
             this.$refs.gridTable.loadpage();
         },
         enabledRow(val, row) {
-            const statusName = val === 'T' ? '启用' : '禁用';
+            const statusName = val === "T" ? "启用" : "禁用";
             this.$Modal.confirm({
                 title: "确认",
                 content: `确认要${statusName}吗？`,
                 onOk: () => {
-                    this.apiGet(`${this.baseinfoApi.setDistributorEnabled}${row.id}?enabled=${val}`).then( res => {
+                    this.apiGet(
+                        `${this.baseinfoApi.setDistributorEnabled}${
+                            row.id
+                        }?enabled=${val}`
+                    ).then(res => {
                         if (res.status === 200) {
                             this.$Message.success({
                                 content: "状态修改成功!"
                             });
-                            this.$refs.gridTable.loadpage('apiPostJson')
+                            this.$refs.gridTable.loadpage("apiPostJson");
                         }
-                    })
+                    });
                 },
                 onCancel: () => {
-                    row.enabled = val === 'T' ? 'F' : 'T'
+                    row.enabled = val === "T" ? "F" : "T";
+                }
+            });
+        },
+        getChannelList() {
+            this.apiPost(this.baseinfoApi.channelList).then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    this.channelIds = res.data.rows;
                 }
             });
         }

@@ -12,10 +12,14 @@
                 <Input v-model="formItem.name" placeholder="填写分销商名称" style="width:33%;" />
             </FormItem>
             <FormItem label="渠道限制规则:" prop="channelRuleId">
-                <Select v-model="formItem.channelRuleId" placeholder="填写分销商名称" style="width:33%;" />
+                <Select v-model="formItem.channelRuleId" placeholder="填写分销商名称" style="width:33%;">
+                    <Option v-for="item in channelRuleArr" :value="item.id" :label="item.name" :key="item.id"></Option>
+                </Select>
             </FormItem>
             <FormItem label="渠道返佣规则：" prop="brokerageRuleId">
-                <Select v-model="formItem.brokerageRuleId" placeholder="填写分销商名称" style="width:33%;" />
+                <Select v-model="formItem.brokerageRuleId" placeholder="填写分销商名称" style="width:33%;">
+                    <Option v-for="item in brokerageRuleArr" :value="item.id" :label="item.name" :key="item.id"></Option>
+                </Select>
             </FormItem>
             <FormItem label="备注：" prop="remark">
                 <Input type="textarea" v-model="formItem.remark" style="width:33%;" :rows="4" />
@@ -42,16 +46,17 @@ export default {
                 scenicId: "",
                 scenicCode: ""
             },
-            funType: [],
+            channelRuleArr: [],
+            brokerageRuleArr: [],
             ruleForm: {
                 name: [
-                    { required: true, message: "请输入景区id", trigger: "blur" }
+                    { required: true, message: "请输入渠道名称", trigger: "blur" }
                 ],
                 channelRuleId: [
-                    { required: true, message: "请选择分销商规则", trigger: "change" }
+                    {type: 'number', required: true, message: "请选择分销商规则", trigger: "change" }
                 ],
                 brokerageRuleId: [
-                    { required: true, message: "请选择分销商规则", trigger: "change" }
+                    {type: 'number', required: true, message: "请选择分销商规则", trigger: "change" }
                 ],
                 remark: [
                     {
@@ -65,6 +70,8 @@ export default {
         };
     },
     created() {
+        this.getRuleList()
+        this.getReBackList()
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
             this.apiGet(this.baseinfoApi.channelToEdit + this.$route.query.id).then(res => {
@@ -105,6 +112,20 @@ export default {
         },
         enableDistrubutor(val) {
             console.log(val)
+        },
+        getRuleList() {
+            const url = this.baseinfoApi.channelRuleList
+            this.apiPostJson(url).then( res => {
+                console.log(res)
+                this.channelRuleArr = res.data.rows
+            })
+        },
+        getReBackList() {
+            const url = this.baseinfoApi.brokerageRuleList
+            this.apiPost(url).then( res => {
+                console.log(res)
+                this.brokerageRuleArr = res.data.rows
+            })
         }
     }
 };

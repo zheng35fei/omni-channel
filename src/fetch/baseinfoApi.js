@@ -16,7 +16,7 @@ export default {
     channelDel: prefix + '/channel/delete/',
     channelToEdit: prefix + '/channel/toEdit/',
     channelDetail: prefix + '/channel/getChannelDetail/',
-    channelAllList: prefix + '/channel/getDistributorList',
+    channelAllList: prefix + '/channel/getDistributorList/',
     // 推广员
     promoterList: prefix + '/promoter/grid',
     promoterSave: prefix + '/promoter/save',
@@ -39,4 +39,11 @@ export default {
     brokerageRuleUpdate: prefix + '/brokerageRule/update',
     brokerageRuleDel: prefix + '/brokerageRule/delete/',
     brokerageRuleToEdit: prefix + '/brokerageRule/toEdit/',
+    // brokerage-rule-list-controller : 渠道返佣规则明细:返佣规则下属产品的返佣设置
+    brokerageRuleProductList: prefix + '/brokerageRuleList/grid',
+    brokerageRuleListDel: prefix + '/brokerageRuleList/delete/',
+    // POST /brokerageRuleList/save/{brokerageRuleId}/{productIds}
+    brokerageRuleListSave: prefix + '/brokerageRuleList/save/',
+    // GET /brokerageRuleList/updateBrokerageSum/{id}/{brokerageSum}
+    brokerageSumtUpdate: prefix + '/brokerageRuleList/updateBrokerageSum/',
 }

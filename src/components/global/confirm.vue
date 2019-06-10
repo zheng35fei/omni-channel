@@ -29,7 +29,7 @@ export default {
       param: ""
     };
   },
-  props: ["mode", "content", "sucessMsg"],
+  props: ["mode", "content", "sucessMsg", "apiType"],
   methods: {
     confirm(url, param) {
       this.url = url;
@@ -50,7 +50,7 @@ export default {
             params: _this.param,
             callback: res => {
               if (res.success) {
-                this.$store.dispatch("getList");
+                this.$store.dispatch("getList", this.apiType);
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {
@@ -66,7 +66,7 @@ export default {
             params: _this.param,
             callback: res => {
               if (res.success || res.status == 200) {
-                this.$store.dispatch("getList");
+                this.$store.dispatch("getList", this.apiType);
                 this.$Message.success(this.sucessMsg);
                 this.$emit('sucessDone')
               } else {

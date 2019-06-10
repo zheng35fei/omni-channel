@@ -3,14 +3,31 @@
         <Form :model="searchForm" rel="searchForm" inline :label-width="80">
             <Row>
                 <Col :span="20">
-                    <FormItem label="规则名称：" prop="name">
-                        <Input v-model="searchForm.name"/>
+                    <FormItem label="产品名称：" prop="productName">
+                        <Input v-model="searchForm.productName"/>
+                    </FormItem>
+                    <FormItem label="渠道编码：" prop="channelCode">
+                        <Input v-model="searchForm.channelCode"/>
+                    </FormItem>
+                    <FormItem label="门票编码：" prop="ticketCode">
+                        <Input v-model="searchForm.ticketCode"/>
+                    </FormItem>
+                    <FormItem label="状态：" prop="status">
+                        <Select v-model="searchForm.status">
+                            <!-- <Option :value=""></Option> -->
+                        </Select>
                     </FormItem>
                     <FormItem :label-width="0">
                         <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
                     </FormItem>
                 </Col>
                 <Col :span="4" align="right">
+                <Button
+                        @click="delSelect"
+                        type="primary"
+                        icon="md-add"
+                        style="margin-bottom:10px;"
+                    >批量删除</Button>
                     <Button
                         @click="showModal"
                         type="primary"
@@ -28,13 +45,12 @@
             :url="url"
             apiType="apiPostJson"
         ></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode" apiType="apiPostJson"></confirm>
+        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
-import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
@@ -44,6 +60,7 @@ export default {
             },
             columns: [
                 {
+                    type: "selection",
                     title: "序号",
                     align: "center",
                     width: 60,
@@ -52,29 +69,39 @@ export default {
                     }
                 },
                 {
-                    title: "规则名称",
-                    key: "name",
+                    title: "产品名称",
+                    key: "productName",
                     align: "center"
                 },
                 {
-                    title: "推广模式",
-                    key: "promoteWay",
+                    title: "渠道编码",
+                    key: "channelCode",
                     align: "center"
                 },
                 {
-                    title: "用户关联方式",
-                    key: "relevanceWay",
+                    title: "门票编码",
+                    key: "ticketCode",
                     align: "center"
                 },
                 {
-                    title: "屏蔽时间",
-                    key: "blockingTime",
+                    title: "状态",
+                    key: "productNum",
                     align: "center"
                 },
                 {
-                    title: "备注",
-                    key: "remark",
+                    title: "当日价格",
+                    key: "productNum",
                     align: "center"
+                },
+                {
+                    title: "返佣金额",
+                    key: "brokerageSum",
+                    align: "center",
+                    render: (h, params) => {
+                        return h('Input', {
+                            
+                        }, params.row.brokerageSum)
+                    }
                 },
                 {
                     title: "操作",
@@ -84,22 +111,13 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "修改",
-                                action: () => {
-                                    this.$router.push({
-                                        path: "/addChannelLimit",
-                                        query: { id: params.row.id }
-                                    });
-                                }
-                            },
-                            {
                                 title: "删除",
                                 action: () => {
                                     this.content = "确定删除？";
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        this.baseinfoApi.channelRuleDel +
+                                        this.baseinfoApi.brokerageRuleListDel +
                                             params.row.id
                                     );
                                 }
@@ -111,7 +129,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: this.baseinfoApi.channelRuleList,
+            url: this.baseinfoApi.brokerageRuleProductList,
             content: "",
             mode: "",
             sucessMsg: ""
@@ -127,9 +145,9 @@ export default {
         }
     },
     methods: {
-        // 添加推广员
+        // 添加
         showModal() {
-            this.$router.push("/addChannelLimit");
+            
         },
         // 搜索查询
         searchTable() {
@@ -142,6 +160,34 @@ export default {
             this.$store.state.list.params = this.params;
             this.$refs.gridTable.loadpage();
         },
+        // 批量删除
+        delSelect() {
+            console.log(
+
+                this.$refs.gridTable.selection.map( item => item.id).join(',')
+            )
+
+            this.$Modal.confirm({
+                title: "确认",
+                content: `确认要删除所选商品吗？`,
+                onOk: () => {
+                    apiGet(
+                        `${this.baseinfoApi.brokerageRuleListDel}${this.selectedIds.join(",")}`
+                    ).then(res => {
+                        if (res.success) {
+                            this.$Notice.success({
+                                content: "删除成功!"
+                            });
+                            this.$refs.gridTable.loadpage();
+                        } else {
+                            this.$Notice.error({
+                                content: res.message
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 };
 </script>

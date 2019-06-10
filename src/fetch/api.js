@@ -50,7 +50,7 @@ function setCookies(cname, cvalue, exdays) {
  * @returns {Promise}
  */
 
-export function apiGet (url, params = {}) {
+export function apiGet (url, params = {}, options = {}) {
   console.log(url)
   if(!url){
    return

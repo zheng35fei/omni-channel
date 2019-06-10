@@ -17,14 +17,21 @@
         </Row>
         <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+
+        <Modal title="分销商" v-model="showDisList" scrollable fullscreen @on-ok="selectDone">
+            <distributor-list v-if="showDisList" ref="distributorTable" :channelId="channelId"></distributor-list>
+        </Modal>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
+import distributorList from "./../distributor/list";
 export default {
     data() {
         return {
+            showDisList: false,
+            channelId: '',
             searchForm: {
                 name: ""
             },
@@ -61,15 +68,9 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "添加渠道商",
-                                action: () => {
-                                    this.channelList('add', params.row.id);
-                                }
-                            },
-                            {
                                 title: "查看渠道商",
                                 action: () => {
-                                    this.channelList('view', params.row.id);
+                                    this.showChannelList('view', params.row.id);
                                 }
                             },
                             {
@@ -108,7 +109,7 @@ export default {
     mounted() {
         // this.loadpage(this.params)
     },
-    components: { gridTable, confirm },
+    components: { gridTable, confirm, distributorList},
     computed: {
         selectedIds() {
             return this.$refs.gridTable.selection.map( item => item.id)
@@ -131,8 +132,15 @@ export default {
             this.$refs.gridTable.loadpage()
         },
         // 查看、添加渠道商
-        channelList(status, id) {
-
+        showChannelList(status, id) {
+            this.showDisList = true;
+            this.channelId = id
+        },
+        // 选择分销商
+        selectDone() {
+            const ids = this.$refs.distributorTable.selectedIds
+            this.showDisList = false;
+            console.log(1, ids)
         }
     }
 };

@@ -23,6 +23,7 @@
 export default {
     data() {
         return {
+            res: {},
             loading: true,
             padding: "30px",
             data: "",
@@ -43,11 +44,11 @@ export default {
         this.loadpage(this.apiType);
     },
     computed: {
-        res() {
-            return this.$store.state.list.res.data
-                ? this.$store.state.list.res.data
-                : this.$store.state.list.res;
-        }
+        // res() {
+        //     return this.$store.state.list.res.data
+        //         ? this.$store.state.list.res.data
+        //         : this.$store.state.list.res;
+        // }
     },
     methods: {
         changepage(num) {
@@ -92,6 +93,7 @@ export default {
             if (res.status != 200) {
                 this.$Message.warning(res.message);
             }
+            this.res = res.data || res
             this.loading = false;
         }
     }

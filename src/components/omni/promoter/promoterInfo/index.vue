@@ -17,7 +17,11 @@
                     </FormItem>
                     <FormItem label="全部渠道：" prop="channelId">
                         <Select v-model="searchForm.channelId" style="width:160px">
-                            <Option v-for="item in channelIds" :key="item.value" :value="item.value">{{item.label}}</Option>
+                            <Option
+                                v-for="item in channelIds"
+                                :key="item.id"
+                                :value="item.id"
+                            >{{item.name}}</Option>
                         </Select>
                     </FormItem>
                 </Col>
@@ -46,7 +50,7 @@
             :url="url"
             apiType="apiPostJson"
         ></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode" apiType="apiPostJson"></confirm>
     </div>
 </template>
 <script>
@@ -56,7 +60,7 @@ import { apiGet } from "@/fetch/api.js";
 export default {
     data() {
         return {
-            channelIds:[],
+            channelIds: [],
             searchForm: {
                 accName: "",
                 realName: ""
@@ -176,20 +180,23 @@ export default {
                             {
                                 title: "通过",
                                 action: () => {
-                                    this.channelList("add", params.row.id);
+                                    this.actionPromoter("pass", params.row.id);
                                 }
                             },
                             {
                                 title: "驳回",
                                 action: () => {
-                                    this.channelList("view", params.row.id);
+                                    this.actionPromoter(
+                                        "denies",
+                                        params.row.id
+                                    );
                                 }
                             },
                             {
                                 title: "查看详情",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/viewPromoter",
+                                        path: "/addPromoter",
                                         query: { id: params.row.id }
                                     });
                                 }
@@ -220,7 +227,8 @@ export default {
         };
     },
     mounted() {
-        // this.loadpage(this.params)
+        // 获取渠道列表
+        this.getDistributorList();
     },
     components: { gridTable, confirm },
     computed: {
@@ -242,15 +250,35 @@ export default {
                 }
             }
             this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage();
+            this.$refs.gridTable.loadpage("apiPostJson");
         },
         getDistributorList() {
-            const url = this.baseinfoApi.distributorAllList;
-            this.apiGet(url).then( res => {
-                if(res.message) {
-                    this.channelIds = res
+            const url = this.baseinfoApi.channelList;
+            this.apiPost(url).then(res => {
+                if (res.status === 200) {
+                    this.channelIds = res.data.rows;
                 }
-            })
+            });
+        },
+        actionPromoter(type, id) {
+            const typeCode = type === "pass" ? 2 : 3;
+            const typeText = type === "pass" ? '通过' : '驳回';
+            this.$Modal.confirm({
+                title: "确认",
+                content: `确认要${typeText}吗？`,
+                onOk: () => {
+                    // 	2:审核通过;3:审核驳回
+                    this.apiGet(`${this.baseinfoApi.setPromoterStatus}${id}/${typeCode}`).then(res => {
+                            if (res.status === 200) {
+                                this.$Message.success(res.message);
+                                this.$refs.gridTable.loadpage("apiPostJson");
+                            }
+                        })
+                        .catch(err => {
+                            this.$Message.error(res.message);
+                        });
+                }
+            });
         }
     }
 };
