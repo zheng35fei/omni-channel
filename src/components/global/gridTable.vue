@@ -1,11 +1,26 @@
 <template>
     <div class="grids" :style="{'padding-bottom':padding}">
+        <search-form
+            v-if="searchData && searchData.length > 0"
+            :DIC="DIC"
+            :searchData="searchData"
+            :apiType="apiType"
+            :rules="formRules"
+            @search-submit="searchSubmit"
+        >
+            <slot name="searchFormItem" slot="searchFormItem"></slot>
+        </search-form>
+        <Row>
+            <Col style="margin-bottom:10px;">
+                <slot name="menuLeft"></slot>
+            </Col>
+        </Row>
         <Table
             stripe
-            :columns="columns"
+            :columns="columnsFilter"
             :data="res.rows"
             :url="url"
-            :loading="loading" 
+            :loading="loading"
             @on-selection-change="changeSelection"
         ></Table>
         <Page
@@ -20,9 +35,11 @@
     </div>
 </template>
 <script>
+import searchForm from "@/components/global/searchForm";
 export default {
     data() {
         return {
+            DIC: { },
             res: {},
             loading: true,
             padding: "30px",
@@ -31,6 +48,7 @@ export default {
             selection: []
         };
     },
+    components: { searchForm },
     props: ["columns", "url", "params", "apiType"],
     created() {
         var agent = navigator.userAgent.toLowerCase();
@@ -38,17 +56,33 @@ export default {
             this.padding = "50px";
         }
     },
+    created() {
+        this.getDicData();
+    },
     mounted() {
         this.$store.state.list.url = this.url;
         this.$store.state.list.params = this.params;
         this.loadpage(this.apiType);
     },
     computed: {
-        // res() {
-        //     return this.$store.state.list.res.data
-        //         ? this.$store.state.list.res.data
-        //         : this.$store.state.list.res;
-        // }
+        // 筛选需要搜索字段
+        searchData() {
+            return this.columns.filter(item => item.search);
+        },
+        // 筛选表格cloums
+        columnsFilter() {
+            return this.columns.filter(item => !Boolean(item.hide));
+        },
+        // 生成表单验证规则列表
+        formRules() {
+            let rules = {}
+            this.columns.forEach( item => {
+                if(item.rules) {
+                    rules[item.key] = item.rules
+                }
+            });
+            return rules 
+        }
     },
     methods: {
         changepage(num) {
@@ -93,8 +127,23 @@ export default {
             if (res.status != 200) {
                 this.$Message.warning(res.message);
             }
-            this.res = res.data || res
+            this.res = res.data || res;
             this.loading = false;
+        },
+        // 传递搜索数据
+        searchSubmit(searchForm) {
+            this.$emit("search-submit", searchForm);
+        },
+        // 获取动态数据字典
+        getDicData() {
+            const dicList = this.columns.filter(item => item.dicUrl);
+            dicList.forEach(item => {
+                this[item.dicMethod || "apiPost"](item.dicUrl).then(res => {
+                    if (res.status === 200) {
+                        this.DIC[item.key] = res.data.rows.map( t => ({label: item.props ? t[item.props.label] : t['name'], value: item.props ? t[item.props.value] : t['id']}));
+                    }
+                });
+            });
         }
     }
 };

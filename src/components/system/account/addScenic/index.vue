@@ -18,7 +18,7 @@
                 <Input v-model="formItem.linkName" placeholder="填写联系人" style="width:33%;"></Input>
             </FormItem>
             <FormItem label="联系人电话：" prop="linkMobile">
-                <Input v-model="formItem.linkMobile" placeholder="填写联系人电话" style="width:33%;"></Input>
+                <Input v-model.number="formItem.linkMobile" placeholder="填写联系人电话" style="width:33%;"></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>

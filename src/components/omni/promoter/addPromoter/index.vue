@@ -112,7 +112,7 @@ export default {
                 this.type === "edit" ? this.baseinfoApi.promoterUpdate : this.baseinfoApi.promoterSave;
             let params = new FormData()
             for(let key in this.formItem) {
-                if(this.formItem[key]) {
+                if(this.formItem[key] && key !== 'idCardPicUrl' && key !== 'tradeCardPicUrl' && key !== 'touristCertPicUrl') {
                     if(key.includes('Pic')) {
                         params.append(key, this.formItem[key], this.formItem[key].name);
                     }else {
@@ -121,13 +121,12 @@ export default {
                     }
                 }
             }
-            console.log(params, params.get('idCardPic'))
             axios.post(url, params, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then( res => {
-                if (res.status === 200) {
+                if (res.status === 200 && (res.data.status === 200 || res.data.success)) {
                     this.$Message.success(res.data.message);
                     this.$router.back();
                 } else {
@@ -146,7 +145,6 @@ export default {
             })
         },
         setImageValue(key, file) {
-            console.log(file)
             this.formItem[key] = file
             let reader = new FileReader();    //html5读文件  
             reader.readAsDataURL(file); //转BASE64     

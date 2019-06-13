@@ -1,9 +1,11 @@
 import * as fetch from '../../fetch/api'
+import qs from 'qs';
 const state = {
   url: '',
   params: '',
   res: '',
-  actionsParams: ''
+  actionsParams: '',
+  searchParams: {}
 }
 
 const mutations = {
@@ -29,14 +31,14 @@ const actions = {
   async getList (context, apiType = 'apiPost') {
     let res = await fetch[apiType](context.state.url, context.state.params)
     // let res = require('../../data/list.json')
-    context.state.res = res
-    return context.state.res
+    // context.state.res = res
+    return res
   },
   async postApi (context, apiType="apiPost") {
-    let res = await fetch[apiType](context.state.url, context.state.params)
-    // let res = require('../../data/list.json')
-    context.state.res = res
-    return context.state.res
+    const url = context.state.url + '?' + qs.stringify(context.state.params)
+    let res = await fetch[apiType](url, context.state.searchParams)
+    // context.state.res = res
+    return res
   }
 }
 

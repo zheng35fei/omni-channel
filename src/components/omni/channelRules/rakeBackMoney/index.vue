@@ -1,27 +1,14 @@
 <template>
     <div>
-        <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-            <Row>
-                <Col :span="20">
-                    <FormItem label="产品名称：" prop="productName">
-                        <Input v-model="searchForm.productName"/>
-                    </FormItem>
-                    <FormItem label="渠道编码：" prop="channelCode">
-                        <Input v-model="searchForm.channelCode"/>
-                    </FormItem>
-                    <FormItem label="门票编码：" prop="ticketCode">
-                        <Input v-model="searchForm.ticketCode"/>
-                    </FormItem>
-                    <FormItem label="状态：" prop="status">
-                        <Select v-model="searchForm.status">
-                            <!-- <Option :value=""></Option> -->
-                        </Select>
-                    </FormItem>
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Col>
-                <Col :span="4" align="right">
+        <gridTable
+            ref="gridTable"
+            :columns="columns"
+            :params="params"
+            :data="data"
+            :url="url"
+            apiType="apiPostJson"
+        >
+            <template slot="menuLeft">
                 <Button
                         @click="delSelect"
                         type="primary"
@@ -34,17 +21,8 @@
                         icon="md-add"
                         style="margin-bottom:10px;"
                     >添加</Button>
-                </Col>
-            </Row>
-        </Form>
-        <gridTable
-            ref="gridTable"
-            :columns="columns"
-            :params="params"
-            :data="data"
-            :url="url"
-            apiType="apiPostJson"
-        ></gridTable>
+            </template>
+        </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
@@ -54,10 +32,6 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
-            channelIds:[],
-            searchForm: {
-                name: ""
-            },
             columns: [
                 {
                     type: "selection",
@@ -71,22 +45,34 @@ export default {
                 {
                     title: "产品名称",
                     key: "productName",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "渠道编码",
                     key: "channelCode",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "门票编码",
                     key: "ticketCode",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "状态",
                     key: "productNum",
-                    align: "center"
+                    align: "center",
+                    search: true,
+                    type: 'select',
+                    dicData: [{
+                        label: '启用',
+                        value: 0
+                    },{
+                        label: '禁用',
+                        value: 1
+                    }]
                 },
                 {
                     title: "当日价格",
@@ -128,7 +114,7 @@ export default {
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10 },
             url: this.baseinfoApi.brokerageRuleProductList,
             content: "",
             mode: "",

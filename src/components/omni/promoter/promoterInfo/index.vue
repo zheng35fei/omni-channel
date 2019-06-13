@@ -1,47 +1,5 @@
 <template>
     <div>
-        <Form :model="searchForm" rel="searchForm" inline :label-width="100">
-            <Row>
-                <Col :span="20">
-                    <FormItem label="分销商名称：" prop="distName">
-                        <Input v-model="searchForm.distName"/>
-                    </FormItem>
-                    <FormItem label="姓名：" prop="name">
-                        <Input v-model="searchForm.name"/>
-                    </FormItem>
-                    <FormItem label="身份证：" prop="idCard">
-                        <Input v-model="searchForm.idCard"/>
-                    </FormItem>
-                    <FormItem label="手机号：" prop="mobile">
-                        <Input v-model="searchForm.mobile"/>
-                    </FormItem>
-                    <FormItem label="全部渠道：" prop="channelId">
-                        <Select v-model="searchForm.channelId" style="width:160px">
-                            <Option
-                                v-for="item in channelIds"
-                                :key="item.id"
-                                :value="item.id"
-                            >{{item.name}}</Option>
-                        </Select>
-                    </FormItem>
-                </Col>
-                <Col :span="4">
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Col>
-            </Row>
-        </Form>
-        <Row>
-            <Col>
-                <Button
-                    @click="showModal"
-                    type="primary"
-                    icon="md-add"
-                    style="margin-bottom:10px;"
-                >添加</Button>
-            </Col>
-        </Row>
         <gridTable
             ref="gridTable"
             :columns="columns"
@@ -49,8 +7,22 @@
             :data="data"
             :url="url"
             apiType="apiPostJson"
-        ></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode" apiType="apiPostJson"></confirm>
+        >
+            <Button
+                slot="menuLeft"
+                @click="showModal"
+                type="primary"
+                icon="md-add"
+                style="margin-bottom:10px;"
+            >添加</Button>
+        </gridTable>
+        <confirm
+            ref="confirmModel"
+            :content="content"
+            :sucessMsg="sucessMsg"
+            :mode="mode"
+            cbApiType="apiPostJson"
+        ></confirm>
     </div>
 </template>
 <script>
@@ -61,10 +33,6 @@ export default {
     data() {
         return {
             channelIds: [],
-            searchForm: {
-                accName: "",
-                realName: ""
-            },
             columns: [
                 {
                     title: "序号",
@@ -77,22 +45,26 @@ export default {
                 {
                     title: "分销商名称",
                     key: "distName",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "姓名",
                     key: "name",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "手机号",
                     key: "mobile",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "身份证",
                     key: "idCard",
                     align: "center",
+                    search: true,
                     render: (h, params) => {
                         return [
                             h("img", {
@@ -216,10 +188,19 @@ export default {
                         ];
                         return this.common.columnsHandle(h, actions);
                     }
-                }
+                },
+                {
+                    title: "全部渠道",
+                    key: "channelId",
+                    type: 'select',
+                    hide: true,
+                    search: true,
+                    dicUrl: this.baseinfoApi.channelList,
+                    dicMethod: 'apiPostJson'
+                },
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10},
             url: this.baseinfoApi.promoterList,
             content: "",
             mode: "",
@@ -227,8 +208,7 @@ export default {
         };
     },
     mounted() {
-        // 获取渠道列表
-        this.getDistributorList();
+        
     },
     components: { gridTable, confirm },
     computed: {
@@ -241,34 +221,19 @@ export default {
         showModal() {
             this.$router.push("/addPromoter");
         },
-        // 搜索查询
-        searchTable() {
-            this.params = Object.assign({}, this.params, this.searchForm);
-            for (let key in this.params) {
-                if (!this.params[key]) {
-                    delete this.params[key];
-                }
-            }
-            this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage("apiPostJson");
-        },
-        getDistributorList() {
-            const url = this.baseinfoApi.channelList;
-            this.apiPost(url).then(res => {
-                if (res.status === 200) {
-                    this.channelIds = res.data.rows;
-                }
-            });
-        },
+        // 审核推广员
         actionPromoter(type, id) {
             const typeCode = type === "pass" ? 2 : 3;
-            const typeText = type === "pass" ? '通过' : '驳回';
+            const typeText = type === "pass" ? "通过" : "驳回";
             this.$Modal.confirm({
                 title: "确认",
                 content: `确认要${typeText}吗？`,
                 onOk: () => {
                     // 	2:审核通过;3:审核驳回
-                    this.apiGet(`${this.baseinfoApi.setPromoterStatus}${id}/${typeCode}`).then(res => {
+                    this.apiGet(
+                        `${this.baseinfoApi.setPromoterStatus}${id}/${typeCode}`
+                    )
+                        .then(res => {
                             if (res.status === 200) {
                                 this.$Message.success(res.message);
                                 this.$refs.gridTable.loadpage("apiPostJson");

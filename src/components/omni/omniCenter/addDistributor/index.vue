@@ -83,7 +83,7 @@
 
             <Divider/>
 
-            <h3>自定义规则</h3>
+            <h3 stlye="margin-bottom:10px;">自定义规则</h3>
 
             <FormItem label="渠道限制规则：" prop="channelRuleId">
                 <Select v-model="formItem.channelRuleId" placeholder="填写分销商名称" style="width:33%;">

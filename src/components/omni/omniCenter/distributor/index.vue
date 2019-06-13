@@ -1,38 +1,5 @@
 <template>
     <div>
-        <Row>
-            <Col>
-                <Form :model="searchForm" rel="searchForm" inline :label-width="90">
-                    <FormItem label="分销商名称：" prop="name">
-                        <Input v-model="searchForm.name"/>
-                    </FormItem>
-                    <FormItem label="联系人：" prop="linkMan">
-                        <Input v-model="searchForm.linkMan"/>
-                    </FormItem>
-                    <FormItem label="手机号：" prop="linkMobile">
-                        <Input v-model="searchForm.linkMobile"/>
-                    </FormItem>
-                    <FormItem label="渠道：" prop="channelId">
-                        <Select v-model="searchForm.channelId" style="width:200px">
-                            <Option
-                                v-for="item in channelIds"
-                                :value="item.id"
-                                :key="item.id"
-                                :label="item.name"
-                            ></Option>
-                        </Select>
-                    </FormItem>
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Form>
-            </Col>
-        </Row>
-        <Row style="margin-bottom:10px;">
-            <Col>
-                <Button @click="showModal" type="primary" icon="md-add">添加</Button>
-            </Col>
-        </Row>
         <gridTable
             ref="gridTable"
             :columns="columns"
@@ -40,8 +7,17 @@
             :data="data"
             :url="url"
             apiType="apiPostJson"
-        ></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        >
+            <Button slot="menuLeft" @click="showModal" type="primary" icon="md-add">添加</Button>
+        </gridTable>
+        <confirm
+            ref="confirmModel"
+            :content="content"
+            :sucessMsg="sucessMsg"
+            :mode="mode"
+            apiType="apiGet"
+            cbApiType="apiPostJson"
+        ></confirm>
     </div>
 </template>
 <script>
@@ -70,18 +46,22 @@ export default {
                 {
                     title: "分销商名称",
                     key: "name",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "联系人",
                     key: "linkName",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "手机号",
                     key: "linkMobile",
                     sortable: true,
-                    align: "center"
+                    align: "center",
+                    search: true,
+                    rules: [{ type: 'number', required: true, message: "请输入正确的手机号", trigger: "blur" }]
                 },
                 {
                     title: "登录用户名",
@@ -93,7 +73,12 @@ export default {
                     key: "channelId",
                     sortable: true,
                     width: 110,
-                    align: "center"
+                    align: "center",
+                    search: true,
+                    type: "select",
+                    dicUrl: this.baseinfoApi.channelList,
+                    dicMethod: "apiPostJson",
+                    rules: [{ type: 'number', required: true, message: "请输入正确的手机号", trigger: "blur" }]
                 },
                 {
                     title: "最后登录时间",
@@ -159,17 +144,14 @@ export default {
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10 },
             url: this.baseinfoApi.distributorList,
             content: "",
             mode: "",
             sucessMsg: ""
         };
     },
-    mounted() {
-        // this.loadpage(this.params)
-        this.getChannelList();
-    },
+    mounted() {},
     components: { gridTable, confirm },
     computed: {
         selectedIds() {
@@ -213,14 +195,6 @@ export default {
                 },
                 onCancel: () => {
                     row.enabled = val === "T" ? "F" : "T";
-                }
-            });
-        },
-        getChannelList() {
-            this.apiPost(this.baseinfoApi.channelList).then(res => {
-                console.log(res);
-                if (res.status === 200) {
-                    this.channelIds = res.data.rows;
                 }
             });
         }

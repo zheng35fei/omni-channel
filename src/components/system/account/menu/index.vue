@@ -41,8 +41,6 @@ export default {
                     key: "funType",
                     width: 150,
                     render: (h, params) => {
-                        let _this = this;
-                        // return h('span', this.filter.accountType(params.row.funType))   1,2,3,4 => [1,2,3,4]
                         let strArr = [];
                         this.splits(params.row.funType || "").forEach(item => {
                             strArr.push(this.filter.turn("funType", item));

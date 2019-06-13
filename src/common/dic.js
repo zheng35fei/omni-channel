@@ -2,25 +2,19 @@
 let dic = {
   //商户类型
   merchantType: [
-    {label: '个人商户', value: 100},
-    {label: '企业商户', value: 200}
+    { label: '个人商户', value: 100 },
+    { label: '企业商户', value: 200 }
   ],
-  status: [
-    {label:"不可用",value:0},
-    {label:"可用",value:1},
-  ],
+  status: [{ label: '不可用', value: 0 }, { label: '可用', value: 1 }],
   // channelType: [
   //   {label:"银行",value:0},
   //   {label:"支付公司",value:1},
   //   {label:"其他",value:2},
   // ],
-  signStatus: [
-    {label:"已解约",value:0},
-    {label:"已签约",value:1},
-  ],
-  feeType:[
-    {label:"按交易笔数（元/笔）",value:0},
-    {label:"按交易金额（%）",value:1},
+  signStatus: [{ label: '已解约', value: 0 }, { label: '已签约', value: 1 }],
+  feeType: [
+    { label: '按交易笔数（元/笔）', value: 0 },
+    { label: '按交易金额（%）', value: 1 }
   ],
   funType: [
     {
@@ -38,31 +32,36 @@ let dic = {
     {
       label: '推广员',
       value: 'extension'
-    },
+    }
   ],
   functionType: [
     {
       label: '菜单',
       value: 'menu'
-    },{
+    },
+    {
       label: '栏目',
       value: 'column'
-    },{
+    },
+    {
       label: '按钮',
       value: 'button'
-    },
+    }
   ],
   hierarchy: [
     {
       label: '一级菜单',
       value: '0'
-    },{
+    },
+    {
       label: '二级菜单',
       value: '1'
-    },{
+    },
+    {
       label: '三级菜单',
       value: '2'
-    },{
+    },
+    {
       label: '四级菜单',
       value: '3'
     }
@@ -108,6 +107,36 @@ let dic = {
       label: '审核驳回',
       value: 3
     }
+  ],
+  blockingTime: [
+    {
+      label: '不屏蔽',
+      value: 0
+    },
+    {
+      label: '屏蔽',
+      value: 1
+    }
+  ],
+  relevanceWay: [
+    {
+      label: '单次关联模式',
+      value: 0
+    },
+    {
+      label: '长期模式',
+      value: 1
+    }
+  ],
+  promoteWay: [
+    {
+      label: '普通模式',
+      value: 0
+    },
+    {
+      label: '队列模式',
+      value: 1
+    }
   ]
-}
-export default dic
+};
+export default dic;

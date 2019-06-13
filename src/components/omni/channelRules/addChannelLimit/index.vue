@@ -9,9 +9,24 @@
             :rules="ruleForm"
         >
             <FormItem prop="name" label="渠道名称：">
-                <Input v-model="formItem.name" placeholder="请填写渠道限制规则名称" style="width:33%;"/>
+                <Input v-model="formItem.name" clearable placeholder="请填写渠道限制规则名称" style="width:33%;"/>
             </FormItem>
-            <h3>推广模式</h3>
+            <FormItem prop="name" label="绑定景区：">
+                <Select
+                    v-model="formItem.scenicId"
+                    style="width:33%;"
+                    filterable
+                    remote
+                    clearable 
+                    :remote-method="setScenicList"
+                    :loading="loading"
+                    @on-change="selectScenicItem"
+                >
+                    <Option v-for="item in scenicList" :key="item.id" :value="item.id">{{item.name}}</Option>
+                </Select>
+            </FormItem>
+
+            <h3 class="formGroupTitle">推广模式</h3>
             <FormItem label="推广模式：" prop="promoteWay">
                 <RadioGroup v-model="formItem.promoteWay" type="button" size="large">
                     <Radio
@@ -22,7 +37,7 @@
                 </RadioGroup>
             </FormItem>
 
-            <template v-if="formItem.promoteWay === 0">
+            <template v-if="formItem.promoteWay === 1">
                 <FormItem label="队列所需完善内容：" prop="necessaryContents">
                     <CheckboxGroup
                         v-model="necessaryContentsSelected"
@@ -32,11 +47,12 @@
                     </CheckboxGroup>
                 </FormItem>
                 <FormItem label="队列重复开启时间：" prop="repeatOpenTime">
-                    <Input
-                        type="number"
+                    <InputNumber
+                        :min="0"
                         v-model="formItem.channelRuleParamDTO.queueInfoDTO.repeatOpenTime"
-                        style="width:33%"
+                        style="width:150px"
                     />
+                    <span>分钟</span>
                 </FormItem>
                 <FormItem label="队列有效人数判断：" prop="quantityType">
                     <RadioGroup v-model="formItem.channelRuleParamDTO.queueInfoDTO.quantityType">
@@ -46,9 +62,9 @@
             </template>
 
             <Divider></Divider>
-            <h3>关联有效期</h3>
+            <h3 class="formGroupTitle">关联有效期</h3>
             <FormItem label="关联有效期：" prop="relevanceWay">
-                <RadioGroup v-model="formItem.relevanceWay">
+                <RadioGroup v-model="formItem.relevanceWay" type="button" size="large">
                     <Radio
                         v-for="item in relevanceTypes"
                         :key="item.value"
@@ -57,37 +73,43 @@
                 </RadioGroup>
             </FormItem>
 
-            <FormItem label="长期有效时间：" prop="longTermType" v-if="formItem.relevanceWay === 0">
+            <FormItem label="长期有效时间：" prop="longTermType" v-if="formItem.relevanceWay === 1">
                 <RadioGroup v-model="formItem.channelRuleParamDTO.longTermDTO.type">
                     <Radio v-for="item in longTermTypes" :key="item.value" :label="item">
                         <span>{{item}}</span>
-                        <Input
-                            v-if="item === formItem.channelRuleParamDTO.longTermDTO.type"
-                            style="width:100px;"
-                            v-model="formItem.channelRuleParamDTO.longTermDTO.num"
-                            :placeholder="item === '按天' ? '天数' : '小时'"
-                        />
+                        <template v-if="item === formItem.channelRuleParamDTO.longTermDTO.type">
+                            <InputNumber
+                                style="width:60px;"
+                                v-model="formItem.channelRuleParamDTO.longTermDTO.num"
+                                :placeholder="item === '按天' ? '天数' : '小时'"
+                            />
+                            {{item === '按天' ? '天' : '小时'}}
+                        </template>
                     </Radio>
                 </RadioGroup>
             </FormItem>
 
-            <h3>屏蔽时间设置（设置部分时间无法进行关联推广员）</h3>
-            <FormItem prop>
+            <h3 class="formGroupTitle">屏蔽时间设置（设置部分时间无法进行关联推广员）</h3>
+            <FormItem label="是否屏蔽时间:" prop="blockingTime">
                 <RadioGroup v-model="formItem.blockingTime">
-                    <Radio v-for="item in blockDateRanges" :label="item.value" :key="item.value">
-                        <span>{{item.label}}</span>
-                        <DatePicker
-                            v-if="item.value === 0 && formItem.blockingTime === 0"
-                            type="datetimerange"
-                            placeholder="选择开始结束时间"
-                            style="width: 280px"
-                            @on-change="setBlockTime"
-                        ></DatePicker>
-                    </Radio>
+                    <Radio
+                        v-for="item in blockDateRanges"
+                        :label="item.value"
+                        :key="item.value"
+                    >{{item.label}}</Radio>
                 </RadioGroup>
             </FormItem>
+            <FormItem label="屏蔽时间:" prop="blockingTimeStartEnd" v-if="formItem.blockingTime === 1">
+                <DatePicker
+                    :value="blockingTimeStartEnd"
+                    type="datetimerange"
+                    placeholder="选择开始结束时间"
+                    style="width: 280px"
+                    @on-change="setBlockTime"
+                ></DatePicker>
+            </FormItem>
 
-            <h3>备注</h3>
+            <h3 class="formGroupTitle">备注</h3>
             <FormItem label="备注：" prop="remark">
                 <Input type="textarea" v-model="formItem.remark" style="width:33%;" :rows="4"/>
             </FormItem>
@@ -104,57 +126,59 @@
 export default {
     data() {
         return {
+            loading: false,
+            scenicList: [],
             blockDateRanges: [
                 {
                     label: "不屏蔽",
-                    value: 1
+                    value: 0
                 },
                 {
                     label: "屏蔽",
-                    value: 0
+                    value: 1
                 }
             ],
             longTermTypes: ["按天", "固定时间"],
             relevanceTypes: [
                 {
                     label: "单次关联模式",
-                    value: 1
+                    value: 0
                 },
                 {
                     label: "长期模式",
-                    value: 0
+                    value: 1
                 }
             ],
             quantityTypes: ["车辆入场模式", "用户取票数量"],
             promoteWays: [
                 {
                     label: "普通模式",
-                    value: 1
+                    value: 0
                 },
                 {
                     label: "队列模式",
-                    value: 0
+                    value: 1
                 }
             ],
             necessaryContents: ["旅行社", "车牌号", "导游证"],
             formItem: {
                 id: "",
                 name: "",
-                promoteWay: "",
-                relevanceWay: "",
-                blockingTime: "",
+                promoteWay: 0,
+                relevanceWay: 0,
+                blockingTime: 0,
                 repeatOpenTime: 0,
-                scenicId: 1,
-                scenicCode: "MOCK_CODE",
+                scenicId: "",
+                scenicCode: "",
                 channelRuleParamDTO: {
                     queueInfoDTO: {
                         necessaryContents: "",
-                        repeatOpenTime: "",
+                        repeatOpenTime: 0,
                         quantityType: ""
                     },
                     longTermDTO: {
                         type: "",
-                        num: ""
+                        num: null
                     },
                     blockDateRangeDTO: {
                         startDate: "",
@@ -163,7 +187,6 @@ export default {
                 },
                 remark: ""
             },
-            funType: [],
             ruleForm: {
                 name: [
                     { required: true, message: "请输入景区id", trigger: "blur" }
@@ -187,6 +210,7 @@ export default {
         };
     },
     created() {
+        this.getAllScenicList();
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
             this.apiPost(
@@ -201,13 +225,68 @@ export default {
         }
     },
     computed: {
-        necessaryContentsSelected() {
-            console.log(this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents)
-            return this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents ? 
-                [this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents] : []
+        necessaryContentsSelected: {
+            get: function() {
+                const arr = this.formItem.channelRuleParamDTO.queueInfoDTO
+                    .necessaryContents;
+                return arr
+                    ? Array.isArray(arr) && arr.length > 0
+                        ? arr
+                        : arr.split(",")
+                    : [];
+            },
+            set: function(val) {
+                this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents = val.join(
+                    ","
+                );
+            }
+        },
+        blockingTimeStartEnd() {
+            return [
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.startDate,
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.endDate
+            ];
         }
     },
     methods: {
+        getAllScenicList() {
+            this.apiGet(this.adminApi.getAllScenicList).then(res => {
+                if (res.status === 200) {
+                    this.scenicList = res.data;
+                } else {
+                    this.$Message.error(res.message);
+                }
+            });
+        },
+        // 查询绑定景区
+        setScenicList(query) {
+            if (!query) return this.scenicList;
+            return this.scenicList.filter(item =>
+                item.name.toLowerCase().includes(query.toLowerCase())
+            );
+            // this.loading = true;
+            // this.apiPost(this.adminApi.scenicList + "?name=" + query)
+            //     .then(res => {
+            //         if (res.status === 200) {
+            //             this.scenicList = res.data.rows;
+            //         } else {
+            //             this.$Message.error(res.data.message);
+            //         }
+            //     })
+            //     .catch(err => {
+            //         this.$Message.error(err.response.data.message);
+            //     })
+            //     .then(() => {
+            //         this.loading = false;
+            //     });
+        },
+        // 选中景区
+        selectScenicItem(val) {
+            console.log(val);
+            const select = this.scenicList.filter(item => item.id === val)[0];
+            this.formItem.scenicId = select && select.id;
+            this.formItem.scenicCode = select && select.scenicCode;
+        },
         back() {
             this.$router.back();
         },
@@ -217,8 +296,8 @@ export default {
                     ? this.baseinfoApi.channelRuleUpdate
                     : this.baseinfoApi.channelRuleSave;
             let params = {};
-            console.log(this.formItem)
-            return
+            console.log(this.formItem);
+            // return
             for (let key in this.formItem) {
                 if (this.formItem[key]) {
                     params[key] = this.formItem[key];
@@ -240,14 +319,15 @@ export default {
             });
         },
         setBlockTime(dateArr) {
-            console.log(dateArr);
-            if(dateArr && dateArr.length > 1) {
-                this.formItem.channelRuleParamDTO.blockDateRangeDTO.startDate = dateArr[0]
-                this.formItem.channelRuleParamDTO.blockDateRangeDTO.endDate = dateArr[1]
+            if (dateArr && dateArr.length > 1) {
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.startDate =
+                    dateArr[0];
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.endDate =
+                    dateArr[1];
             }
         },
-        setNecessaryContents( val) {
-            console.log()
+        setNecessaryContents(val) {
+            // console.log(val)
         }
     }
 };
@@ -255,8 +335,9 @@ export default {
 
 
 <style lang="scss">
-.addMenu {
-    margin-top: 20px;
+.formGroupTitle {
+    margin-bottom: 10px;
+    padding: 5px;
 }
 </style>
 

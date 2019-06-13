@@ -125,3 +125,16 @@ export function apiDelete (url, params = {}) {
       })
   })
 }
+
+export function apiConfig( url, params = {}, method = 'get', headers = {}) {
+  return axios.request({
+    method, 
+    url,
+    params,
+    headers
+  }).then( res => {
+    return res.data
+  }).catch( err => {
+    return err
+  })
+}

@@ -1,25 +1,5 @@
 <template>
     <div>
-        <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-            <Row>
-                <Col :span="20">
-                    <FormItem label="分组名称：" prop="name">
-                        <Input v-model="searchForm.name"/>
-                    </FormItem>
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Col>
-                <Col :span="4" align="right">
-                    <Button
-                        @click="showModal"
-                        type="primary"
-                        icon="md-add"
-                        style="margin-bottom:10px;"
-                    >添加</Button>
-                </Col>
-            </Row>
-        </Form>
         <gridTable
             ref="gridTable"
             :columns="columns"
@@ -27,7 +7,9 @@
             :data="data"
             :url="url"
             apiType="apiPostJson"
-        ></gridTable>
+        >
+            <Button slot="menuLeft" @click="showModal" type="primary" icon="md-add">添加</Button>
+        </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
@@ -37,10 +19,6 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
-            channelIds:[],
-            searchForm: {
-                name: ""
-            },
             columns: [
                 {
                     title: "序号",
@@ -53,7 +31,8 @@ export default {
                 {
                     title: "返佣规则名称",
                     key: "name",
-                    align: "center"
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "返佣商品数量",

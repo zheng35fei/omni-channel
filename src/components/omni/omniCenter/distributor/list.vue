@@ -24,7 +24,6 @@ export default {
         return {
             columns: [
                 {
-                    type: "selection",
                     title: "序号",
                     align: "center",
                     width: 60,
@@ -80,15 +79,11 @@ export default {
             sucessMsg: ""
         };
     },
-    mounted() {},
     components: { gridTable, confirm },
     computed: {
         selectedIds() {
             return this.$refs.gridTable.selection.map(item => item.id);
         }
-    },
-    methods: {
-        
     }
 };
 </script>

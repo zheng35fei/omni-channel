@@ -41,12 +41,12 @@ const common = {
     })
   },
   listDelete (obj, options) {
-    api.apiPost(options.url, options.params || {}).then( res => {
+    api[options.reqMethod || 'apiPost'](options.url, options.params || {}, options.method).then( res => {
       options.callback(res)
     })
   },
   listDone (obj, options) {
-    api.apiGet(options.url, options.params || {}).then( res => {
+    api[options.reqMethod || 'apiGet'](options.url, options.params || {}, options.method).then( res => {
       options.callback(res)
     })
   },

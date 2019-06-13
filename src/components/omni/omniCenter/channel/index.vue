@@ -1,24 +1,32 @@
 <template>
     <div>
-        <Row>
-            <Col :span="12" align="left">
-                <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-                    <FormItem label="渠道名称：" prop="name">
-                        <Input v-model="searchForm.name"/>
-                    </FormItem>
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Form>
-            </Col>
-            <Col :span="12" align="right">
-                <Button @click="showModal" type="primary" icon="md-add" style="margin-right:10px;">添加</Button>
-            </Col>
-        </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url" apiType="apiPostJson"></gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <gridTable
+            ref="gridTable"
+            :columns="columns"
+            :params="params"
+            :data="data"
+            :url="url"
+            apiType="apiPostJson"
+        >
+            <Button
+                slot="menuLeft"
+                @click="showModal"
+                type="primary"
+                icon="md-add"
+                style="margin-right:10px;"
+            >添加</Button>
+        </gridTable>
+        <confirm
+            ref="confirmModel"
+            :content="confirmObj.content"
+            :sucessMsg="confirmObj.sucessMsg"
+            :mode="confirmObj.mode"
+            :apiType="confirmObj.apiType"
+            :method="confirmObj.method"
+            :cbApiType="confirmObj.cbApiType"
+        ></confirm>
 
-        <Modal title="分销商" v-model="showDisList" scrollable fullscreen @on-ok="selectDone">
+        <Modal title="分销商" v-model="showDisList" scrollable width="960px" @on-ok="selectDone">
             <distributor-list v-if="showDisList" ref="distributorTable" :channelId="channelId"></distributor-list>
         </Modal>
     </div>
@@ -31,10 +39,7 @@ export default {
     data() {
         return {
             showDisList: false,
-            channelId: '',
-            searchForm: {
-                name: ""
-            },
+            channelId: "",
             columns: [
                 {
                     title: "序号",
@@ -47,18 +52,19 @@ export default {
                 {
                     title: "渠道名称",
                     key: "name",
-                    align: 'center',
+                    align: "center",
+                    search: true
                 },
                 {
                     title: "分销商数量",
                     key: "distAmount",
-                    align: 'center',
+                    align: "center",
                     width: 100
                 },
                 {
                     title: "备注",
                     key: "remark",
-                    align: 'center'
+                    align: "center"
                 },
                 {
                     title: "操作",
@@ -70,7 +76,7 @@ export default {
                             {
                                 title: "查看渠道商",
                                 action: () => {
-                                    this.showChannelList('view', params.row.id);
+                                    this.showChannelList("view", params.row.id);
                                 }
                             },
                             {
@@ -85,11 +91,15 @@ export default {
                             {
                                 title: "删除",
                                 action: () => {
-                                    this.content = "确定删除？";
-                                    this.mode = "done";
-                                    this.sucessMsg = "删除成功！";
+                                    this.confirmObj.content = "确定删除？";
+                                    this.confirmObj.mode = "done";
+                                    this.confirmObj.sucessMsg = "删除成功！";
+                                    this.confirmObj.apiType = "apiConfig";
+                                    this.confirmObj.method = "put";
+                                    this.confirmObj.cbApiType = "apiPostJson";
                                     this.$refs.confirmModel.confirm(
-                                        this.baseinfoApi.channelDel + params.row.id
+                                        this.baseinfoApi.channelDel +
+                                            params.row.id
                                     );
                                 }
                             }
@@ -101,18 +111,23 @@ export default {
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
             url: this.baseinfoApi.channelList,
-            content: "",
-            mode: "",
-            sucessMsg: ""
+            confirmObj: {
+                content: "",
+                mode: "",
+                sucessMsg: "",
+                apiType: "",
+                method: "",
+                cbApiType: ""
+            }
         };
     },
     mounted() {
         // this.loadpage(this.params)
     },
-    components: { gridTable, confirm, distributorList},
+    components: { gridTable, confirm, distributorList },
     computed: {
         selectedIds() {
-            return this.$refs.gridTable.selection.map( item => item.id)
+            return this.$refs.gridTable.selection.map(item => item.id);
         }
     },
     methods: {
@@ -123,24 +138,24 @@ export default {
         // 搜索查询
         searchTable() {
             this.params = Object.assign({}, this.params, this.searchForm);
-            for(let key in this.params) {
-                if(!this.params[key]) {
-                    delete this.params[key]
+            for (let key in this.params) {
+                if (!this.params[key]) {
+                    delete this.params[key];
                 }
             }
             this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage()
+            this.$refs.gridTable.loadpage();
         },
         // 查看、添加渠道商
         showChannelList(status, id) {
             this.showDisList = true;
-            this.channelId = id
+            this.channelId = id;
         },
         // 选择分销商
         selectDone() {
-            const ids = this.$refs.distributorTable.selectedIds
+            const ids = this.$refs.distributorTable.selectedIds;
             this.showDisList = false;
-            console.log(1, ids)
+            console.log(1, ids);
         }
     }
 };
