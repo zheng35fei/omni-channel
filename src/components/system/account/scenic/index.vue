@@ -1,11 +1,8 @@
 <template>
     <div>
-        <Row :gutter="16" class="btn-groups">
-            <Col span="2">
-                <Button type="primary" @click="showModal">添加</Button>
-            </Col>
-        </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url">
+            <Button slot="menuLeft" type="primary" @click="showModal">添加</Button>
+        </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
         <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setDialogDone">
             <Form v-model="scenicObj"></Form>
@@ -35,20 +32,24 @@ export default {
                 },
                 {
                     title: "景区名称",
-                    key: "name"
+                    key: "name",
+                    search: true
                 },
                 {
                     title: "景区编码",
-                    key: "scenicCode"
+                    key: "scenicCode",
+                    search: true
                 },
                 {
                     title: "联系人",
                     key: "linkName",
-                    width: 250
+                    width: 250,
+                    search: true
                 },
                 {
                     title: "联系人电话",
-                    key: "linkMobile"
+                    key: "linkMobile",
+                    search: true
                 },
                 {
                     title: "操作",

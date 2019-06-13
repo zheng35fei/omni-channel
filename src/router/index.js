@@ -17,7 +17,6 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
   iView.LoadingBar.start()
   // sessionStorage.setItem('activeName', to.meta.belongTab)
   // VueCookies.set('activeName', to.meta.belongTab)

@@ -33,7 +33,7 @@
         <FormItem>
             <slot name="searchFormItem"></slot>
         </FormItem>
-        <Button type="primary" icon="ios-search" @click="handleSubmit()">搜索</Button>
+        <Button type="primary" icon="ios-search" @click="handleSubmit('formInline')">搜索</Button>
         <Button type="primary" icon="md-refresh" @click="handleReset('formInline')">重置</Button>
         <slot name="btn"></slot>
         <!-- <FormItem>
@@ -68,7 +68,6 @@ export default {
     },
     props: ["searchData", "apiType", "DIC", "rules"],
     mounted() {
-        console.log(this.rules);
         this.searchData.map(ele => {
             if (ele.today) {
                 this.searchForm[ele.name] = ele.today ? ele.today : "";
@@ -78,17 +77,21 @@ export default {
     computed: {},
     methods: {
         // 提交搜索
-        handleSubmit() {
-            for (let item in this.searchForm) {
-                if (typeof this.searchForm[item] === "object") {
-                    this.searchForm[item] = this.searchForm[
-                        item
-                    ].toLocaleDateString();
+        handleSubmit(formName) {
+            this.$refs[formName].validate( valid => {
+                if(valid) {
+                    for (let item in this.searchForm) {
+                        if (typeof this.searchForm[item] === "object") {
+                            this.searchForm[item] = this.searchForm[
+                                item
+                            ].toLocaleDateString();
+                        }
+                    }
+                    this.$store.state.list.searchParams = this.searchForm;
+                    this.$emit("search-submit", this.searchForm);
+                    this.$parent.loadpage(this.apiType);
                 }
-            }
-            this.$store.state.list.searchParams = this.searchForm;
-            this.$emit("search-submit", this.searchForm);
-            this.$parent.loadpage(this.apiType);
+            })
         },
         // 重置表单
         handleReset(name) {

@@ -42,9 +42,7 @@ export default {
                 name: "",
                 remark: "",
                 channelRuleId: "",
-                brokerageRuleId: "",
-                scenicId: "",
-                scenicCode: ""
+                brokerageRuleId: ""
             },
             channelRuleArr: [],
             brokerageRuleArr: [],
@@ -122,7 +120,7 @@ export default {
         },
         getReBackList() {
             const url = this.baseinfoApi.brokerageRuleList
-            this.apiPost(url).then( res => {
+            this.apiPostJson(url).then( res => {
                 console.log(res)
                 this.brokerageRuleArr = res.data.rows
             })

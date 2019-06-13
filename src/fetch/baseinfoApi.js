@@ -46,4 +46,6 @@ export default {
     brokerageRuleListSave: prefix + '/brokerageRuleList/save/',
     // GET /brokerageRuleList/updateBrokerageSum/{id}/{brokerageSum}
     brokerageSumtUpdate: prefix + '/brokerageRuleList/updateBrokerageSum/',
+    // 产品列表
+    productList: prefix + '/productInfo/grid'
 }

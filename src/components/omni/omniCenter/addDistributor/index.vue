@@ -125,8 +125,6 @@ export default {
             formItem: {
                 id: "",
                 userId: "",
-                scenicId: "",
-                scenicCode: "",
                 accName: "",
                 name: "",
                 accPass: "",
@@ -146,9 +144,6 @@ export default {
                 brokerageRuleId: ""
             },
             ruleForm: {
-                scenicId: [
-                    { required: true, message: "请输入景区id", trigger: "blur" }
-                ],
                 roleName: [
                     {
                         required: true,
@@ -221,7 +216,7 @@ export default {
             });
         },
         getChannelList() {
-            this.apiPost(this.baseinfoApi.channelList).then(res => {
+            this.apiPostJson(this.baseinfoApi.channelList).then(res => {
                 if (res.status === 200) {
                     this.channelIds = res.data.rows;
                 }
@@ -236,7 +231,7 @@ export default {
         },
         getReBackList() {
             const url = this.baseinfoApi.brokerageRuleList;
-            this.apiPost(url).then(res => {
+            this.apiPostJson(url).then(res => {
                 console.log(res);
                 this.brokerageRuleArr = res.data.rows;
             });

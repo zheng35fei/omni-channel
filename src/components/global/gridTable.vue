@@ -1,7 +1,7 @@
 <template>
     <div class="grids" :style="{'padding-bottom':padding}">
         <search-form
-            v-if="searchData && searchData.length > 0"
+            v-if="search || (searchData && searchData.length > 0)"
             :DIC="DIC"
             :searchData="searchData"
             :apiType="apiType"
@@ -39,7 +39,7 @@ import searchForm from "@/components/global/searchForm";
 export default {
     data() {
         return {
-            DIC: { },
+            DIC: {},
             res: {},
             loading: true,
             padding: "30px",
@@ -49,7 +49,25 @@ export default {
         };
     },
     components: { searchForm },
-    props: ["columns", "url", "params", "apiType"],
+    props: {
+        columns: {
+            type: Array,
+            default: []
+        },
+        url: {
+            type: String
+        },
+        params: {
+            type: Object
+        },
+        apiType: {
+            type: String
+        },
+        search: {
+            default: false,
+            type: Boolean
+        }
+    },
     created() {
         var agent = navigator.userAgent.toLowerCase();
         if (agent.indexOf("firefox") > 0) {
@@ -71,20 +89,49 @@ export default {
         },
         // 筛选表格cloums
         columnsFilter() {
-            return this.columns.filter(item => !Boolean(item.hide));
+            return this.columns
+                .filter(item => !Boolean(item.hide))
+                .map(item => this.renderTd(item));
         },
         // 生成表单验证规则列表
         formRules() {
-            let rules = {}
-            this.columns.forEach( item => {
-                if(item.rules) {
-                    rules[item.key] = item.rules
+            let rules = {};
+            this.columns.forEach(item => {
+                if (item.rules) {
+                    rules[item.key] = item.rules;
                 }
             });
-            return rules 
+            return rules;
         }
     },
     methods: {
+        // 静态数据字典渲染
+        renderTd(item) {
+            if (item.dicData) {
+                item.render = (h, params) => {
+                    let arr = [];
+                    arr = item.dicData
+                        .map(t => t.value === params.row[item.key] && t.label)
+                        .filter(t => !!t);
+                    return h("div", arr.join(" "));
+                };
+            }
+            return item;
+        },
+        // 动态数据字典渲染
+        renderTdUrl(item) {
+            return (h, params) => {
+                let arr = [];
+                arr =
+                    this.DIC &&
+                    Object.entries(this.DIC[item.key]).map(t => {
+                        if ("" + t[1].value == params.row[item.key]) {
+                            return t[1].label;
+                        }
+                    });
+                return h("div", arr.join(" "));
+            };
+        },
         changepage(num) {
             this.$store.state.list.params.page = num;
             this.loadpage(this.apiType);
@@ -136,11 +183,18 @@ export default {
         },
         // 获取动态数据字典
         getDicData() {
-            const dicList = this.columns.filter(item => item.dicUrl);
-            dicList.forEach(item => {
-                this[item.dicMethod || "apiPost"](item.dicUrl).then(res => {
+            this.columns.forEach((item, index) => {
+                if (!item.dicUrl) return;
+                this[item.dicMethod || "apiPost"](
+                    item.dicUrl,
+                    item.dicParams || {}
+                ).then(res => {
                     if (res.status === 200) {
-                        this.DIC[item.key] = res.data.rows.map( t => ({label: item.props ? t[item.props.label] : t['name'], value: item.props ? t[item.props.value] : t['id']}));
+                        this.DIC[item.key] = res.data.rows.map(t => ({
+                            label: item.props ? t[item.props.label] : t["name"],
+                            value: item.props ? t[item.props.value] : t["id"]
+                        }));
+                        this.$set(item, "render", this.renderTdUrl(item));
                     }
                 });
             });

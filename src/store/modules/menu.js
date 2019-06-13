@@ -82,7 +82,6 @@ function buildMenu(routes, list, funNameArr = [], funCodeArr = [], index = 0) {
     if (!item.list) {
       let nameArr = [...funNameArr]
       let codeArr = [...funCodeArr]
-      console.log(index, item.funName, nameArr, codeArr, item.funUrl)
       const itemRouter = buildComponents(
         nameArr,
         codeArr,
@@ -152,7 +151,6 @@ const actions = {
       list: []
     }
     switchTree(menuList.data, menuParentObj, 'parentId', 'list')
-    console.log(defaultMenuList.data[0].list[0].list[0].funCode)
     context.state.menuList = [...defaultMenuList.data, ...menuParentObj.list];
   },
   setActiveNameAction({ commit }, name) {

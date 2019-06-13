@@ -11,20 +11,6 @@
             <FormItem prop="name" label="渠道名称：">
                 <Input v-model="formItem.name" clearable placeholder="请填写渠道限制规则名称" style="width:33%;"/>
             </FormItem>
-            <FormItem prop="name" label="绑定景区：">
-                <Select
-                    v-model="formItem.scenicId"
-                    style="width:33%;"
-                    filterable
-                    remote
-                    clearable 
-                    :remote-method="setScenicList"
-                    :loading="loading"
-                    @on-change="selectScenicItem"
-                >
-                    <Option v-for="item in scenicList" :key="item.id" :value="item.id">{{item.name}}</Option>
-                </Select>
-            </FormItem>
 
             <h3 class="formGroupTitle">推广模式</h3>
             <FormItem label="推广模式：" prop="promoteWay">
@@ -168,8 +154,6 @@ export default {
                 relevanceWay: 0,
                 blockingTime: 0,
                 repeatOpenTime: 0,
-                scenicId: "",
-                scenicCode: "",
                 channelRuleParamDTO: {
                     queueInfoDTO: {
                         necessaryContents: "",
@@ -257,28 +241,6 @@ export default {
                     this.$Message.error(res.message);
                 }
             });
-        },
-        // 查询绑定景区
-        setScenicList(query) {
-            if (!query) return this.scenicList;
-            return this.scenicList.filter(item =>
-                item.name.toLowerCase().includes(query.toLowerCase())
-            );
-            // this.loading = true;
-            // this.apiPost(this.adminApi.scenicList + "?name=" + query)
-            //     .then(res => {
-            //         if (res.status === 200) {
-            //             this.scenicList = res.data.rows;
-            //         } else {
-            //             this.$Message.error(res.data.message);
-            //         }
-            //     })
-            //     .catch(err => {
-            //         this.$Message.error(err.response.data.message);
-            //     })
-            //     .then(() => {
-            //         this.loading = false;
-            //     });
         },
         // 选中景区
         selectScenicItem(val) {

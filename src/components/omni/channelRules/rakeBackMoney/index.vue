@@ -55,28 +55,31 @@ export default {
                     search: true
                 },
                 {
-                    title: "门票编码",
-                    key: "ticketCode",
+                    title: "产品编码",
+                    key: "proCode",
                     align: "center",
                     search: true
                 },
                 {
                     title: "状态",
-                    key: "productNum",
+                    key: "proEnabled",
                     align: "center",
                     search: true,
                     type: 'select',
                     dicData: [{
+                        label: '全部',
+                        value: ''
+                    },{
                         label: '启用',
-                        value: 0
+                        value: 'T'
                     },{
                         label: '禁用',
-                        value: 1
+                        value: 'F'
                     }]
                 },
                 {
                     title: "当日价格",
-                    key: "productNum",
+                    key: "proPrice",
                     align: "center"
                 },
                 {
@@ -85,8 +88,13 @@ export default {
                     align: "center",
                     render: (h, params) => {
                         return h('Input', {
-                            
-                        }, params.row.brokerageSum)
+                            props: {
+                                prefix:"logo-yen"
+                            },
+                            attrs: {
+                                value: params.row.brokerageSum
+                            }
+                        })
                     }
                 },
                 {
@@ -121,9 +129,6 @@ export default {
             sucessMsg: ""
         };
     },
-    mounted() {
-        // this.loadpage(this.params)
-    },
     components: { gridTable, confirm },
     computed: {
         selectedIds() {
@@ -134,17 +139,6 @@ export default {
         // 添加
         showModal() {
             
-        },
-        // 搜索查询
-        searchTable() {
-            this.params = Object.assign({}, this.params, this.searchForm);
-            for (let key in this.params) {
-                if (!this.params[key]) {
-                    delete this.params[key];
-                }
-            }
-            this.$store.state.list.params = this.params;
-            this.$refs.gridTable.loadpage();
         },
         // 批量删除
         delSelect() {

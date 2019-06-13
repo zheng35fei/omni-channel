@@ -1,36 +1,24 @@
 <template>
     <div>
-        <Row>
-            <Col :span="12" align="left">
-                <Form :model="searchForm" rel="searchForm" inline :label-width="80">
-                    <FormItem label="用户名：" prop="accName">
-                        <Input v-model="searchForm.accName"/>
-                    </FormItem>
-                    <FormItem label="真实姓名：" prop="realName">
-                        <Input v-model="searchForm.realName"/>
-                    </FormItem>
-                    <FormItem :label-width="0">
-                        <Button type="primary" icon="md-search" @click="searchTable">搜索</Button>
-                    </FormItem>
-                </Form>
-            </Col>
-            <Col :span="12" align="right">
-                <Button
-                    @click="showModal"
-                    type="primary"
-                    icon="md-add"
-                    style="margin-right:10px;"
-                >添加</Button>
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url">
+            <Row slot="menuLeft">
+                <Col>
+                    <Button
+                        @click="showModal"
+                        type="primary"
+                        icon="md-add"
+                        style="margin-right:10px;"
+                    >添加</Button>
 
-                <ButtonGroup>
-                    <Button icon="md-play" type="primary" @click="setAccStatus('T')">启用</Button>
-                    <Button icon="md-square" type="primary" @click="setAccStatus('F')">停用</Button>
-                    <Button icon="md-trash" type="primary" @click="deleteRow">删除</Button>
-                    <Button icon="md-refresh" type="primary" @click="resetPwd">密码重置</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
+                    <ButtonGroup>
+                        <Button icon="md-play" type="primary" @click="setAccStatus('T')">启用</Button>
+                        <Button icon="md-square" type="primary" @click="setAccStatus('F')">停用</Button>
+                        <Button icon="md-trash" type="primary" @click="deleteRow">删除</Button>
+                        <Button icon="md-refresh" type="primary" @click="resetPwd">密码重置</Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
+        </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
     </div>
 </template>
@@ -41,11 +29,6 @@ import { apiGet, apiPost } from "@/fetch/api.js";
 export default {
     data() {
         return {
-            DIC: {},
-            searchForm: {
-                accName: "",
-                realName: ""
-            },
             columns: [
                 {
                     type: "selection",
@@ -61,6 +44,7 @@ export default {
                     title: "登录用户名",
                     key: "accName",
                     align: "center",
+                    search: true,
                     width: 100
                 },
                 {
@@ -80,6 +64,7 @@ export default {
                     title: "真实姓名",
                     key: "realName",
                     align: "center",
+                    search: true,
                     width: 100
                 },
                 {
@@ -88,19 +73,12 @@ export default {
                     sortable: true,
                     width: 110,
                     align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            "aa"
-                            // this.getDicList({
-                            //     name: "accType",
-                            //     url: "/sysRole/grid",
-                            //     props: {
-                            //         abel: "roleName",
-                            //         value: "id"
-                            //     }
-                            // })
-                        );
+                    search: true,
+                    type: 'select',
+                    dicUrl: this.adminApi.roleList,
+                    props: {
+                        label: "roleName",
+                        value: "id"
                     }
                 },
                 {
@@ -152,18 +130,6 @@ export default {
                     }
                 },
                 {
-                    title: "所属景区ID",
-                    key: "scenicId",
-                    sortable: true,
-                    width: 120
-                },
-                {
-                    title: "所属景区编码",
-                    key: "scenicCode",
-                    sortable: true,
-                    width: 130
-                },
-                {
                     title: "操作",
                     key: "action",
                     width: 200,
@@ -205,10 +171,6 @@ export default {
         };
     },
     created() {
-        // this.getDicList("accType", "/sysRole/grid", {
-        //     label: "roleName",
-        //     value: "id"
-        // });
     },
     mounted() {},
     components: { gridTable, confirm },
@@ -302,19 +264,6 @@ export default {
         },
         // 重置密码
         resetPwd() {},
-        getDicList({ name, url, props = { label: "name", value: "id" } }) {
-            if (!url || !name) return false;
-            console.log(this.DIC[name])
-            if(this.DIC[name]) return this.DIC[name]
-            return apiPost(url).then(res => {
-                this.DIC[name] = res.data.rows.filter(item => ({
-                    label: props.label,
-                    value: props.value
-                }));
-                console.log('res', this.DIC[name])
-                return this.DIC[name];
-            });
-        }
     }
 };
 </script>

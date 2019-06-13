@@ -62,12 +62,6 @@
                     >{{ item.label }}</Option>
                 </Select>
             </FormItem>
-            <FormItem label="归属的景区ID：" prop="scenicId">
-                <Input v-model="formItem.scenicId" style="width:33%;"></Input>
-            </FormItem>
-            <FormItem label="归属的景区编码：" prop="scenicCode">
-                <Input v-model="formItem.scenicCode" style="width:33%;"></Input>
-            </FormItem>
 
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -102,9 +96,7 @@ export default {
                 accStatus: "T",
                 ifAdmin: "F",
                 corpCode: "",
-                userType: "0",
-                scenicId: "",
-                scenicCode: ""
+                userType: "0"
             },
             ruleForm: {
                 funName: [

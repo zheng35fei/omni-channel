@@ -263,7 +263,6 @@ export default {
     },
     mounted() {
         this.loadpage();
-        console.log(this.$route.name)
     },
     methods: {
         lookingKey() {

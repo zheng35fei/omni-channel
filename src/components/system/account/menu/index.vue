@@ -25,16 +25,19 @@ export default {
                 },
                 {
                     title: "名称",
-                    key: "funName"
+                    key: "funName",
+                    search: true
                 },
                 {
                     title: "唯一编码",
-                    key: "funCode"
+                    key: "funCode",
+                    search: true
                 },
                 {
                     title: "URL",
                     key: "funUrl",
-                    width: 250
+                    width: 250,
+                    search: true
                 },
                 {
                     title: "所属类型",

@@ -95,7 +95,6 @@ export default {
                     title: "状态",
                     key: "enabled",
                     render: (h, params) => {
-                        console.log(params.row.enabled);
                         return h("i-switch", {
                             props: {
                                 value: params.row.enabled,

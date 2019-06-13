@@ -1,11 +1,8 @@
 <template>
     <div>
-        <Row :gutter="16" class="btn-groups">
-            <Col span="2">
-                <Button type="primary" @click="showModal">添加</Button>
-            </Col>
-        </Row>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url"></gridTable>
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url">
+            <Button slot="menuLeft" type="primary" @click="showModal">添加</Button>
+        </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
         <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setAuthDone">
             <Tree :data="authData"></Tree>
@@ -34,17 +31,15 @@ export default {
                     }
                 },
                 {
-                    title: "景区Id",
-                    key: "scenicId",
-                    width: 100
-                },
-                {
                     title: "角色名称",
+                    align: "center",
                     key: "roleName",
+                    search: true,
                     width: 350
                 },
                 {
                     title: "备注",
+                    align: "center",
                     key: "remark"
                 },
                 {

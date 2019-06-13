@@ -8,9 +8,6 @@
             ref="formItem"
             :rules="ruleForm"
         >
-            <FormItem label="景区id：" prop="scenicId">
-                <Input v-model="formItem.scenicId" placeholder="填写所属景区" style="width:33%;" />
-            </FormItem>
             <FormItem label="角色名称：" prop="roleName">
                 <Input v-model="formItem.roleName" placeholder="填写角色名称" style="width:33%;" />
             </FormItem>
@@ -32,15 +29,11 @@ export default {
         return {
             formItem: {
                 id: "",
-                scenicId: "",
                 roleName: "",
                 remark: "",
             },
             funType: [],
             ruleForm: {
-                scenicId: [
-                    { required: true, message: "请输入景区id", trigger: "blur" }
-                ],
                 roleName: [
                     { required: true, message: "请输入角色名称", trigger: "blur" }
                 ],
