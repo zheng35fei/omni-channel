@@ -33,4 +33,8 @@ export default {
     resetUserPwd: prefix + '/userInfo/resetAccPass/',
     // 用户信息-启禁用设置
     setAccStatus: prefix + '/userInfo/setAccStatus',
+    // 用户获取菜单列表树型
+    getMenuTreeData: perfix + '/sysRole/getSysMenuTree/',
+    getRolePlugs: perfix + '/sysRole/getSysRoleplugs/',
+    setMenuToRole: prefix + '/sysRole/addSysMenuToRole/'
 }
