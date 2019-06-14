@@ -56,7 +56,7 @@ export default {
                                 action: () => {
                                     this.$router.push({
                                         path: "/rakeBackMoney",
-                                        query: { id: params.row.id }
+                                        query: { brokerageRuleId: params.row.id }
                                     });
                                 }
                             },

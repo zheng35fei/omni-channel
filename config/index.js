@@ -11,10 +11,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin': {
-        target: 'http://acd.sendinfo.com.cn/',
+        target: 'http://192.168.200.214:8091/',
         changeOrigin: true,
         pathRewrite: {
-          '^/admin': '/admin'
+          '^/admin': ''
         }
       },
       '/order': {
@@ -25,10 +25,10 @@ module.exports = {
         }
       },
       '/baseinfo': {
-        target: 'http://acd.sendinfo.com.cn/',
+        target: 'http://192.168.200.214:8092/',
         changeOrigin: true,
         pathRewrite: {
-          '^/baseinfo': '/baseinfo'
+          '^/baseinfo': ''
         }
       }
     },
