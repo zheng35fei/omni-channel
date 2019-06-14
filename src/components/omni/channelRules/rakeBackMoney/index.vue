@@ -110,8 +110,6 @@ export default {
                         return h("Input", {
                             props: {
                                 prefix: "logo-yen",
-                                // search: true,
-                                // 'enter-button': '设置',
                                 icon: "md-checkmark"
                             },
                             attrs: {
@@ -122,9 +120,6 @@ export default {
                                     const val =
                                         dom.target.parentNode.childNodes[6]
                                             .value;
-                                    this.setRebackMoney(val, params.row.id);
-                                },
-                                "on-search": val => {
                                     this.setRebackMoney(val, params.row.id);
                                 }
                             }
