@@ -258,10 +258,10 @@ export default {
                     ? this.baseinfoApi.channelRuleUpdate
                     : this.baseinfoApi.channelRuleSave;
             let params = {};
-            console.log(this.formItem);
+            
             // return
             for (let key in this.formItem) {
-                if (this.formItem[key]) {
+                if (typeof this.formItem[key] === 'number' || this.formItem[key]) {
                     params[key] = this.formItem[key];
                 }
             }

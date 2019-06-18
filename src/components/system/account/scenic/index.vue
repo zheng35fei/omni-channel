@@ -4,22 +4,29 @@
             <Button slot="menuLeft" type="primary" @click="showModal">添加</Button>
         </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
-        <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setDialogDone">
-            <Form v-model="scenicObj"></Form>
+        <Modal
+            v-model="setDialog.isShow"
+            :title="setDialog.title"
+            :width="setDialog.width"
+            @on-ok="setDialogDone"
+        >
+            <div class="scenicDetail">
+                <img :src="scenicObj.businessUrl" alt="scenicObj.name" class="scenicQrCode">
+                <p class="scenicAddr">地址: {{scenicObj.businessUrl}}</p>
+            </div>
         </Modal>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
-import { apiGet } from "@/fetch/api.js"
 export default {
     data() {
         return {
             scenicObj: {},
             setDialog: {
                 isShow: false,
-                title: '查看景区信息',
+                title: "查看景区信息",
                 width: 650
             },
             columns: [
@@ -61,7 +68,7 @@ export default {
                             {
                                 title: "查看",
                                 action: () => {
-                                    this.viewScenic(params.row.id)
+                                    this.viewScenic(params.row.id);
                                 }
                             },
                             {
@@ -99,16 +106,14 @@ export default {
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10 },
             url: this.adminApi.scenicList,
             content: "",
             mode: "",
             sucessMsg: ""
         };
     },
-    mounted() {
-        // this.loadpage(this.params)
-    },
+    mounted() {},
     components: { gridTable, confirm },
     methods: {
         showModal() {
@@ -116,22 +121,32 @@ export default {
         },
         // 查看景区信息
         viewScenic(id) {
-            this.setDialog.isShow = true
+            this.setDialog.isShow = true;
             const url = `${this.adminApi.scenicDetail}${id}`;
-            apiGet(url).then( res => {
-                if(res.status === 200) {
-                    this.scenicObj = res.data
-                }else {
+            this.apiGet(url).then(res => {
+                if (res.status === 200) {
+                    this.scenicObj = res.data;
+                } else {
                     this.$Notice.error({
                         desc: res.message
-                    })
+                    });
                 }
-            })
+            });
         },
         // 关闭弹窗
-        setDialogDone() {
-
-        }
+        setDialogDone() {}
     }
 };
 </script>
+<style scope>
+.scenicQrCode {
+    display: block;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 15px;
+}
+.scenicAddr {
+    font-size: 16px;
+    text-align: center;
+}
+</style>

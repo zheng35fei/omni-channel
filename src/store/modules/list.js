@@ -34,7 +34,7 @@ const actions = {
     // context.state.res = res
     return res
   },
-  async postApi (context, apiType="apiPost") {
+  async postApi (context, apiType="apiPostJson") {
     const url = context.state.url + '?' + qs.stringify(context.state.params)
     let res = await fetch[apiType](url, context.state.searchParams)
     // context.state.res = res

@@ -17,10 +17,11 @@
                 format="yyyy-MM-dd"
                 clearable
             ></DatePicker>
+            <!-- {{typeof searchForm[item.key]}} -->
             <Select
                 v-if="item.type=='select'"
                 v-model="searchForm[item.key]"
-                style="width:180px"
+                :style="{width: item.width}"
                 :placeholder="'请选择'+item.title"
             >
                 <Option
@@ -45,25 +46,7 @@
 export default {
     data() {
         return {
-            searchForm: {},
-            arules: {
-                linkMobile: [
-                    {
-                        type: "number",
-                        required: true,
-                        message: "请输入正确的手机号",
-                        trigger: "blur"
-                    }
-                ],
-                channelId: [
-                    {
-                        type: "number",
-                        required: true,
-                        message: "请输入正确的手机号",
-                        trigger: "blur"
-                    }
-                ]
-            }
+            searchForm: {}
         };
     },
     props: ["searchData", "apiType", "DIC", "rules"],

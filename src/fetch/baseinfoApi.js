@@ -1,4 +1,4 @@
-const prefix = '/baseinfo';
+const prefix = '/manage/baseinfo';
 export default {
     // 分销商管理
     distributorList: prefix + '/distributor/grid',

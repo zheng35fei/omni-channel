@@ -12,7 +12,6 @@
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
-import confirm from "@/components/global/confirm";
 export default {
     props: {
         channelId: {
@@ -72,18 +71,16 @@ export default {
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc", channelId: this.channelId},
+            params: { page: 1, limit: 10, sort: "createTime", order: "desc"},
             url: this.baseinfoApi.distributorList,
             content: "",
             mode: "",
             sucessMsg: ""
         };
     },
-    components: { gridTable, confirm },
-    computed: {
-        selectedIds() {
-            return this.$refs.gridTable.selection.map(item => item.id);
-        }
+    components: { gridTable },
+    created() {
+        this.$store.state.list.searchParams = {channelId: this.channelId}
     }
 };
 </script>

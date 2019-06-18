@@ -1,6 +1,6 @@
 <template>
     <div class="login-main">
-        <h3 class="login-title">后台管理系统</h3>
+        <h3 class="login-title">全渠道分销后台管理系统</h3>
         <Form ref="formInline" :model="formInline" :rules="ruleInline" class="login-from">
             <FormItem prop="userName">
                 <Input type="text" v-model="formInline.userName" placeholder="用户名">

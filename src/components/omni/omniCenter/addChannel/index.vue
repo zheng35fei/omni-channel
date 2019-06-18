@@ -97,6 +97,7 @@ export default {
             this.common.formPost(this, {
                 url,
                 params,
+                apiType: 'apiPostJson',
                 mold: "modal",
                 callback: res => {
                     if (res.status == 200) {

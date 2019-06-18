@@ -18,7 +18,7 @@
                 <Input v-model="formItem.name" placeholder="填写分销商名称" style="width:33%;"/>
             </FormItem>
             <FormItem label="所属渠道：" prop="channelId">
-                <Select v-model="formItem.channelId" style="width:200px">
+                <Select v-model.number="formItem.channelId" style="width:200px">
                     <Option
                         v-for="item in channelIds"
                         :value="item.id"
@@ -50,8 +50,8 @@
             <FormItem label="联系人：" prop="linkName">
                 <Input v-model="formItem.linkName" placeholder="填写联系人" style="width:33%;"/>
             </FormItem>
-            <FormItem label="手机号：" prop="linkMobile">
-                <Input v-model="formItem.linkMobile" placeholder="填写手机号" style="width:33%;"/>
+            <FormItem label="联系人电话：" prop="linkMobile">
+                <Input v-model="formItem.linkMobile" placeholder="填写联系人电话" style="width:33%;"/>
             </FormItem>
             <FormItem label="公司电话：" prop="telephone">
                 <Input v-model="formItem.telephone" placeholder="填写用户名" style="width:33%;"/>
@@ -86,7 +86,7 @@
             <h3 stlye="margin-bottom:10px;">自定义规则</h3>
 
             <FormItem label="渠道限制规则：" prop="channelRuleId">
-                <Select v-model="formItem.channelRuleId" placeholder="填写分销商名称" style="width:33%;">
+                <Select v-model.number="formItem.channelRuleId" placeholder="选择渠道限制规则" style="width:33%;">
                     <Option
                         v-for="item in channelRuleArr"
                         :value="item.id"
@@ -96,7 +96,7 @@
                 </Select>
             </FormItem>
             <FormItem label="渠道返佣规则：" prop="brokerageRuleId">
-                <Select v-model="formItem.brokerageRuleId" placeholder="填写分销商名称" style="width:33%;">
+                <Select v-model.number="formItem.brokerageRuleId" placeholder="选择返佣规则" style="width:33%;">
                     <Option
                         v-for="item in brokerageRuleArr"
                         :value="item.id"
@@ -144,11 +144,88 @@ export default {
                 brokerageRuleId: ""
             },
             ruleForm: {
-                roleName: [
+                validDate: [
                     {
                         required: true,
-                        message: "请输入角色名称",
+                        message: "请填写协议有效期",
                         trigger: "blur"
+                    }
+                ],
+                channelId: [
+                    {
+                        type: 'number',
+                        required: true,
+                        message: "请选择渠道",
+                        trigger: "change"
+                    }
+                ],
+                accName: [
+                    {
+                        required: true,
+                        message: "请填写登录用户名",
+                        trigger: "blur"
+                    }
+                ],
+                accPass: [
+                    {
+                        required: true,
+                        message: "请填写登录密码",
+                        trigger: "blur"
+                    }
+                ],
+                name: [
+                    {
+                        required: true,
+                        message: "请填写分销商名称",
+                        trigger: "blur"
+                    }
+                ],
+                linkMobile: [
+                    {
+                        required: true,
+                        message: "请填写联系人电话",
+                        trigger: "blur"
+                    }, {
+                        pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
+                        message: "号码格式不正确",
+                        trigger: "blur"
+                    }
+                ],
+                busLicensePicCode: [
+                    {
+                        required: true,
+                        message: "请填写营业执照注册号",
+                        trigger: "blur"
+                    }
+                ],
+                busPermitPicCode: [
+                    {
+                        required: true,
+                        message: "请填写旅行社经营许可证号",
+                        trigger: "blur"
+                    }
+                ],
+                channelRuleId: [
+                    {
+                        type: 'number',
+                        required: true,
+                        message: "请选择渠道限制规则",
+                        trigger: "change"
+                    }
+                ],
+                brokerageRuleId: [
+                    {
+                        type: 'number',
+                        required: true,
+                        message: "请选择选择返佣规则",
+                        trigger: "change"
+                    }
+                ],
+                enabled: [
+                    {
+                        required: true,
+                        message: "请选择选择返佣规则",
+                        trigger: "change"
                     }
                 ],
                 remark: [

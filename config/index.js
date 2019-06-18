@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/admin': {
-        target: 'http://192.168.200.214:8091/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/admin': ''
@@ -25,12 +25,19 @@ module.exports = {
         }
       },
       '/baseinfo': {
-        target: 'http://192.168.200.214:8092/',
+        target: 'http://acd.sendinfo.com.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^/baseinfo': ''
         }
-      }
+      },
+      '/manage': {
+        target: 'http://acd.sendinfo.com.cn/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/manage': '/manage'
+        }
+      },
     },
 
     // Various Dev Server settings

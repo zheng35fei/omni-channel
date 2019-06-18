@@ -21,12 +21,13 @@
                 <Input v-model="formItem.realName" placeholder="填写真实姓名" style="width:33%;"/>
             </FormItem>
             <FormItem label="所属角色：" prop="accType">
-                <Select v-model="formItem.accType" style="width:200px">
+                <Select v-model.number="formItem.accType" style="width:200px">
                     <Option
                         v-for="item in accTypes"
                         :value="item.value"
                         :key="item.value"
-                    >{{ item.label }}</Option>
+                        :label="item.label"
+                    ></Option>
                 </Select>
             </FormItem>
             <FormItem label="用户状态：" prop="accStatus">
@@ -53,7 +54,7 @@
             <FormItem label="企业编码：" prop="corpCode">
                 <Input v-model="formItem.corpCode" style="width:33%;"/>
             </FormItem>
-            <FormItem label="用户类型：" prop="userType">
+            <!-- <FormItem label="用户类型：" prop="userType">
                 <Select v-model="formItem.userType" style="width:200px">
                     <Option
                         v-for="item in userTypes"
@@ -61,7 +62,7 @@
                         :key="item.value"
                     >{{ item.label }}</Option>
                 </Select>
-            </FormItem>
+            </FormItem> -->
 
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -72,7 +73,6 @@
 </template>
 
 <script>
-import { apiGet, apiPost } from "@/fetch/api";
 export default {
     data() {
         return {
@@ -92,22 +92,28 @@ export default {
                 accName: "",
                 accPass: "",
                 accNo: "",
-                accType: "0",
+                accType: '',
+                realName:'',
                 accStatus: "T",
                 ifAdmin: "F",
                 corpCode: "",
-                userType: "0"
+                userType: 0
             },
             ruleForm: {
-                funName: [
-                    { required: true, message: "请输入名称", trigger: "blur" }
+                accName: [
+                    { required: true, message: "请输入登录用户名", trigger: "blur" }
                 ],
-                funCode: [
-                    {
-                        required: true,
-                        message: "请输入唯一编码",
-                        trigger: "blur"
-                    }
+                accPass: [
+                    { required: true, message: "请输入登录密码", trigger: "blur" }
+                ],
+                accNo: [
+                    { required: true, message: "请输入用户编号", trigger: "blur" }
+                ],
+                accType: [
+                    { type: 'number', required: true, message: "请选择用户角色", trigger: "change" }
+                ],
+                accNo: [
+                    { required: true, message: "请输入用户编号", trigger: "blur" }
                 ]
             },
             type: "add"
@@ -117,7 +123,7 @@ export default {
         this.getRoleList()
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
-            apiGet(this.adminApi.userToEdit + this.$route.query.id).then(res => {
+            this.apiGet(this.adminApi.userToEdit + this.$route.query.id).then(res => {
                 if (res.status == 200) {
                     for (let key in this.formItem) {
                         this.formItem[key] = res.data[key];
@@ -151,7 +157,7 @@ export default {
             this.formItem[name] = val ? 'T' : 'F'
         },
         getRoleList() {
-            apiPost(this.adminApi.roleList).then( res => {
+            this.apiPostJson(this.adminApi.roleList).then( res => {
                 this.accTypes = res.data.rows.map( item => ({label: item.roleName, value: item.id}))
             })
         }

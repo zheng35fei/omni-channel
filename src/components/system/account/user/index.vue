@@ -19,7 +19,12 @@
                 </Col>
             </Row>
         </gridTable>
-        <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <confirm
+            ref="confirmModel"
+            :content="confirm.content"
+            :sucessMsg="confirm.sucessMsg"
+            :mode="confirm.mode"
+        ></confirm>
     </div>
 </template>
 <script>
@@ -68,18 +73,20 @@ export default {
                     width: 100
                 },
                 {
-                    title: "用户类型",
+                    title: "用户角色",
                     key: "accType",
-                    sortable: true,
-                    width: 110,
+                    type: "select",
+                    width: '180px',
                     align: "center",
+                    sortable: true,
                     search: true,
-                    type: 'select',
                     dicUrl: this.adminApi.roleList,
                     props: {
                         label: "roleName",
                         value: "id"
-                    }
+                    },
+                    dicMethod: "apiPostJson",
+                    rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
                 },
                 {
                     title: "用户状态",
@@ -149,9 +156,9 @@ export default {
                             {
                                 title: "删除",
                                 action: () => {
-                                    this.content = "确定删除？";
-                                    this.mode = "done";
-                                    this.sucessMsg = "删除成功！";
+                                    this.confirm.content = "确定删除？";
+                                    this.confirm.mode = "done";
+                                    this.confirm.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
                                         this.adminApi.userDel + params.row.id
                                     );
@@ -165,13 +172,14 @@ export default {
             data: "",
             params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
             url: this.adminApi.userList,
-            content: "",
-            mode: "",
-            sucessMsg: ""
+            confirm: {
+                content: "",
+                mode: "",
+                sucessMsg: ""
+            }
         };
     },
-    created() {
-    },
+    created() {},
     mounted() {},
     components: { gridTable, confirm },
     computed: {
@@ -207,15 +215,14 @@ export default {
                 });
                 return;
             }
+            const url = `${this.adminApi.setAccStatus}?ids=${this.selectedIds.join(
+                ","
+            )}&accStatus=${status}`;
             this.$Modal.confirm({
                 title: "确认",
                 content: `确认要${statusName}${this.selectedIds}用户吗？`,
                 onOk: () => {
-                    apiGet(
-                        `${this.adminApi.setAccStatus}${this.selectedIds.join(
-                            ","
-                        )}?accStatus=${status}`
-                    ).then(res => {
+                    apiGet(url).then(res => {
                         if (res.success) {
                             this.$refs.gridTable.loadpage();
                             this.$Message.success({
@@ -263,7 +270,21 @@ export default {
             });
         },
         // 重置密码
-        resetPwd() {},
+        resetPwd() {
+            if (!this.selectedIds || this.selectedIds.length <= 0) {
+                this.$Message.warning({
+                    content: "请至少选择一个账户"
+                });
+                return;
+            }
+            const url = this.adminApi.resetUserPwd + this.selectedIds;
+            this.confirm = {
+                content: "确定要重置密码？",
+                mode: "done",
+                sucessMsg: "密码重置成功！"
+            };
+            this.$refs.confirmModel.confirm(url);
+        }
     }
 };
 </script>

@@ -5,13 +5,14 @@
         </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
         <Modal v-model="setDialog.isShow" :title="setDialog.title" :width="setDialog.width" @on-ok="setAuthDone">
-            <Tree :data="authData"></Tree>
+            <Tree ref="menuTree" :data="authTreeData" show-checkbox multiple children-key="childList"></Tree>
         </Modal>
     </div>
 </template>
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
@@ -52,7 +53,7 @@ export default {
                             {
                                 title: "设置",
                                 action: () => {
-                                    this.setRoleAuth()
+                                    this.setRoleAuth(params.row.id)
                                 }
                             },
                             {
@@ -88,20 +89,57 @@ export default {
             sucessMsg: ""
         };
     },
-    mounted() {
-        // this.loadpage(this.params)
+    mounted() {},
+    computed: {
+        authTreeData() {
+            this.modifyTree(this.authData)
+            return this.authData
+        },
+        ...mapState({
+            userId: 'userId'
+        })
     },
     components: { gridTable, confirm },
     methods: {
+        modifyTree(data) {
+            data.forEach( item => {
+                item.title = item.funName
+                item.expand = true
+                if(item.childList && item.childList.length > 0) {
+                    // tree组件, checked会选中下面的所有子节点
+                    item.checked = false
+                    this.modifyTree(item.childList)
+                }
+            })
+        },
         showModal() {
             this.$router.push("/addRole");
         },
         // 设置角色权限
-        setRoleAuth() {
+        setRoleAuth(id) {
+            this.setRowId = id;
+            const url = this.adminApi.getMenuTreeData + id
+            this.apiGet(url).then( res => {
+                if(res.status === 200) {
+                    this.authData = res.data
+                }
+            })
             this.setDialog.isShow = true;
         },
-        // 关闭设置界面
+        // 保存权限设置
         setAuthDone() {
+            const checkIds = this.$refs.menuTree.getCheckedAndIndeterminateNodes().map( item => {
+                return item.id
+            }).join(',')
+            
+            const url = this.adminApi.setMenuToRole + this.setRowId + '/' + checkIds;
+            this.apiPostJson(url).then( res => {
+                console.log(res)
+                this.$Message.success({
+                    title: '成功',
+                    content: res.message
+                })
+            })
             this.setDialog.isShow = false;
         }
     }

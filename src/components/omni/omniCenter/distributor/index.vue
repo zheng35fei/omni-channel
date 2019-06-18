@@ -65,7 +65,7 @@ export default {
                 },
                 {
                     title: "登录用户名",
-                    key: "loginName",
+                    key: "accName",
                     align: "center"
                 },
                 {
