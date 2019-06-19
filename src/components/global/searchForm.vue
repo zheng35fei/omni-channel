@@ -1,6 +1,6 @@
 <template>
     <Form ref="formInline" :model="searchForm" inline>
-        <FormItem v-for="(item,index) in searchData" :prop="item.key" :key="index" :rules="rules">
+        <FormItem v-for="(item,index) in searchData" :prop="item.key" :key="index">
             <Input
                 v-if="!item.type || item.type=='input'"
                 v-model="searchForm[item.key]"
@@ -61,8 +61,8 @@ export default {
     methods: {
         // 提交搜索
         handleSubmit(formName) {
-            this.$refs[formName].validate( valid => {
-                if(valid) {
+            // this.$refs[formName].validate( valid => {
+                // if(valid) {
                     for (let item in this.searchForm) {
                         if (typeof this.searchForm[item] === "object") {
                             this.searchForm[item] = this.searchForm[
@@ -73,8 +73,8 @@ export default {
                     this.$store.state.list.searchParams = this.searchForm;
                     this.$emit("search-submit", this.searchForm);
                     this.$parent.loadpage(this.apiType);
-                }
-            })
+                // }
+            // })
         },
         // 重置表单
         handleReset(name) {
