@@ -153,7 +153,14 @@ const actions = {
     switchTree(menuList.data, menuParentObj, 'parentId', 'list')
     // context.state.menuList = [...defaultMenuList.data, ...menuParentObj.list];
     context.state.menuList = menuParentObj.list;
-    console.log('context.state.menuList', context.state.menuList)
+
+    sortMenuList(context.state.menuList)
+    function sortMenuList(arr) {
+      arr.sort( (a, b) => {
+        a.list && sortMenuList(a.list)
+        return a.sortNo - b.sortNo
+      })
+    }
   },
   setActiveNameAction({ commit }, name) {
     commit('setActiveName', name);

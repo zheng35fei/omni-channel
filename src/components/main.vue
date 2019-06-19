@@ -38,7 +38,10 @@
                                 :key="item.id"
                                 :name="item.funCode"
                                 :to="item.funUrl"
-                            >{{item.funName}}</MenuItem>
+                            >
+                                <Icon :type="item.funIco" :size="18"></Icon>
+                                <span>{{item.funName}}</span>
+                            </MenuItem>
                         </template>
                     </div>
                 </Menu>
@@ -106,7 +109,7 @@
                                 <template v-if="item.list && item.list.length > 0">
                                     <Submenu :name="item.funCode" :key="item.id" :to="item.funUrl">
                                         <template slot="title">
-                                            <!-- <Icon type="ios-navigate"></Icon> -->
+                                            <Icon :type="item.funIco"></Icon>
                                             {{item.funName}}
                                         </template>
                                         <template v-for="sitem in item.list">
@@ -130,6 +133,7 @@
                                         :to="item.funUrl"
                                         :target="item.openType"
                                     >
+                                        <Icon :type="item.funIco" :size="24"></Icon>
                                         <span>{{item.funName}}</span>
                                     </MenuItem>
                                 </template>

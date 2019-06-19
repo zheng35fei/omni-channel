@@ -15,7 +15,9 @@
                 <Input v-model="formItem.funCode" style="width:33%;" />
             </FormItem>
             <FormItem label="功能图标：" prop="funIco">
-                <Input v-model="formItem.funIco" style="width:33%;" />
+                <Input v-model="formItem.funIco" style="width:33%;" @on-focus="() => showIcons = true">
+                    <Icon slot="prefix" :size="16" :type="formItem.funIco"></Icon>
+                </Input>
             </FormItem>
             <FormItem label="URL：" prop="funUrl">
                 <Input v-model="formItem.funUrl" style="width:33%;" />
@@ -72,17 +74,19 @@
             </FormItem>
         </Form>
 
-        <modal>
-            
+        <modal v-model="showIcons" :width="800"  title="选择图标" @on-ok="iconSelected">
+            <icon-list ref="iconList" @selected-icon="selectedIcon"></icon-list>
         </modal>
     </div>
 </template>
 
 <script>
 import { apiGet } from "@/fetch/api";
+import iconList from "@/components/global/icons.vue";
 export default {
     data() {
         return {
+            showIcons: false,
             openMode: [
                 {
                     value: "_blank",
@@ -150,6 +154,7 @@ export default {
                 funCode: "",
                 optType: "",
                 sortNo: "",
+                funIco: "",
                 openType: "_self",
                 funUrl: "",
                 functionType: "",
@@ -203,6 +208,7 @@ export default {
             type: "add"
         };
     },
+    components: { iconList },
     created() {
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
@@ -248,8 +254,15 @@ export default {
                     }
                 }
             });
+        },
+        iconSelected() {
+            this.formItem.funIco = this.$refs.iconList.selectIcon
+        },
+        selectedIcon(name) {
+            console.log(name)
         }
-    }
+    },
+    
 };
 </script>
 
