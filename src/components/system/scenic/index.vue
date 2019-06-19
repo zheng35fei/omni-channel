@@ -4,6 +4,17 @@
             <Button slot="menuLeft" type="primary" @click="showModal">添加</Button>
         </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
+        <Modal
+            v-model="setDialog.isShow"
+            :title="setDialog.title"
+            :width="setDialog.width"
+            @on-ok="setDialogDone"
+        >
+            <div class="scenicDetail">
+                <img :src="scenicObj.businessUrl" alt="scenicObj.name" class="scenicQrCode">
+                <p class="scenicAddr">地址: {{scenicObj.businessUrl}}</p>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -12,6 +23,12 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
+            scenicObj: {},
+            setDialog: {
+                isShow: false,
+                title: "查看景区信息",
+                width: 650
+            },
             columns: [
                 {
                     title: "序号",
@@ -21,77 +38,45 @@ export default {
                     }
                 },
                 {
-                    title: "名称",
-                    key: "funName",
+                    title: "景区名称",
+                    key: "name",
                     search: true
                 },
                 {
-                    title: "唯一编码",
-                    key: "funCode",
+                    title: "景区编码",
+                    key: "scenicCode",
                     search: true
                 },
                 {
-                    title: "URL",
-                    key: "funUrl",
+                    title: "联系人",
+                    key: "linkName",
                     width: 250,
                     search: true
                 },
                 {
-                    title: "所属类型",
-                    key: "funType",
-                    width: 150,
-                    render: (h, params) => {
-                        let strArr = [];
-                        this.splits(params.row.funType || "").forEach(item => {
-                            strArr.push(this.filter.turn("funType", item));
-                        });
-                        return h("span", strArr.join(" "));
-                    }
-                },
-                {
-                    title: "标识",
-                    key: "optType"
-                },
-                {
-                    title: "权限类型",
-                    key: "functionType",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            this.filter.turn(
-                                "functionType",
-                                params.row.functionType
-                            )
-                        );
-                    }
-                },
-                {
-                    title: "层级深度",
-                    key: "hierarchy",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            this.filter.turn("hierarchy", params.row.hierarchy)
-                        );
-                    }
+                    title: "联系人电话",
+                    key: "linkMobile",
+                    search: true
                 },
                 {
                     title: "操作",
                     key: "action",
-                    width: 200,
+                    width: 320,
                     align: "center",
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "添加",
+                                title: "查看",
+                                action: () => {
+                                    this.viewScenic(params.row.id);
+                                }
+                            },
+                            {
+                                title: "用户管理",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/addMenu",
-                                        query: {
-                                            parentId: params.row.id,
-                                            parentHierarchy:
-                                                params.row.hierarchy
-                                        }
+                                        path: "/user-list",
+                                        query: { id: params.row.id }
                                     });
                                 }
                             },
@@ -99,7 +84,7 @@ export default {
                                 title: "修改",
                                 action: () => {
                                     this.$router.push({
-                                        path: "/addMenu",
+                                        path: "/addScenic",
                                         query: { id: params.row.id }
                                     });
                                 }
@@ -111,38 +96,57 @@ export default {
                                     this.mode = "done";
                                     this.sucessMsg = "删除成功！";
                                     this.$refs.confirmModel.confirm(
-                                        this.adminApi.menuDel + params.row.id
+                                        this.adminApi.scenicDel + params.row.id
                                     );
                                 }
                             }
                         ];
-                        if (params.row.hierarchy === 3) {
-                            actions.splice(0, 1);
-                        }
                         return this.common.columnsHandle(h, actions);
                     }
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
-            url: this.adminApi.menuList,
+            params: { page: 1, limit: 10 },
+            url: this.adminApi.scenicList,
             content: "",
             mode: "",
             sucessMsg: ""
         };
     },
-    mounted() {
-        // this.loadpage(this.params)
-    },
+    mounted() {},
     components: { gridTable, confirm },
     methods: {
-        splits(test) {
-            return test.split(",");
-        },
-
         showModal() {
-            this.$router.push("/addMenu");
-        }
+            this.$router.push("/addScenic");
+        },
+        // 查看景区信息
+        viewScenic(id) {
+            this.setDialog.isShow = true;
+            const url = `${this.adminApi.scenicDetail}${id}`;
+            this.apiGet(url).then(res => {
+                if (res.status === 200) {
+                    this.scenicObj = res.data;
+                } else {
+                    this.$Notice.error({
+                        desc: res.message
+                    });
+                }
+            });
+        },
+        // 关闭弹窗
+        setDialogDone() {}
     }
 };
 </script>
+<style scope>
+.scenicQrCode {
+    display: block;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 15px;
+}
+.scenicAddr {
+    font-size: 16px;
+    text-align: center;
+}
+</style>

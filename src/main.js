@@ -20,6 +20,12 @@ import baseinfoApi from '@/fetch/baseinfoApi'
 router.beforeEach(async (to, from, next) => {
   let token = VueCookies.get('token');
   let userId = VueCookies.get('userId');
+
+  if (to.name === 'login' || to.name === 'adminLogin') {
+    next();
+    return
+  }
+
   if (token) {
     // 本地获取了token说明用户登录过了
     if (!store.state.userId) {
@@ -31,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
         {
           path: '/mainDefault',
           component: Main,
-          children: [...store.state.menu.asyncRouter]
+          children: store.state.menu.asyncRouter
         }
       ]);
       // next()
@@ -49,12 +55,7 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    // 没登录过
-    if (to.name === 'login' || to.name === 'adminLogin') {
-      next();
-    } else {
-      next({ name: 'login' });
-    }
+    next({ name: 'login' });
   }
 });
 

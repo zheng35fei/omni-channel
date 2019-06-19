@@ -17,11 +17,11 @@
                 format="yyyy-MM-dd"
                 clearable
             ></DatePicker>
-            <!-- {{typeof searchForm[item.key]}} -->
+            
             <Select
                 v-if="item.type=='select'"
                 v-model="searchForm[item.key]"
-                :style="{width: item.width}"
+                :style="{'min-width': (item.minWidth || 160) + 'px'}"
                 :placeholder="'请选择'+item.title"
             >
                 <Option

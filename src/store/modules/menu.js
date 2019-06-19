@@ -152,6 +152,8 @@ const actions = {
     }
     switchTree(menuList.data, menuParentObj, 'parentId', 'list')
     context.state.menuList = [...defaultMenuList.data, ...menuParentObj.list];
+    // context.state.menuList = menuParentObj.list;
+    console.log('context.state.menuList', context.state.menuList)
   },
   setActiveNameAction({ commit }, name) {
     commit('setActiveName', name);
