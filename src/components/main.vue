@@ -18,13 +18,13 @@
                             <Icon type="md-arrow-dropdown"/>
                             <DropdownMenu slot="list">
                                 <!-- <DropdownItem><span @click="info">个人信息</span></DropdownItem>
-                                <DropdownItem>修改密码</DropdownItem>-->
+                                <DropdownItem>修改密码</DropdownItem>
                                 <DropdownItem>
                                     <div class="down-item-handle" @click="lookingKey">查看密钥</div>
                                 </DropdownItem>
                                 <DropdownItem class="down-item">
                                     <div class="down-item-handle" @click="updateCorp">企业信息</div>
-                                </DropdownItem>
+                                </DropdownItem> -->
                                 <DropdownItem class="down-item">
                                     <div class="down-item-handle" @click="logout">退出</div>
                                 </DropdownItem>
@@ -92,48 +92,50 @@
                     class="page-left"
                     :class="{houseShow:$route.path==='/houseStatus'}"
                 >
-                    <Menu
-                        ref="contactMenu"
-                        :active-name="$route.name"
-                        theme="light"
-                        width="auto"
-                        :accordion="true"
-                        :open-names="vexOpenNames?[vexOpenNames]:openNames"
-                        @on-select="changeMenu"
-                    >
-                        <template v-for="item in subMenuList.list">
-                            <template v-if="item.list && item.list.length > 0">
-                                <Submenu :name="item.funCode" :key="item.id" :to="item.funUrl">
-                                    <template slot="title">
-                                        <!-- <Icon type="ios-navigate"></Icon> -->
-                                        {{item.funName}}
-                                    </template>
-                                    <template v-for="sitem in item.list">
-                                        <MenuItem
-                                            v-if="sitem.functionType !== 'button'"
-                                            :name="sitem.funCode"
-                                            :key="sitem.id"
-                                            :to="sitem.funUrl"
-                                            :target="sitem.openType"
-                                        >
-                                            <span>{{sitem.funName}}</span>
-                                        </MenuItem>
-                                    </template>
-                                </Submenu>
+                    <template v-if="subMenuList.list && subMenuList.list.length > 0">
+                        <Menu
+                            ref="contactMenu"
+                            :active-name="$route.name"
+                            theme="light"
+                            width="auto"
+                            :accordion="true"
+                            :open-names="vexOpenNames?[vexOpenNames]:openNames"
+                            @on-select="changeMenu"
+                        >
+                            <template v-for="item in subMenuList.list">
+                                <template v-if="item.list && item.list.length > 0">
+                                    <Submenu :name="item.funCode" :key="item.id" :to="item.funUrl">
+                                        <template slot="title">
+                                            <!-- <Icon type="ios-navigate"></Icon> -->
+                                            {{item.funName}}
+                                        </template>
+                                        <template v-for="sitem in item.list">
+                                            <MenuItem
+                                                v-if="sitem.functionType !== 'button'"
+                                                :name="sitem.funCode"
+                                                :key="sitem.id"
+                                                :to="sitem.funUrl"
+                                                :target="sitem.openType"
+                                            >
+                                                <span>{{sitem.funName}}</span>
+                                            </MenuItem>
+                                        </template>
+                                    </Submenu>
+                                </template>
+                                <template v-else>
+                                    <MenuItem
+                                        v-if="item.functionType !== 'button'"
+                                        :name="item.funCode"
+                                        :key="item.id"
+                                        :to="item.funUrl"
+                                        :target="item.openType"
+                                    >
+                                        <span>{{item.funName}}</span>
+                                    </MenuItem>
+                                </template>
                             </template>
-                            <template v-else>
-                                <MenuItem
-                                    v-if="item.functionType !== 'button'"
-                                    :name="item.funCode"
-                                    :key="item.id"
-                                    :to="item.funUrl"
-                                    :target="item.openType"
-                                >
-                                    <span>{{item.funName}}</span>
-                                </MenuItem>
-                            </template>
-                        </template>
-                    </Menu>
+                        </Menu>
+                    </template>
                 </Sider>
                 <Layout id="content">
                     <Breadcrumb class="breadcrumb">
@@ -256,8 +258,8 @@ export default {
     watch: {
         vexOpenNames(newValue) {
             this.$nextTick(() => {
-                this.$refs.contactMenu.updateOpened();
-                this.$refs.contactMenu.updateActiveName();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateOpened();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateActiveName();
             });
         }
     },
@@ -337,8 +339,8 @@ export default {
             this.openNames = [curRouter.funCode];
             this.$router.push(curRouter.funUrl);
             this.$nextTick(() => {
-                this.$refs.contactMenu.updateOpened();
-                this.$refs.contactMenu.updateActiveName();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateOpened();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateActiveName();
             });
         },
         // 获取当前选中路由
@@ -358,8 +360,8 @@ export default {
             this.openNames = [this.$route.meta.openName];
             this.menuPosite(this.$route.meta.belongTab);
             this.$nextTick(() => {
-                this.$refs.contactMenu.updateOpened();
-                this.$refs.contactMenu.updateActiveName();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateOpened();
+                this.$refs.contactMenu && this.$refs.contactMenu.updateActiveName();
             });
         },
         menuPosite(active) {

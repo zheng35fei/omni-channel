@@ -53,6 +53,11 @@ export default {
                     key: "optType"
                 },
                 {
+                    title: "排序",
+                    key: "sortNo",
+                    sortable: true
+                },
+                {
                     title: "权限类型",
                     key: "functionType",
                     render: (h, params) => {

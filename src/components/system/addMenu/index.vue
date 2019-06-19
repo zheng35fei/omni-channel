@@ -71,6 +71,10 @@
                 <Button @click="back">取消</Button>
             </FormItem>
         </Form>
+
+        <modal>
+            
+        </modal>
     </div>
 </template>
 
@@ -146,7 +150,7 @@ export default {
                 funCode: "",
                 optType: "",
                 sortNo: "",
-                openType: "",
+                openType: "_self",
                 funUrl: "",
                 functionType: "",
                 hierarchy: null,
