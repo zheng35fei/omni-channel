@@ -9,16 +9,22 @@
             :rules="ruleForm"
         >
             <FormItem label="景区编码：" prop="scenicCode">
-                <Input v-model="formItem.scenicCode" placeholder="填写景区编码" style="width:33%;"></Input>
+                <Input v-model="formItem.scenicCode" clearable placeholder="填写景区编码" style="width:33%;" />
             </FormItem>
             <FormItem label="景区名称：" prop="name">
-                <Input v-model="formItem.name" placeholder="填写景区名称" style="width:33%;"></Input>
+                <Input v-model="formItem.name" clearable placeholder="填写景区名称" style="width:33%;" />
             </FormItem>
             <FormItem label="联系人:" prop="linkName">
-                <Input v-model="formItem.linkName" placeholder="填写联系人" style="width:33%;"></Input>
+                <Input v-model="formItem.linkName" clearable placeholder="填写联系人" style="width:33%;" />
             </FormItem>
             <FormItem label="联系人电话：" prop="linkMobile">
-                <Input v-model.number="formItem.linkMobile" placeholder="填写联系人电话" style="width:33%;"></Input>
+                <Input v-model.number="formItem.linkMobile" clearable placeholder="填写联系人电话" style="width:33%;" />
+            </FormItem>
+            <FormItem label="电商推广地址：" prop="businessUrl">
+                <Input v-model="formItem.businessUrl" clearable placeholder="填写电商推广地址" style="width:33%;" />
+            </FormItem>
+            <FormItem label="电商私钥：" prop="privateKey">
+                <Input v-model="formItem.privateKey" readonly style="width:33%;" />
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -38,7 +44,9 @@ export default {
                 name: "",
                 remark: "",
                 linkName: "",
-                linkMobile: ""
+                linkMobile: "",
+                privateKey: "",
+                businessUrl: ""
             },
             funType: [],
             ruleForm: {

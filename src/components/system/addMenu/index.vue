@@ -228,7 +228,7 @@ export default {
             (this.$route.query.parentHierarchy ||
                 this.$route.query.parentHierarchy == 0)
         ) {
-            this.formItem.hierarchy = this.$route.query.parentHierarchy;
+            this.formItem.hierarchy = this.$route.query.parentHierarchy + 1;
             this.formItem.parentId = this.$route.query.parentId;
         }
     },

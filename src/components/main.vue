@@ -95,7 +95,7 @@
                     class="page-left"
                     :class="{houseShow:$route.path==='/houseStatus'}"
                 >
-                    <template v-if="subMenuList.list && subMenuList.list.length > 0">
+                    <template v-if="subMenuList && subMenuList.list && subMenuList.list.length > 0">
                         <Menu
                             ref="contactMenu"
                             :active-name="$route.name"
@@ -133,7 +133,7 @@
                                         :to="item.funUrl"
                                         :target="item.openType"
                                     >
-                                        <Icon :type="item.funIco" :size="24"></Icon>
+                                        <Icon :type="item.funIco" :size="16"></Icon>
                                         <span>{{item.funName}}</span>
                                     </MenuItem>
                                 </template>

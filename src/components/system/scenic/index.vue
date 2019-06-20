@@ -11,8 +11,10 @@
             @on-ok="setDialogDone"
         >
             <div class="scenicDetail">
-                <img :src="scenicObj.businessUrl" alt="scenicObj.name" class="scenicQrCode">
-                <p class="scenicAddr">地址: {{scenicObj.businessUrl}}</p>
+                <div style="width: 170px; height: 170px; margin:0 auto;">
+                    <qr-code ref="qrCode" :value="scenicObj.businessUrl" :options="{ size: 170 }"></qr-code>
+                </div>
+                <p class="scenicAddr">地址: {{scenicObj.businessUrl}} <a :href="codeUrl" :download="scenicObj.name">下载二维码</a></p>
             </div>
         </Modal>
     </div>
@@ -20,6 +22,7 @@
 <script>
 import gridTable from "@/components/global/gridTable";
 import confirm from "@/components/global/confirm";
+import qrCode from "@xkeshi/vue-qrcode";
 export default {
     data() {
         return {
@@ -110,11 +113,12 @@ export default {
             url: this.adminApi.scenicList,
             content: "",
             mode: "",
-            sucessMsg: ""
+            sucessMsg: "",
+            codeUrl: ""
         };
     },
     mounted() {},
-    components: { gridTable, confirm },
+    components: { gridTable, confirm, qrCode },
     methods: {
         showModal() {
             this.$router.push("/addScenic");
@@ -126,6 +130,8 @@ export default {
             this.apiGet(url).then(res => {
                 if (res.status === 200) {
                     this.scenicObj = res.data;
+                    const canvasData = this.$refs.qrCode.$el;
+                    this.codeUrl = canvasData.toDataURL() || '';
                 } else {
                     this.$Notice.error({
                         desc: res.message
@@ -138,7 +144,7 @@ export default {
     }
 };
 </script>
-<style scope>
+<style scoped>
 .scenicQrCode {
     display: block;
     width: 140px;

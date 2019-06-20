@@ -18,10 +18,10 @@ axios.interceptors.request.use(
 // response拦截
 axios.interceptors.response.use(
   response => {
-    if(response.data && response.data.status === 402 && response.data.message.includes('登录')) {
+    if(response.data && response.data.status === 402 && response.data.message.includes('用户登录超时')) {
       setCookies('userId','',-1)
       setCookies('token','',-1)
-      // window.location.href= process.env.BASE_URL + "login"
+      window.location.href= process.env.BASE_URL + "login"
     }
     return response
   },
