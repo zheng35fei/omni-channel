@@ -17,28 +17,35 @@
                 <Input v-model="formItem.name" placeholder="填写分销商Id" style="width:33%;" />
             </FormItem>
             <FormItem label="手机号：" prop="mobile">
-                <Input v-model="formItem.mobile" placeholder="填写手机号" style="width:33%;" />
+                <Input v-model.number="formItem.mobile" placeholder="填写手机号" style="width:33%;" />
             </FormItem>
             <FormItem label="身份证编号：" prop="idCard">
-                <Input v-model="formItem.idCard" placeholder="填写身份证编号" style="width:33%;" />
+                <Input v-model.trim="formItem.idCard" placeholder="填写身份证编号" style="width:33%;" />
             </FormItem>
-            <FormItem label="身份证图片：" prop="idCardPic">
-                <img class="uploadImg" :src="formItem.idCardPicUrl || '/static/images/plus-large.png'">
-                <Upload class="uploadBox" type="drag" action="/" :format="['png', 'jpg', 'gif']" :before-upload=" file => setImageValue('idCardPic', file)">
-                    <Button icon="ios-cloud-upload-outline">Upload files</Button>
-                </Upload>
+            
+            <FormItem label="身份证图片：" prop="idCardPicCode">
+                <upload-img class="uploadBox" :uploadList="idCardPicList" @getImgUrl="arr => getImgUrl(arr, 'idCardPic')" :action="adminApi.imgUpload" :name="uploadConfig.name" :header="uploadConfig.header">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="48" style="color: #3399ff"></Icon>
+                        <p>点击或拖动文件到这里</p>
+                    </div>
+                </upload-img>
             </FormItem>
-            <FormItem label="导游证图片：" prop="touristCertPic">
-                <img class="uploadImg" :src="formItem.touristCertPicUrl || '/static/images/plus-large.png'">
-                <Upload class="uploadBox" type="drag" action="/" :before-upload=" file => setImageValue('touristCertPic', file)">
-                    <Button icon="ios-cloud-upload-outline">Upload files</Button>
-                </Upload>
+            <FormItem label="导游证图片：" prop="touristCertPicCode">
+                <upload-img class="uploadBox" :uploadList="touristCertPicList" @getImgUrl="arr => getImgUrl(arr, 'touristCertPic')" :action="adminApi.imgUpload" :name="uploadConfig.name" :header="uploadConfig.header">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="48" style="color: #3399ff"></Icon>
+                        <p>点击或拖动文件到这里</p>
+                    </div>
+                </upload-img>
             </FormItem>
-            <FormItem label="营运证图片：" prop="tradeCardPic">
-                <img class="uploadImg" :src="formItem.tradeCardPicUrl || '/static/images/plus-large.png'">
-                <Upload class="uploadBox" type="drag" action="/" :before-upload=" file => setImageValue('tradeCardPic', file)">
-                    <Button icon="ios-cloud-upload-outline">Upload files</Button>
-                </Upload>
+            <FormItem label="营运证图片：" prop="tradeCardPicCode">
+                <upload-img class="uploadBox" :uploadList="tradeCardPicList" @getImgUrl="arr => getImgUrl(arr, 'tradeCardPic')" :action="adminApi.imgUpload" :name="uploadConfig.name" :header="uploadConfig.header">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="48" style="color: #3399ff"></Icon>
+                        <p>点击或拖动文件到这里</p>
+                    </div>
+                </upload-img>
             </FormItem>
             <FormItem label="备注：" prop="remark">
                 <Input type="textarea" v-model="formItem.remark" style="width:33%;" :rows="4" />
@@ -54,6 +61,7 @@
 
 <script>
 import axios from 'axios'
+import uploadImg from '@/components/global/singleImg.vue'
 export default {
     data() {
         return {
@@ -65,11 +73,11 @@ export default {
                 mobile: "",
                 idCard: "",
                 remark: "",
-                idCardPic: "",
+                idCardPicCode: "",
                 idCardPicUrl: "",
-                tradeCardPic: "",
+                tradeCardPicCode: "",
                 tradeCardPicUrl: "",
-                touristCertPic: "",
+                touristCertPicCode: "",
                 touristCertPicUrl: "",
             },
             ruleForm: {
@@ -79,6 +87,15 @@ export default {
                 distId: [
                     { type: 'number', required: true, message: "请选择分销商Id", trigger: "change" }
                 ],
+                idCard: [
+                    { required: true, message: "请输入身份证号", trigger: "change" }
+                ],
+                idCardPicCode: [
+                    { required: true, message: "请上传身份证", trigger: "change" }
+                ],
+                mobile: [
+                    { type: 'number', required: true, message: "请输入手机号", trigger: "change" }
+                ],
                 remark: [
                     {
                         max:200,
@@ -87,8 +104,51 @@ export default {
                     }
                 ],
             },
-            type: "add"
+            type: "add",
+            uploadConfig: {
+                name: 'picFile',
+                header: {'Content-Type': 'multipart/form-data'}
+            }
         };
+    },
+    components: {uploadImg},
+    computed: {
+        idCardPicList: {
+            get: function() {
+                return this.formItem.idCardPicUrl ? [{
+                    code: this.formItem.idCardPicCode,
+                    picUrl: this.formItem.idCardPicUrl
+                }] : []
+            },
+            set: function(val) {
+                this.formItem.idCardPicCode = val[0] ? val[0].code : ''
+                this.formItem.idCardPicUrl = val[0] ? val[0].picUrl : ''
+            }
+        },
+        tradeCardPicList: {
+            get: function() {
+                return this.formItem.tradeCardPicUrl ? [{
+                    code: this.formItem.tradeCardPicCode,
+                    picUrl: this.formItem.tradeCardPicUrl
+                }] : []
+            },
+            set: function(val) {
+                this.formItem.tradeCardPicCode = val[0] ? val[0].code : ''
+                this.formItem.tradeCardPicUrl = val[0] ? val[0].picUrl : ''
+            }
+        },
+        touristCertPicList: {
+            get: function() {
+                return this.formItem.touristCertPicUrl ? [{
+                    code: this.formItem.touristCertPicCode ,
+                    picUrl: this.formItem.touristCertPicUrl
+                }] : []
+            },
+            set: function(val) {
+                this.formItem.touristCertPicCode  = val[0] ? val[0].code : ''
+                this.formItem.touristCertPicUrl = val[0] ? val[0].picUrl : ''
+            }
+        },
     },
     created() {
         this.getDistributorList();
@@ -110,22 +170,13 @@ export default {
         submit() {
             const url =
                 this.type === "edit" ? this.baseinfoApi.promoterUpdate : this.baseinfoApi.promoterSave;
-            let params = new FormData()
+            let params = {}
             for(let key in this.formItem) {
                 if(this.formItem[key] && key !== 'idCardPicUrl' && key !== 'tradeCardPicUrl' && key !== 'touristCertPicUrl') {
-                    if(key.includes('Pic')) {
-                        params.append(key, this.formItem[key], this.formItem[key].name);
-                    }else {
-                        params.append(key, this.formItem[key]);
-
-                    }
+                    params[key] = this.formItem[key];
                 }
             }
-            axios.post(url, params, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then( res => {
+            axios.post(url, params).then( res => {
                 if (res.status === 200 && (res.data.status === 200 || res.data.success)) {
                     this.$Message.success(res.data.message);
                     this.$router.back();
@@ -152,6 +203,10 @@ export default {
                 this.formItem[key + 'Url'] = e.target.result
             }
             return false
+        },
+        getImgUrl(arr, name) {
+            this[name+ 'List'] = arr
+            console.log(this.formItem[name], this[name+ 'List'])
         }
     }
 };
@@ -160,9 +215,10 @@ export default {
 
 <style lang="scss">
 .uploadBox {
-    width: 120px;
+    width: 33%;
 }
 .uploadBox .ivu-upload {
+    width: 100%;
     padding: 10px;
     display: flex;
     align-items: center;

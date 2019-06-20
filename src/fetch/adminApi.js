@@ -36,5 +36,7 @@ export default {
     // 用户获取菜单列表树型
     getMenuTreeData: prefix + '/sysRole/getSysMenuTree/',
     getRolePlugs: prefix + '/sysRole/getSysRoleplugs/',
-    setMenuToRole: prefix + '/sysRole/addSysMenuToRole/'
+    setMenuToRole: prefix + '/sysRole/addSysMenuToRole/',
+    // 图片上传
+    imgUpload: prefix + '/SysPictureLib/save'
 }

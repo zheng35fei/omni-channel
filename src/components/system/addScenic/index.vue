@@ -23,7 +23,7 @@
             <FormItem label="电商推广地址：" prop="businessUrl">
                 <Input v-model="formItem.businessUrl" clearable placeholder="填写电商推广地址" style="width:33%;" />
             </FormItem>
-            <FormItem label="电商私钥：" prop="privateKey">
+            <FormItem v-if="type === 'edit'" label="电商私钥：" prop="privateKey">
                 <Input v-model="formItem.privateKey" readonly style="width:33%;" />
             </FormItem>
             <FormItem>
