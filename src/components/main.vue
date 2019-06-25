@@ -17,9 +17,11 @@
                             <!-- <Icon type="arrow-down-b"></Icon> -->
                             <Icon type="md-arrow-dropdown"/>
                             <DropdownMenu slot="list">
-                                <!-- <DropdownItem><span @click="info">个人信息</span></DropdownItem>
-                                <DropdownItem>修改密码</DropdownItem>
+                                 <!-- <DropdownItem><span @click="info">个人信息</span></DropdownItem> -->
                                 <DropdownItem>
+                                    <router-link to="/modifyPwd">修改密码</router-link>
+                                </DropdownItem>
+                                <!--<DropdownItem>
                                     <div class="down-item-handle" @click="lookingKey">查看密钥</div>
                                 </DropdownItem>
                                 <DropdownItem class="down-item">
@@ -68,19 +70,19 @@
                     label-position="right"
                 >
                     <FormItem label="企业名称：" prop="corpName">
-                        <Input v-model="formItem.corpName" :maxlength="64" style="width:80%;"></Input>
+                        <Input v-model="formItem.corpName" :maxlength="64" style="width:80%;" />
                     </FormItem>
                     <FormItem label="电话:" prop="phone">
-                        <Input v-model="formItem.phone" style="width:80%;"></Input>
+                        <Input v-model="formItem.phone" style="width:80%;" />
                     </FormItem>
                     <FormItem label="邮箱:" prop="email">
-                        <Input v-model="formItem.email" style="width:80%;"></Input>
+                        <Input v-model="formItem.email" style="width:80%;" />
                     </FormItem>
                     <FormItem label="logo:" prop="logo">
                         <my-img :limitNum="1" v-model="formItem.logo"></my-img>
                     </FormItem>
                     <FormItem label="地址:" prop="address">
-                        <Input v-model="formItem.address" :maxlength="100" style="width:80%;"></Input>
+                        <Input v-model="formItem.address" :maxlength="100" style="width:80%;" />
                     </FormItem>
                     <FormItem>
                         <Button type="primary" @click="saveCorp">提交</Button>
@@ -107,7 +109,7 @@
                         >
                             <template v-for="item in subMenuList.list">
                                 <template v-if="item.list && item.list.length > 0">
-                                    <Submenu :name="item.funCode" :key="item.id" :to="item.funUrl">
+                                    <Submenu class="submenuBox" :name="item.funCode" :key="item.id" :to="item.funUrl">
                                         <template slot="title">
                                             <Icon :type="item.funIco"></Icon>
                                             {{item.funName}}
@@ -117,7 +119,7 @@
                                                 v-if="sitem.functionType !== 'button'"
                                                 :name="sitem.funCode"
                                                 :key="sitem.id"
-                                                :to="sitem.funUrl"
+                                                :to="sitem.funUrl.startsWith('/') ? sitem.funUrl : '/' + sitem.funUrl"
                                                 :target="sitem.openType"
                                             >
                                                 <span>{{sitem.funName}}</span>
@@ -130,7 +132,7 @@
                                         v-if="item.functionType !== 'button'"
                                         :name="item.funCode"
                                         :key="item.id"
-                                        :to="item.funUrl"
+                                        :to="item.funUrl.startsWith('/') ? item.funUrl : '/' + item.funUrl"
                                         :target="item.openType"
                                     >
                                         <Icon :type="item.funIco" :size="16"></Icon>

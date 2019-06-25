@@ -68,6 +68,18 @@ export const loginRouter = [
         component: resolve => {
           require(['@/components/system/menu'], resolve);
         }
+      },
+      {
+        path: '/modifyPwd',
+        name: 'password',
+        meta: {
+          breadcrumbList: ['修改密码'],
+          belongTab: 'system',
+          openName: 'account'
+        },
+        component: resolve => {
+          require(['@/components/system/account/password.vue'], resolve);
+        }
       }
     ]
   }

@@ -42,7 +42,7 @@
                 </FormItem>
                 <FormItem label="队列有效人数判断：" prop="quantityType">
                     <RadioGroup v-model="formItem.channelRuleParamDTO.queueInfoDTO.quantityType">
-                        <Radio v-for="item in quantityTypes" :key="item" :label="item"></Radio>
+                        <Radio v-for="item in quantityTypes" :key="item.value" :label="item.value">{{item.label}}</Radio>
                     </RadioGroup>
                 </FormItem>
             </template>
@@ -61,13 +61,13 @@
 
             <FormItem label="长期有效时间：" prop="longTermType" v-if="formItem.relevanceWay === 1">
                 <RadioGroup v-model="formItem.channelRuleParamDTO.longTermDTO.type">
-                    <Radio v-for="item in longTermTypes" :key="item.value" :label="item">
-                        <span>{{item}}</span>
-                        <template v-if="item === formItem.channelRuleParamDTO.longTermDTO.type">
+                    <Radio v-for="item in longTermTypes" :key="item.value" :label="item.value">
+                        <span>{{item.label}}</span>
+                        <template v-if="item.value === formItem.channelRuleParamDTO.longTermDTO.type">
                             <InputNumber
                                 style="width:60px;"
                                 v-model="formItem.channelRuleParamDTO.longTermDTO.num"
-                                :placeholder="item === '按天' ? '天数' : '小时'"
+                                :placeholder="item.value === 0 ? '天数' : '小时'"
                             />
                             {{item === '按天' ? '天' : '小时'}}
                         </template>
@@ -124,7 +124,7 @@ export default {
                     value: 1
                 }
             ],
-            longTermTypes: ["按天", "固定时间"],
+            longTermTypes: [{ label: "按天", value: 0}, {label: "固定时间", value: 1}],
             relevanceTypes: [
                 {
                     label: "单次关联模式",
@@ -135,7 +135,7 @@ export default {
                     value: 1
                 }
             ],
-            quantityTypes: ["车辆入场模式", "用户取票数量"],
+            quantityTypes: [{label: "车辆入场模式", value: '0'}, {label: "用户取票数量", value: '1'}],
             promoteWays: [
                 {
                     label: "普通模式",

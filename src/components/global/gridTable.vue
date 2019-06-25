@@ -129,7 +129,11 @@ export default {
                             return t[1].label;
                         }
                     });
-                return h("div", arr.join(" "));
+                if(arr.filter(item => Boolean(item)).length) {
+                    return h("div", arr.join(" "));
+                }else {
+                    return h("div", params.row[item.key]);
+                }
             };
         },
         changepage(num) {

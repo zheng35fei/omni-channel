@@ -79,7 +79,7 @@ function buildMenu(routes, list, funNameArr = [], funCodeArr = [], index = 0) {
     funCodeArr.splice(index);
     funNameArr.push(item.funName);
     funCodeArr.push(item.funCode);
-    if (!item.list) {
+    if (!item.list || item.funUrl) {
       let nameArr = [...funNameArr]
       let codeArr = [...funCodeArr]
       const itemRouter = buildComponents(
@@ -89,6 +89,7 @@ function buildMenu(routes, list, funNameArr = [], funCodeArr = [], index = 0) {
         item.functionType
       );
       routes.push(itemRouter);
+      Boolean(item.list) && buildMenu(routes, item.list, funNameArr, funCodeArr, index + 1);
     } else {
       buildMenu(routes, item.list, funNameArr, funCodeArr, index + 1);
     }
@@ -135,6 +136,7 @@ const mutations = {
       return;
     }
     buildMenu(roleRouter, state.menuList);
+    // 去重
     // roleRouter = uniqueArr(roleRouter, 'funUrl')
     state.asyncRouter = roleRouter;
   }

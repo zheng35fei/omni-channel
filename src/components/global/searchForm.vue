@@ -8,13 +8,23 @@
                 clearable
             />
             <DatePicker
-                v-if="item.type=='date'"
+                v-if="item.type === 'date'"
                 type="date"
                 confirm
                 :placeholder="'请选择'+item.title"
                 v-model="searchForm[item.key]"
-                @on-change="searchForm[item.key]=$event"
+                @on-change="searchForm[item.key] = $event"
                 format="yyyy-MM-dd"
+                clearable
+            ></DatePicker>
+
+            <DatePicker
+                v-if="item.type === 'daterange'"
+                type="daterange"
+                confirm
+                :placeholder="'请选择'+item.title"
+                @on-change="val => dateSelect(val, item)"
+                :format="item.format || 'yyyy-MM-dd'"
                 clearable
             ></DatePicker>
             
@@ -59,6 +69,15 @@ export default {
     },
     computed: {},
     methods: {
+        dateSelect(val, item) {
+            if(item.searchParams && Array.isArray(item.searchParams) && item.searchParams.length > 0) {
+                item.searchParams.forEach( (param, index) => {
+                    this.searchForm[param] = val && Array.isArray(val) ? val[index] : val
+                })
+            } else {
+                this.searchForm[item.key] = val.join(',')
+            }
+        },
         // 提交搜索
         handleSubmit(formName) {
             // this.$refs[formName].validate( valid => {

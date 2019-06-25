@@ -48,6 +48,13 @@ export default {
                     title: "状态",
                     key: "enabled",
                     align: "center",
+                    dicData: [{
+                        label: '开启',
+                        value: 'T'
+                    },{
+                        label: '禁用',
+                        value: 'F'
+                    }]
                 },
                 {
                     title: "产品类型",

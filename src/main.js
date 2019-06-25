@@ -15,6 +15,7 @@ import VueClipboard from 'vue-clipboard2';
 import { apiGet, apiPost, apiPostJson } from '@/fetch/api';
 import adminApi from '@/fetch/adminApi'
 import baseinfoApi from '@/fetch/baseinfoApi'
+import orderApi from '@/fetch/orderApi'
 
 // 防止页面刷新路由失效
 router.beforeEach(async (to, from, next) => {
@@ -71,6 +72,7 @@ Vue.prototype.apiPost = apiPost;
 Vue.prototype.apiPostJson = apiPostJson;
 Vue.prototype.adminApi = adminApi;
 Vue.prototype.baseinfoApi = baseinfoApi;
+Vue.prototype.orderApi = orderApi;
 
 // Object.keys(filter).forEach(key => {
 //   Vue.filter(key, filter[key])

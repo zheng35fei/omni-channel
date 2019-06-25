@@ -134,6 +134,18 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
+                                title: "禁用",
+                                action: () => {
+                                    this.content = "确定禁用？";
+                                    this.mode = "done";
+                                    this.sucessMsg = "已禁用！";
+                                    this.$refs.confirmModel.confirm(
+                                        this.baseinfoApi.brokerageRuleListDel +
+                                            params.row.id
+                                    );
+                                }
+                            },
+                            {
                                 title: "删除",
                                 action: () => {
                                     this.content = "确定删除？";
