@@ -83,7 +83,7 @@ export default {
                 },
                 {
                     title: "最后登录时间",
-                    key: "modifyTime",
+                    key: "lastLoginTime",
                     align: "center"
                 },
                 {

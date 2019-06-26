@@ -48,19 +48,19 @@ export default {
                 },
                 {
                     title: "用户名",
-                    key: "loginName",
+                    key: "accName",
                     align: "center"
                 },
                 {
                     title: "渠道规则",
-                    key: "channelId",
+                    key: "channelRuleName",
                     sortable: true,
                     width: 110,
                     align: "center"
                 },
                 {
                     title: "最后登录时间",
-                    key: "modifyTime",
+                    key: "lastLoginTime",
                     align: "center"
                 },
                 {

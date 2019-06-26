@@ -124,6 +124,13 @@ export default {
     mounted() {
         // this.loadpage(this.params)
     },
+    watch: {
+        showDisList: function(val) {
+            if(!val) {
+                this.$store.state.list.searchParams = {}
+            }
+        }
+    },
     components: { gridTable, confirm, distributorList },
     computed: {
         selectedIds() {
@@ -155,7 +162,6 @@ export default {
         selectDone() {
             const ids = this.$refs.distributorTable.selectedIds;
             this.showDisList = false;
-            console.log(1, ids);
         }
     }
 };
