@@ -43,104 +43,24 @@ export default {
                     }
                 },
                 {
-                    title: "分销商名称",
+                    title: "内容名称",
                     key: "distName",
                     align: "center",
                     search: true
                 },
                 {
-                    title: "姓名",
+                    title: "内容类型",
                     key: "name",
-                    align: "center",
-                    search: true
+                    align: "center"
                 },
                 {
-                    title: "手机号",
+                    title: "是否必填",
                     key: "mobile",
-                    align: "center",
-                    search: true
-                },
-                {
-                    title: "身份证",
-                    key: "idCard",
-                    align: "center",
-                    search: true,
-                    render: (h, params) => {
-                        return [
-                            h("img", {
-                                attrs: {
-                                    src: params.row.idCardPicUrl
-                                },
-                                style: {
-                                    width: "50px",
-                                    height: "50px"
-                                }
-                            })
-                        ];
-                    }
-                },
-                {
-                    title: "导游证",
-                    key: "touristCertPicUrl",
-                    align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "div",
-                            {
-                                style: {
-                                    padding: "10px"
-                                }
-                            },
-                            [
-                                h("img", {
-                                    attrs: {
-                                        src: params.row.touristCertPicUrl
-                                    },
-                                    style: {
-                                        width: "50px",
-                                        height: "50px"
-                                    }
-                                })
-                            ]
-                        );
-                    }
-                },
-                {
-                    title: "营运",
-                    key: "tradeCardPicUrl",
-                    align: "center",
-                    render: (h, params) => {
-                        return [
-                            h("img", {
-                                attrs: {
-                                    src: params.row.tradeCardPicUrl
-                                },
-                                style: {
-                                    width: "50px",
-                                    height: "50px"
-                                }
-                            })
-                        ];
-                    }
-                },
-                {
-                    title: '审核状态',
-                    key: 'auditStatus',
-                    // 审核状态（1:待审核;2:审核通过;3:审核驳回） 
-                    dicData: [{
-                        label: '待审核',
-                        value: 1
-                    },{
-                        label: '审核通过',
-                        value: 2
-                    },{
-                        label: '审核驳回',
-                        value: 3
-                    },]
+                    align: "center"
                 },
                 {
                     title: "备注",
-                    key: "remark",
+                    key: "mobile",
                     align: "center"
                 },
                 {
@@ -149,9 +69,9 @@ export default {
                     width: 280,
                     align: "center",
                     render: (h, params) => {
-                        let actions = [
+                        const actions = [
                             {
-                                title: "查看详情",
+                                title: "修改",
                                 action: () => {
                                     this.$router.push({
                                         path: "/addPromoter",
@@ -172,24 +92,6 @@ export default {
                                 }
                             }
                         ];
-                        
-                        if(params.row.auditStatus < 2) {
-                            actions = [{
-                                title: "通过",
-                                action: () => {
-                                    this.actionPromoter("pass", params.row.id);
-                                }
-                            },
-                            {
-                                title: "驳回",
-                                action: () => {
-                                    this.actionPromoter(
-                                        "denies",
-                                        params.row.id
-                                    );
-                                }
-                            }, ...actions]
-                        }
                         return this.common.columnsHandle(h, actions);
                     }
                 },

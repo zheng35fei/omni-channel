@@ -49,7 +49,7 @@ export default {
                     search: true
                 },
                 {
-                    title: "姓名",
+                    title: "推广员名称",
                     key: "name",
                     align: "center",
                     search: true
@@ -61,87 +61,18 @@ export default {
                     search: true
                 },
                 {
-                    title: "身份证",
-                    key: "idCard",
-                    align: "center",
-                    search: true,
-                    render: (h, params) => {
-                        return [
-                            h("img", {
-                                attrs: {
-                                    src: params.row.idCardPicUrl
-                                },
-                                style: {
-                                    width: "50px",
-                                    height: "50px"
-                                }
-                            })
-                        ];
-                    }
-                },
-                {
-                    title: "导游证",
-                    key: "touristCertPicUrl",
+                    title: "审核状态",
+                    key: "auditStatus",
                     align: "center",
                     render: (h, params) => {
                         return h(
-                            "div",
-                            {
-                                style: {
-                                    padding: "10px"
-                                }
-                            },
-                            [
-                                h("img", {
-                                    attrs: {
-                                        src: params.row.touristCertPicUrl
-                                    },
-                                    style: {
-                                        width: "50px",
-                                        height: "50px"
-                                    }
-                                })
-                            ]
+                            "span",
+                            this.filter.turn(
+                                "auditStatus",
+                                params.row.auditStatus
+                            )
                         );
                     }
-                },
-                {
-                    title: "营运",
-                    key: "tradeCardPicUrl",
-                    align: "center",
-                    render: (h, params) => {
-                        return [
-                            h("img", {
-                                attrs: {
-                                    src: params.row.tradeCardPicUrl
-                                },
-                                style: {
-                                    width: "50px",
-                                    height: "50px"
-                                }
-                            })
-                        ];
-                    }
-                },
-                {
-                    title: '审核状态',
-                    key: 'auditStatus',
-                    // 审核状态（1:待审核;2:审核通过;3:审核驳回） 
-                    dicData: [{
-                        label: '待审核',
-                        value: 1
-                    },{
-                        label: '审核通过',
-                        value: 2
-                    },{
-                        label: '审核驳回',
-                        value: 3
-                    },]
-                },
-                {
-                    title: "备注",
-                    key: "remark",
-                    align: "center"
                 },
                 {
                     title: "操作",
@@ -149,7 +80,7 @@ export default {
                     width: 280,
                     align: "center",
                     render: (h, params) => {
-                        let actions = [
+                        const actions = [
                             {
                                 title: "查看详情",
                                 action: () => {
@@ -172,24 +103,6 @@ export default {
                                 }
                             }
                         ];
-                        
-                        if(params.row.auditStatus < 2) {
-                            actions = [{
-                                title: "通过",
-                                action: () => {
-                                    this.actionPromoter("pass", params.row.id);
-                                }
-                            },
-                            {
-                                title: "驳回",
-                                action: () => {
-                                    this.actionPromoter(
-                                        "denies",
-                                        params.row.id
-                                    );
-                                }
-                            }, ...actions]
-                        }
                         return this.common.columnsHandle(h, actions);
                     }
                 },
