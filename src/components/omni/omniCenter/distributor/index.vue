@@ -1,5 +1,8 @@
 <template>
     <div>
+        {{enabled}}
+        <i-switch v-model="enabled" true-value="T" false-value="F" @on-change="aaa"></i-switch>
+        <h1>1111</h1>
         <gridTable
             ref="gridTable"
             :columns="columns"
@@ -26,6 +29,7 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
+            enabled: 'F',
             channelIds: [],
             searchForm: {
                 name: "",
@@ -103,6 +107,7 @@ export default {
                             },
                             on: {
                                 "on-change": val => {
+                                    this.$set(params.row, 'enabled', val)
                                     this.enabledRow(val, params.row);
                                 }
                             }
