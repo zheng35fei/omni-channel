@@ -66,7 +66,7 @@ export default {
                 },
                 {
                     title: "渠道编码",
-                    key: "channelCode",
+                    key: "modelCode",
                     align: "center",
                     search: true
                 },
