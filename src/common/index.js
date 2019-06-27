@@ -19,9 +19,9 @@ const common = {
             case 'modal':
               obj.$refs.gridTable.loadpage()
               break;
-              case 'page':
+            case 'page':
 
-              break
+            break
           }
         } else if (res.status === 200) {
             switch (options.mold) {

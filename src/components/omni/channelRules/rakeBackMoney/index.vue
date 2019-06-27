@@ -194,6 +194,10 @@ export default {
         },
         // 批量删除
         delSelect() {
+            if(!this.selectedIds || this.selectedIds.length <= 0){
+                this.$Message.warning('请选择删除产品')
+                return
+            }
             this.$Modal.confirm({
                 title: "确认",
                 content: `确认要删除所选商品吗？`,

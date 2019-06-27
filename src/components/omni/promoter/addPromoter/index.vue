@@ -17,7 +17,7 @@
                 <Input v-model="formItem.name" placeholder="填写分销商Id" style="width:33%;" />
             </FormItem>
             <FormItem label="手机号：" prop="mobile">
-                <Input v-model.number="formItem.mobile" placeholder="填写手机号" style="width:33%;" />
+                <Input v-model="formItem.mobile" placeholder="填写手机号" style="width:33%;" />
             </FormItem>
             <FormItem label="身份证编号：" prop="idCard">
                 <Input v-model.trim="formItem.idCard" placeholder="填写身份证编号" style="width:33%;" />
@@ -88,13 +88,14 @@ export default {
                     { type: 'number', required: true, message: "请选择分销商Id", trigger: "change" }
                 ],
                 idCard: [
-                    { required: true, message: "请输入身份证号", trigger: "change" }
+                    { required: true, message: "请输入身份证号", trigger: "blur" }
                 ],
                 idCardPicCode: [
                     { required: true, message: "请上传身份证", trigger: "change" }
                 ],
                 mobile: [
-                    { type: 'number', required: true, message: "请输入手机号", trigger: "change" }
+                    { required: true, message: "请输入手机号", trigger: "blur" },
+                    { pattern: /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, message: '请输入正确格式的手机号'}
                 ],
                 remark: [
                     {

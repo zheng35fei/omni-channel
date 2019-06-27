@@ -38,5 +38,6 @@ export default {
     getRolePlugs: prefix + '/sysRole/getSysRoleplugs/',
     setMenuToRole: prefix + '/sysRole/addSysMenuToRole/',
     // 图片上传
-    imgUpload: prefix + '/SysPictureLib/save'
+    imgUpload: prefix + '/SysPictureLib/save',
+    modifyPwd: prefix + '/change/password'
 }
