@@ -39,15 +39,30 @@ export default {
                     required: true,
                     message: '请输入原始密码',
                     trigger: "blur"
+                },{
+                    min:6,
+                    max:20,
+                    message: '请输入6-20位密码',
+                    trigger: "blur"
                 }],
                 secondPass: [{
                     required: true,
                     message: '请再次输入新密码',
                     trigger: "blur"
+                },{
+                    min:6,
+                    max:20,
+                    message: '请输入6-20位密码',
+                    trigger: "blur"
                 }],
                 targetPass: [{
                     required: true,
                     message: '请输入新密码',
+                    trigger: "blur"
+                },{
+                    min:6,
+                    max:20,
+                    message: '请输入6-20位密码',
                     trigger: "blur"
                 }],
             },

@@ -134,15 +134,9 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "禁用",
+                                title: params.row.proEnabled === 'T' ? "禁用" : "启用",
                                 action: () => {
-                                    this.content = "确定禁用？";
-                                    this.mode = "done";
-                                    this.sucessMsg = "已禁用！";
-                                    this.$refs.confirmModel.confirm(
-                                        this.baseinfoApi.brokerageRuleListDel +
-                                            params.row.id
-                                    );
+                                    this.brokerageEnable(params.row)
                                 }
                             },
                             {
@@ -242,6 +236,7 @@ export default {
         },
         // 设置返佣金额
         setRebackMoney(price, id) {
+            if(!price) return
             const url = this.baseinfoApi.brokerageSumtUpdate + id + "/" + price;
             this.apiGet(url)
                 .then(res => {
@@ -260,6 +255,21 @@ export default {
                         desc: err.message
                     });
                 });
+        },
+        // 禁启用返佣规则
+        brokerageEnable(row) {
+            const proEnabled = row.proEnabled === 'T' ? 'F' : 'T';
+            const message = proEnabled === 'T' ? '启用' : '禁用';
+            const id = row.id;
+            const url = this.baseinfoApi.brokerageEnable + id + '/' + proEnabled;
+            this.apiGet(url).then( res => {
+                if(res.status === 200) {
+                    this.$Message.success(`${message}成功!`)
+                    this.$refs.gridTable.loadpage('apiPostJson')
+                }else {
+                    this.$Message.error(res.message)
+                }
+            })
         }
     }
 };
