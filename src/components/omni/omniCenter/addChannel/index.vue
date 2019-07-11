@@ -110,19 +110,16 @@ export default {
             });
         },
         enableDistrubutor(val) {
-            console.log(val)
         },
         getRuleList() {
             const url = this.baseinfoApi.channelRuleList
             this.apiPostJson(url).then( res => {
-                console.log(res)
                 this.channelRuleArr = res.data.rows
             })
         },
         getReBackList() {
             const url = this.baseinfoApi.brokerageRuleList
             this.apiPostJson(url).then( res => {
-                console.log(res)
                 this.brokerageRuleArr = res.data.rows
             })
         }

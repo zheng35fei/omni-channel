@@ -244,7 +244,6 @@ export default {
         },
         // 选中景区
         selectScenicItem(val) {
-            console.log(val);
             const select = this.scenicList.filter(item => item.id === val)[0];
             this.formItem.scenicId = select && select.id;
             this.formItem.scenicCode = select && select.scenicCode;

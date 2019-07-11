@@ -259,7 +259,6 @@ export default {
             this.formItem.funIco = this.$refs.iconList.selectIcon
         },
         selectedIcon(name) {
-            console.log(name)
         }
     },
     

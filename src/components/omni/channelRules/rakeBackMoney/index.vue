@@ -252,7 +252,6 @@ export default {
             );
             this.modalConfirm = true;
             if(ids.length <= 0) {
-                console.log(this.modalConfirm)
                 this.$Message.warning('请选择产品')
                 this.modalConfirm = false;
                 return
@@ -263,7 +262,6 @@ export default {
                 "/" +
                 ids;
             this.apiPost(url).then(res => {
-                console.log(res);
                 this.$store.state.list.url = this.url;
                 this.$refs.gridTable.loadpage("apiPostJson");
             });

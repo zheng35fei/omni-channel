@@ -123,7 +123,6 @@ export default {
         },
         getImgUrl(arr, name) {
             this[name+ 'List'] = arr
-            console.log(this.formItem[name], this[name+ 'List'])
         }
     }
 }

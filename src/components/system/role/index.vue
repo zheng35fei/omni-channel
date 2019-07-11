@@ -134,7 +134,6 @@ export default {
             
             const url = this.adminApi.setMenuToRole + this.setRowId + '/' + checkIds;
             this.apiPostJson(url).then( res => {
-                console.log(res)
                 this.$Message.success({
                     title: '成功',
                     content: res.message

@@ -273,11 +273,9 @@ export default {
             let params = {};
             for (let key in this.formItem) {
                 if (this.formItem[key]) {
-                    console.log(key, this.formItem[key])
                     params[key] = this.formItem[key];
                 }
             }
-            console.log('params', params)
             this.common.formPost(this, {
                 url,
                 params,
@@ -302,14 +300,12 @@ export default {
         getRuleList() {
             const url = this.baseinfoApi.channelRuleList;
             this.apiPostJson(url).then(res => {
-                console.log(res);
                 this.channelRuleArr = res.data.rows;
             });
         },
         getReBackList() {
             const url = this.baseinfoApi.brokerageRuleList;
             this.apiPostJson(url).then(res => {
-                console.log(res);
                 this.brokerageRuleArr = res.data.rows;
             });
         },

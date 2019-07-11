@@ -65,7 +65,6 @@ export default {
     },
     computed: {
         necessaryContentsSelected() {
-            console.log(this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents)
             return this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents ? 
                 [this.formItem.channelRuleParamDTO.queueInfoDTO.necessaryContents] : []
         }
@@ -101,14 +100,12 @@ export default {
             });
         },
         setBlockTime(dateArr) {
-            console.log(dateArr);
             if(dateArr && dateArr.length > 1) {
                 this.formItem.channelRuleParamDTO.blockDateRangeDTO.startDate = dateArr[0]
                 this.formItem.channelRuleParamDTO.blockDateRangeDTO.endDate = dateArr[1]
             }
         },
         setNecessaryContents( val) {
-            console.log()
         }
     }
 };
