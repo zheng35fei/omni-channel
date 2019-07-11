@@ -111,7 +111,7 @@ export default {
                 this.adminApi.checkCode + "?key=" + this.formInline.key;
         },
         handleSubmit() {
-            this.$refs.formInline.validate(async valid => {
+            this.$refs.formInline && this.$refs.formInline.validate(async valid => {
                 if (valid) {
                     let url = "";
                     let params = {};
@@ -153,9 +153,6 @@ export default {
                                     }
                                 ]); // 动态加载路由
                                 // this.formaterRouterHandle()
-                                console.log(
-                                    this.$store.state.menu.asyncRouter[0]
-                                );
                                 this.$router.push(
                                     this.$store.state.menu.asyncRouter[0].path
                                 );
