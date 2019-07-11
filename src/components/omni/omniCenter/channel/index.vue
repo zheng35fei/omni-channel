@@ -16,11 +16,11 @@
                 style="margin-right:10px;"
             >添加</Button>
 
-            <template v-slot:searchFormItem>
-                <form-item>
-                    <Input type="text" placeholder="自定义搜索" />
-                </form-item>    
-            </template>
+            <!-- <template v-slot:searchFormItem="{ searchForm }">
+                <FormItem>
+                    <Input type="text" v-model="searchForm.custom" placeholder="自定义搜索1" clearable />
+                </FormItem> 
+            </template> -->
         </gridTable>
 
         <confirm

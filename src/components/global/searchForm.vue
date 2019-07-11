@@ -41,7 +41,7 @@
                 >{{ sitem.label }}</Option>
             </Select>
         </FormItem>
-        <slot name="searchFormItem"></slot>
+        <slot name="searchFormItem" v-bind:searchForm="searchForm"></slot>
         <Button type="primary" icon="ios-search" @click="handleSubmit('formInline')">搜索</Button>
         <Button icon="md-refresh" @click="handleReset('formInline')">重置</Button>
         <slot name="btn"></slot>
@@ -78,8 +78,8 @@ export default {
         },
         // 提交搜索
         handleSubmit(formName) {
-            // this.$refs[formName].validate( valid => {
-                // if(valid) {
+            this.$refs[formName].validate( valid => {
+                if(valid) {
                     for (let item in this.searchForm) {
                         if (typeof this.searchForm[item] === "object") {
                             this.searchForm[item] = this.searchForm[
@@ -88,12 +88,13 @@ export default {
                         }
                     }
                     this.$emit("search-submit", this.searchForm);
-                // }
-            // })
+                }
+            })
         },
         // 重置表单
         handleReset(name) {
             this.$refs[name].resetFields();
+            this.searchForm = {};
             this.$emit('reset-search');
         }
     }

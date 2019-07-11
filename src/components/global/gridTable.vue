@@ -9,7 +9,9 @@
             @search-submit="searchSubmit"
             @reset-search="resetSearch"
         >
-            <slot name="searchFormItem" slot="searchFormItem"></slot>
+            <template v-slot:searchFormItem="{ searchForm }">
+                <slot name="searchFormItem" v-bind:searchForm="searchForm"></slot>
+            </template>
         </search-form>
         <Row type="flex" justify="space-between" style="margin-bottom:10px;">
             <Col>
@@ -198,7 +200,6 @@ export default {
         },
         // 传递搜索数据
         searchSubmit(searchForm) {
-            // this.$emit("search-submit", searchForm);
             this.searchParams = searchForm
             this.loadpage()
         },
