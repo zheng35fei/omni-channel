@@ -1,5 +1,5 @@
 <template>
-    <div class="grids" :style="{'padding-bottom':padding}">
+    <div class="grids">
         <search-form
             v-if="search || (searchData && searchData.length > 0)"
             :DIC="DIC"
@@ -7,12 +7,16 @@
             :apiType="apiType"
             :rules="formRules"
             @search-submit="searchSubmit"
+            @reset-search="resetSearch"
         >
             <slot name="searchFormItem" slot="searchFormItem"></slot>
         </search-form>
-        <Row>
-            <Col style="margin-bottom:10px;">
+        <Row type="flex" justify="space-between" style="margin-bottom:10px;">
+            <Col>
                 <slot name="menuLeft"></slot>
+            </Col>
+            <Col>
+                <slot name="menuRight"></slot>
             </Col>
         </Row>
         <Table
@@ -35,6 +39,8 @@
     </div>
 </template>
 <script>
+import * as fetch from '../../fetch/api'
+import qs from 'qs';
 import searchForm from "@/components/global/searchForm";
 export default {
     data() {
@@ -44,8 +50,10 @@ export default {
             loading: true,
             padding: "30px",
             data: "",
+            params: {page: 1, limit: 10},
             // params: Object.assign({page: 1, limit: 10, sort: 'createTime', order: 'desc'},this.$route.params),
-            selection: []
+            selection: [],
+            searchParams: {}
         };
     },
     components: { searchForm },
@@ -57,9 +65,9 @@ export default {
         url: {
             type: String
         },
-        params: {
-            type: Object
-        },
+        // params: {
+        //     type: Object
+        // },
         apiType: {
             type: String
         },
@@ -76,11 +84,7 @@ export default {
     },
     created() {
         this.getDicData();
-    },
-    mounted() {
-        this.$store.state.list.url = this.url;
-        this.$store.state.list.params = this.params;
-        this.loadpage(this.apiType);
+        this.loadpage();
     },
     computed: {
         // 筛选需要搜索字段
@@ -90,8 +94,8 @@ export default {
         // 筛选表格cloums
         columnsFilter() {
             return this.columns
-                .filter(item => !Boolean(item.hide))
-                .map(item => this.renderTd(item));
+                .filter(item => !Boolean(item.hide)) // 隐藏栏目
+                .map(item => this.renderTd(item));  // 渲染静态字典
         },
         // 生成表单验证规则列表
         formRules() {
@@ -107,6 +111,11 @@ export default {
     methods: {
         // 静态数据字典渲染
         renderTd(item) {
+            if(item.type === 'index_paging') {
+                item.render = (h, params) => {
+                    return h("span", (this.params.page - 1) * this.params.limit + params.index + 1);
+                }
+            }
             if (item.dicData) {
                 item.render = (h, params) => {
                     let arr = [];
@@ -137,12 +146,12 @@ export default {
             };
         },
         changepage(num) {
-            this.$store.state.list.params.page = num;
-            this.loadpage(this.apiType);
+            this.params.page = num;
+            this.loadpage();
         },
         changesize(num) {
-            this.$store.state.list.params.limit = num;
-            this.loadpage(this.apiType);
+            this.params.limit = num;
+            this.loadpage();
         },
         changeSelection(selection) {
             this.selection = selection;
@@ -172,18 +181,30 @@ export default {
             });
             return array;
         },
-        async loadpage(apiType) {
+        loadpage() {
             this.loading = true;
-            let res = await this.$store.dispatch("postApi", apiType);
-            if (res.status != 200) {
-                this.$Message.warning(res.message);
-            }
-            this.res = res.data || res;
-            this.loading = false;
+            const url = this.url + '?' + qs.stringify(this.params)
+            fetch[this.apiType || 'apiPostJson'](url, this.searchParams).then( res => {
+                if (res.status != 200) {
+                    this.$Message.warning(res.message);
+                    return
+                }
+                this.res = res.data || res;
+            }).catch( err => {
+                this.$Message.error(err)
+            }).then( () => {
+                this.loading = false;
+            })
         },
         // 传递搜索数据
         searchSubmit(searchForm) {
-            this.$emit("search-submit", searchForm);
+            // this.$emit("search-submit", searchForm);
+            this.searchParams = searchForm
+            this.loadpage()
+        },
+        resetSearch() {
+            this.searchParams = {};
+            this.loadpage()
         },
         // 获取动态数据字典
         getDicData() {

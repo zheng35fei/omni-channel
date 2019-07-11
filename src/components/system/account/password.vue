@@ -41,8 +41,8 @@ export default {
                     trigger: "blur"
                 },{
                     min:6,
-                    max:20,
-                    message: '请输入6-20位密码',
+                    max:30,
+                    message: '请输入6-30位密码',
                     trigger: "blur"
                 }],
                 secondPass: [{
@@ -51,8 +51,8 @@ export default {
                     trigger: "blur"
                 },{
                     min:6,
-                    max:20,
-                    message: '请输入6-20位密码',
+                    max:30,
+                    message: '请输入6-30位密码',
                     trigger: "blur"
                 }],
                 targetPass: [{
@@ -61,8 +61,8 @@ export default {
                     trigger: "blur"
                 },{
                     min:6,
-                    max:20,
-                    message: '请输入6-20位密码',
+                    max:30,
+                    message: '请输入6-30位密码',
                     trigger: "blur"
                 }],
             },

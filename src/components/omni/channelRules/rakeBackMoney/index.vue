@@ -18,7 +18,7 @@
                 <Button
                     @click="delSelect"
                     type="primary"
-                    icon="md-delete"
+                    icon="md-trash"
                     style="margin-bottom:10px;"
                 >批量删除</Button>
             </template>
@@ -32,6 +32,7 @@
         ></confirm>
 
         <Modal
+            :loading="modalConfirm"
             v-model="modal.isShowProduct"
             :title="modal.title"
             :width="modal.width"
@@ -48,15 +49,14 @@ import productList from "./productList.vue";
 export default {
     data() {
         return {
+            modalConfirm: true,
             columns: [
                 {
                     type: "selection",
+                    key: 'index',
                     title: "序号",
                     align: "center",
-                    width: 60,
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    }
+                    width: 60
                 },
                 {
                     title: "产品名称",
@@ -117,10 +117,38 @@ export default {
                             },
                             on: {
                                 "on-click": dom => {
-                                    const val =
-                                        dom.target.parentNode.childNodes[6]
-                                            .value;
-                                    this.setRebackMoney(val, params.row.id);
+                                    const val = dom.target.parentNode.childNodes[6].value;
+                                    if(+params.row.brokerageSum === +val) {
+                                        this.$Message.warning('金额没有修改')
+                                    }else if(+params.row.proPrice >= +val) {
+                                        this.setRebackMoney(val, params.row.id, params.row);
+                                    }else {
+                                        this.$Modal.confirm({
+                                            loading: true,
+                                            title: '确认',
+                                            content: '返佣金额大于当日价格，确定要设置该金额吗？',
+                                            onOk: () => {
+                                                this.setRebackMoney(val, params.row.id, params.row)
+                                            }
+                                        })
+                                    }
+                                },
+                                "on-enter": input => {
+                                    const val = +input.target.value
+                                    if(+params.row.brokerageSum === +val) {
+                                        this.$Message.warning('金额没有修改')
+                                    }else if(+params.row.proPrice >= +val) {
+                                        this.setRebackMoney(val, params.row.id, params.row);
+                                    }else {
+                                        this.$Modal.confirm({
+                                            loading: true,
+                                            title: '确认',
+                                            content: '返佣金额大于当日价格，确定要设置该金额吗？',
+                                            onOk: () => {
+                                                this.setRebackMoney(val, params.row.id, params.row)
+                                            }
+                                        })
+                                    }
                                 }
                             }
                         });
@@ -219,10 +247,16 @@ export default {
         },
         // 添加选中产品
         checkProList() {
-            console.log(this.$refs.proList.$refs.gridTable.selection);
             const ids = this.$refs.proList.$refs.gridTable.selection.map(
                 t => t.id
             );
+            this.modalConfirm = true;
+            if(ids.length <= 0) {
+                console.log(this.modalConfirm)
+                this.$Message.warning('请选择产品')
+                this.modalConfirm = false;
+                return
+            }
             const url =
                 this.baseinfoApi.brokerageRuleListSave +
                 this.rebackId +
@@ -235,7 +269,7 @@ export default {
             });
         },
         // 设置返佣金额
-        setRebackMoney(price, id) {
+        setRebackMoney(price, id, row) {
             if(!price) return
             const url = this.baseinfoApi.brokerageSumtUpdate + id + "/" + price;
             this.apiGet(url)
@@ -244,6 +278,7 @@ export default {
                         this.$Notice.success({
                             desc: "设置返佣金额成功"
                         });
+                        this.$set(row, 'brokerageSum', price)
                     } else {
                         this.$Notice.error({
                             desc: res.message
@@ -254,20 +289,31 @@ export default {
                     this.$Notice.error({
                         desc: err.message
                     });
+                }).then( () => {
+                    this.$Modal.remove()
                 });
         },
         // 禁启用返佣规则
         brokerageEnable(row) {
             const proEnabled = row.proEnabled === 'T' ? 'F' : 'T';
             const message = proEnabled === 'T' ? '启用' : '禁用';
-            const id = row.id;
-            const url = this.baseinfoApi.brokerageEnable + id + '/' + proEnabled;
-            this.apiGet(url).then( res => {
-                if(res.status === 200) {
-                    this.$Message.success(`${message}成功!`)
-                    this.$refs.gridTable.loadpage('apiPostJson')
-                }else {
-                    this.$Message.error(res.message)
+            this.$Modal.confirm({
+                loading: true,
+                title: '确认',
+                content: `确认要${message}吗`,
+                onOk: () => {
+                    const id = row.id;
+                    const url = this.baseinfoApi.brokerageEnable + id + '/' + proEnabled;
+                    this.apiGet(url).then( res => {
+                        if(res.status === 200) {
+                            this.$Message.success(`${message}成功!`)
+                            this.$refs.gridTable.loadpage('apiPostJson')
+                        }else {
+                            this.$Message.error(res.message)
+                        }
+                    }).then( () => {
+                        this.$Modal.remove();
+                    })
                 }
             })
         }

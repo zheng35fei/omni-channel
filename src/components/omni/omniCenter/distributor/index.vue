@@ -40,21 +40,21 @@ export default {
                     title: "序号",
                     align: "center",
                     width: 60,
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    }
+                    type: 'index_paging'
                 },
                 {
                     title: "分销商名称",
                     key: "name",
                     align: "center",
-                    search: true
+                    search: true,
+                    width: 180
                 },
                 {
                     title: "联系人",
                     key: "linkName",
                     align: "center",
-                    search: true
+                    search: true,
+                    width: 120
                 },
                 {
                     title: "手机号",
@@ -62,18 +62,20 @@ export default {
                     sortable: true,
                     align: "center",
                     search: true,
+                    width: 140,
                     rules: [{ type: 'number', required: true, message: "请输入正确的手机号", trigger: "blur" }]
                 },
                 {
                     title: "登录用户名",
                     key: "accName",
-                    align: "center"
+                    align: "center",
+                    width: 120
                 },
                 {
                     title: "渠道规则",
                     key: "channelId",
                     sortable: true,
-                    width: 110,
+                    width: 200,
                     align: "center",
                     search: true,
                     type: "select",
@@ -84,17 +86,22 @@ export default {
                 {
                     title: "最后登录时间",
                     key: "lastLoginTime",
-                    align: "center"
+                    align: "center",
+                    width: 120
                 },
                 {
                     title: "协议有效期",
                     key: "validDate",
                     sortable: true,
-                    align: "center"
+                    align: "center",
+                    width: 180
                 },
                 {
                     title: "状态",
                     key: "enabled",
+                    align: 'center',
+                    width: 80,
+                    fixed: 'right',
                     render: (h, params) => {
                         return h("i-switch", {
                             props: {
@@ -114,7 +121,8 @@ export default {
                 {
                     title: "操作",
                     key: "action",
-                    width: 200,
+                    width: 180,
+                    fixed: 'right',
                     align: "center",
                     render: (h, params) => {
                         const actions = [

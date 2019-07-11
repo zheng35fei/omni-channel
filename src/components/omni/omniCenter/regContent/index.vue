@@ -1,20 +1,36 @@
 <template>
     <div>
-        <gridTable
-            ref="gridTable"
-            :columns="columns"
-            :params="params"
-            :data="data"
-            :url="url"
-            apiType="apiPostJson"
-        >
-            <Button slot="menuLeft" @click="showModal" type="primary" icon="md-add">添加</Button>
-        </gridTable>
+        <Row :gutter="20">
+            <Col :span="7">
+                <gridTable
+                    ref="gridTableChannel"
+                    :columns="columnsChannel"
+                    :params="paramsChannel"
+                    :data="dataChannel"
+                    :url="urlChannel"
+                    apiType="apiPostJson"
+                >
+                </gridTable>
+            </Col>
+            <Col :span="17">
+                <gridTable
+                    ref="gridTable"
+                    :columns="columns"
+                    :params="params"
+                    :data="data"
+                    :url="url"
+                    apiType="apiPostJson"
+                >
+                    <Button slot="menuRight" @click="showModal" type="primary" icon="md-add" style="margin-bottom: 25px">添加</Button>
+                </gridTable>
+            </Col>
+        </Row>
+
         <confirm
             ref="confirmModel"
-            :content="content"
-            :sucessMsg="sucessMsg"
-            :mode="mode"
+            :content="confirmObj.content"
+            :sucessMsg="confirmObj.sucessMsg"
+            :mode="confirmObj.mode"
             apiType="apiGet"
             cbApiType="apiPostJson"
         ></confirm>
@@ -26,14 +42,26 @@ import confirm from "@/components/global/confirm";
 export default {
     data() {
         return {
-            enabled: 'F',
-            channelIds: [],
-            searchForm: {
-                name: "",
-                linkMan: "",
-                linkMobile: "",
-                channelId: ""
-            },
+            columnsChannel: [
+                {
+                    type: "selection",
+                    title: "序号",
+                    align: "center",
+                    width: 60,
+                    render: (h, params) => {
+                        return h("span", params.index + 1);
+                    }
+                },
+                {
+                    title: "渠道名称",
+                    key: "channelName",
+                    align: "center",
+                    search: true
+                },
+            ],
+            dataChannel: '',
+            paramsChannel: { page: 1, limit: 10 },
+            urlChannel: '',
             columns: [
                 {
                     type: "selection",
@@ -45,71 +73,24 @@ export default {
                     }
                 },
                 {
-                    title: "分销商名称",
+                    title: "内容名称",
                     key: "name",
-                    align: "center",
-                    search: true
+                    align: "center"
                 },
                 {
-                    title: "联系人",
+                    title: "内容类型",
                     key: "linkName",
                     align: "center",
-                    search: true
                 },
                 {
-                    title: "手机号",
+                    title: "备注说明",
                     key: "linkMobile",
-                    sortable: true,
                     align: "center",
-                    search: true,
-                    rules: [{ type: 'number', required: true, message: "请输入正确的手机号", trigger: "blur" }]
                 },
                 {
-                    title: "登录用户名",
-                    key: "accName",
+                    title: "是否必填",
+                    key: "linkName",
                     align: "center"
-                },
-                {
-                    title: "渠道规则",
-                    key: "channelId",
-                    sortable: true,
-                    width: 110,
-                    align: "center",
-                    search: true,
-                    type: "select",
-                    dicUrl: this.baseinfoApi.channelList,
-                    dicMethod: "apiPostJson",
-                    rules: [{ type: 'number', required: true, message: "请输入正确的手机号", trigger: "blur" }]
-                },
-                {
-                    title: "最后登录时间",
-                    key: "modifyTime",
-                    align: "center"
-                },
-                {
-                    title: "协议有效期",
-                    key: "validDate",
-                    sortable: true,
-                    align: "center"
-                },
-                {
-                    title: "状态",
-                    key: "enabled",
-                    render: (h, params) => {
-                        return h("i-switch", {
-                            props: {
-                                value: params.row.enabled,
-                                "true-value": "T",
-                                "false-value": "F"
-                            },
-                            on: {
-                                "on-change": val => {
-                                    this.$set(params.row, 'enabled', val)
-                                    this.enabledRow(val, params.row);
-                                }
-                            }
-                        });
-                    }
                 },
                 {
                     title: "操作",
@@ -147,9 +128,11 @@ export default {
             data: "",
             params: { page: 1, limit: 10 },
             url: this.baseinfoApi.distributorList,
-            content: "",
-            mode: "",
-            sucessMsg: ""
+            confirmObj: {
+                content: "",
+                mode: "",
+                sucessMsg: ""
+            }
         };
     },
     mounted() {},

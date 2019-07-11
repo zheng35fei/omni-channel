@@ -41,11 +41,9 @@
                 >{{ sitem.label }}</Option>
             </Select>
         </FormItem>
-        <FormItem>
-            <slot name="searchFormItem"></slot>
-        </FormItem>
+        <slot name="searchFormItem"></slot>
         <Button type="primary" icon="ios-search" @click="handleSubmit('formInline')">搜索</Button>
-        <Button type="primary" icon="md-refresh" @click="handleReset('formInline')">重置</Button>
+        <Button icon="md-refresh" @click="handleReset('formInline')">重置</Button>
         <slot name="btn"></slot>
         <!-- <FormItem>
         <Button type="success" @click="handleSubmit()">导出</Button>
@@ -89,17 +87,14 @@ export default {
                             ].toLocaleDateString();
                         }
                     }
-                    this.$store.state.list.searchParams = this.searchForm;
                     this.$emit("search-submit", this.searchForm);
-                    this.$parent.loadpage(this.apiType);
                 // }
             // })
         },
         // 重置表单
         handleReset(name) {
             this.$refs[name].resetFields();
-            this.$store.state.list.searchParams = {};
-            this.$parent.loadpage(this.apiType);
+            this.$emit('reset-search');
         }
     }
 };

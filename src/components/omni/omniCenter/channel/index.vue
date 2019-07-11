@@ -15,7 +15,14 @@
                 icon="md-add"
                 style="margin-right:10px;"
             >添加</Button>
+
+            <template v-slot:searchFormItem>
+                <form-item>
+                    <Input type="text" placeholder="自定义搜索" />
+                </form-item>    
+            </template>
         </gridTable>
+
         <confirm
             ref="confirmModel"
             :content="confirmObj.content"
