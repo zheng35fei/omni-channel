@@ -40,9 +40,6 @@ export default {
                     title: "序号",
                     align: "center",
                     width: 60,
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    },
                     fixed: "left"
                 },
                 {

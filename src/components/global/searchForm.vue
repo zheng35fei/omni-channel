@@ -10,18 +10,15 @@
             <DatePicker
                 v-if="item.type === 'date'"
                 type="date"
-                confirm
                 :placeholder="'请选择'+item.title"
                 v-model="searchForm[item.key]"
                 @on-change="searchForm[item.key] = $event"
                 format="yyyy-MM-dd"
                 clearable
             ></DatePicker>
-
             <DatePicker
                 v-if="item.type === 'daterange'"
                 type="daterange"
-                confirm
                 :placeholder="'请选择'+item.title"
                 @on-change="val => dateSelect(val, item)"
                 :format="item.format || 'yyyy-MM-dd'"
@@ -82,9 +79,7 @@ export default {
                 if(valid) {
                     for (let item in this.searchForm) {
                         if (typeof this.searchForm[item] === "object") {
-                            this.searchForm[item] = this.searchForm[
-                                item
-                            ].toLocaleDateString();
+                            this.searchForm[item] = this.searchForm[item].toLocaleDateString();
                         }
                     }
                     this.$emit("search-submit", this.searchForm);

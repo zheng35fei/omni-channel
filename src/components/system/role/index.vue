@@ -27,9 +27,7 @@ export default {
                     title: "序号",
                     align: "center",
                     width: 80,
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    }
+                    type:'index_paging'
                 },
                 {
                     title: "角色名称",

@@ -1,20 +1,22 @@
 <template>
     <div class="addMenu">
         <h2>{{type=='add'?"新增":"修改"}}</h2>
+        <br>
         <Form
             :model="formItem"
-            label-position="right"
+            label-position="left"
             :label-width="120"
             ref="formItem"
             :rules="ruleForm"
+            style="margin-left: 40px;"
         >
             <FormItem prop="name" label="渠道名称：">
                 <Input v-model="formItem.name" clearable placeholder="请填写渠道限制规则名称" style="width:33%;"/>
             </FormItem>
-
+            <Divider></Divider>
             <h3 class="formGroupTitle">推广模式</h3>
             <FormItem label="推广模式：" prop="promoteWay">
-                <RadioGroup v-model="formItem.promoteWay" type="button" size="large">
+                <RadioGroup v-model="formItem.promoteWay" type="button">
                     <Radio
                         v-for="item in promoteWays"
                         :key="item.value"
@@ -50,7 +52,7 @@
             <Divider></Divider>
             <h3 class="formGroupTitle">关联有效期</h3>
             <FormItem label="关联有效期：" prop="relevanceWay">
-                <RadioGroup v-model="formItem.relevanceWay" type="button" size="large">
+                <RadioGroup v-model="formItem.relevanceWay" type="button">
                     <Radio
                         v-for="item in relevanceTypes"
                         :key="item.value"
@@ -69,15 +71,15 @@
                                 v-model="formItem.channelRuleParamDTO.longTermDTO.num"
                                 :placeholder="item.value === 0 ? '天数' : '小时'"
                             />
-                            {{item === '按天' ? '天' : '小时'}}
+                            {{item.value === 0 ? '天' : '小时'}}
                         </template>
                     </Radio>
                 </RadioGroup>
             </FormItem>
-
+            <Divider></Divider>
             <h3 class="formGroupTitle">屏蔽时间设置（设置部分时间无法进行关联推广员）</h3>
-            <FormItem label="是否屏蔽时间:" prop="blockingTime">
-                <RadioGroup v-model="formItem.blockingTime">
+            <FormItem label="屏蔽时间设置：" prop="blockingTime">
+                <RadioGroup v-model="formItem.blockingTime" type="button">
                     <Radio
                         v-for="item in blockDateRanges"
                         :label="item.value"
@@ -94,8 +96,8 @@
                     @on-change="setBlockTime"
                 ></DatePicker>
             </FormItem>
-
-            <h3 class="formGroupTitle">备注</h3>
+            <Divider></Divider>
+            
             <FormItem label="备注：" prop="remark">
                 <Input type="textarea" v-model="formItem.remark" style="width:33%;" :rows="4"/>
             </FormItem>
@@ -297,7 +299,9 @@ export default {
 
 <style lang="scss">
 .formGroupTitle {
+    font-size: 15px;
     margin-bottom: 10px;
+    margin-left: -5px;
     padding: 5px;
 }
 </style>

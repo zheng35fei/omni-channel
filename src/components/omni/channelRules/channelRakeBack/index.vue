@@ -24,7 +24,7 @@ export default {
                     title: "序号",
                     align: "center",
                     width: 60,
-                    type: 'index'
+                    type:'index_paging'
                 },
                 {
                     title: "返佣规则名称",

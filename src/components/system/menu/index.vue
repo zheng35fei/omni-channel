@@ -16,9 +16,7 @@ export default {
                 {
                     title: "序号",
                     align: "center",
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    }
+                    type:'index_paging'
                 },
                 {
                     title: "名称",

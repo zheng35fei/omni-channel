@@ -24,9 +24,7 @@ export default {
                     align: "center",
                     width: 60,
                     fixed: 'left',
-                    render: (h, params) => {
-                        return h("span", params.index + 1);
-                    }
+                    type:'index_paging'
                 },
                 {
                     title: "订单信息",
