@@ -56,7 +56,6 @@ function setCookies(cname, cvalue, exdays) {
  */
 
 export function apiGet (url, params = {}, options = {}) {
-  console.log(url)
   if(!url){
    return
   }
