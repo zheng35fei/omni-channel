@@ -12,9 +12,13 @@
         >
             <div class="scenicDetail">
                 <div style="width: 170px; height: 170px; margin:0 auto;">
-                    <qr-code ref="qrCode" :value="scenicObj.businessUrl" :options="{ size: 170 }"></qr-code>
+                    <qr-code ref="qrCode" :value="scenicObj.wapUrl" :options="{ size: 170 }"></qr-code>
                 </div>
-                <p class="scenicAddr">地址: {{scenicObj.businessUrl}} <a :href="codeUrl" :download="scenicObj.name">下载二维码</a></p>
+                <div class="scenicAddr">
+                    <p>地址: {{scenicObj.wapUrl}}
+                    <Button type="text" v-clipboard:copy="scenicObj.wapUrl" v-clipboard:success="onCopy">复制地址</Button>
+                    <a :href="codeUrl" :download="scenicObj.name">下载二维码</a></p> 
+                </div>
             </div>
         </Modal>
     </div>
@@ -36,22 +40,30 @@ export default {
                 {
                     title: "序号",
                     align: "center",
-                    type:'index_paging'
+                    type:'index_paging',
+                    width: 80
                 },
                 {
                     title: "景区名称",
                     key: "name",
-                    search: true
+                    search: true,
+                    width: 160
                 },
                 {
                     title: "景区编码",
                     key: "scenicCode",
-                    search: true
+                    search: true,
+                    width: 120
+                },
+                {
+                    title: 'wap登录地址',
+                    key: 'wapUrl',
+                    width: 420
                 },
                 {
                     title: "联系人",
                     key: "linkName",
-                    width: 250,
+                    width: 100,
                     search: true
                 },
                 {
@@ -138,7 +150,13 @@ export default {
             });
         },
         // 关闭弹窗
-        setDialogDone() {}
+        setDialogDone() {},
+        onCopy() {
+            this.$Message.success("复制成功！");
+        },
+        onError() {
+            this.$Message.error("复制失败！");
+        },
     }
 };
 </script>
@@ -150,7 +168,12 @@ export default {
     margin: 0 auto 15px;
 }
 .scenicAddr {
+    margin: 15px 20px 0;
     font-size: 16px;
+    text-align: center;
+}
+.scenicAddr p {
+    font-size: 14px;
     text-align: center;
 }
 </style>

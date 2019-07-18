@@ -9,22 +9,25 @@
             :rules="ruleForm"
         >
             <FormItem label="景区编码：" prop="scenicCode">
-                <Input v-model="formItem.scenicCode" clearable placeholder="填写景区编码" style="width:33%;" />
+                <Input v-model="formItem.scenicCode" clearable placeholder="填写景区编码" style="width:42%;" />
             </FormItem>
             <FormItem label="景区名称：" prop="name">
-                <Input v-model="formItem.name" clearable placeholder="填写景区名称" style="width:33%;" />
+                <Input v-model="formItem.name" clearable placeholder="填写景区名称" style="width:42%;" />
+            </FormItem>
+            <FormItem label="wap登录地址：" prop="wapUrl">
+                <Input v-model="formItem.wapUrl" clearable placeholder="填写wap登录地址" style="width:42%;" />
             </FormItem>
             <FormItem label="联系人:" prop="linkName">
-                <Input v-model="formItem.linkName" clearable placeholder="填写联系人" style="width:33%;" />
+                <Input v-model="formItem.linkName" clearable placeholder="填写联系人" style="width:42%;" />
             </FormItem>
             <FormItem label="联系人电话：" prop="linkMobile">
-                <Input v-model.number="formItem.linkMobile" clearable placeholder="填写联系人电话" style="width:33%;" />
+                <Input v-model.number="formItem.linkMobile" clearable placeholder="填写联系人电话" style="width:42%;" />
             </FormItem>
             <FormItem label="电商推广地址：" prop="businessUrl">
-                <Input v-model="formItem.businessUrl" clearable placeholder="填写电商推广地址" style="width:33%;" />
+                <Input v-model="formItem.businessUrl" clearable placeholder="填写电商推广地址" style="width:42%;" />
             </FormItem>
             <FormItem v-if="type === 'edit'" label="电商私钥：" prop="privateKey">
-                <Input v-model="formItem.privateKey" readonly style="width:33%;" />
+                <Input v-model="formItem.privateKey" readonly style="width:42%;" />
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="submit">提交</Button>
@@ -43,6 +46,7 @@ export default {
                 scenicCode: "",
                 name: "",
                 remark: "",
+                wapUrl: "",
                 linkName: "",
                 linkMobile: "",
                 privateKey: "",
@@ -69,7 +73,8 @@ export default {
                         message: "请填写正确的手机号",
                         trigger: "blur"
                     }
-                ]
+                ],
+                wapUrl: [{ required: true, message: "请输入wap登录地址", trigger: "blur" }]
             },
             type: "add"
         };
