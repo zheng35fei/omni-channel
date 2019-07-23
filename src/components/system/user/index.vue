@@ -1,6 +1,6 @@
 <template>
     <div>
-        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url">
+        <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :customParams="customParams" :url="url">
             <Row slot="menuLeft">
                 <Col>
                     <Button
@@ -167,8 +167,9 @@ export default {
                     }
                 }
             ],
+            customParams: { scenicId: this.$route.query.id},
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10 },
             url: this.adminApi.userList,
             confirm: {
                 content: "",

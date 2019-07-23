@@ -127,7 +127,7 @@ export default {
                 }
             ],
             data: "",
-            params: { page: 1, limit: 10, sort: "createTime", order: "desc" },
+            params: { page: 1, limit: 10},
             url: this.adminApi.menuList,
             content: "",
             mode: "",

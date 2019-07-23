@@ -38,6 +38,14 @@
                 >{{ sitem.label }}</Option>
             </Select>
         </FormItem>
+    
+        <!-- 列表自定义搜索 -->
+        <!-- <template v-slot:searchFormItem="{ searchForm }">
+            <FormItem>
+                <Input type="text" v-model="searchForm.custom" placeholder="自定义搜索" clearable />
+            </FormItem> 
+        </template> -->
+
         <slot name="searchFormItem" v-bind:searchForm="searchForm"></slot>
         <Button type="primary" icon="ios-search" @click="handleSubmit('formInline')">搜索</Button>
         <Button icon="md-refresh" @click="handleReset('formInline')">重置</Button>

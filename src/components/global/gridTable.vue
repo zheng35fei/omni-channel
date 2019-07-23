@@ -52,26 +52,34 @@ export default {
             loading: true,
             padding: "30px",
             data: "",
-            params: {page: 1, limit: 10},
             // params: Object.assign({page: 1, limit: 10, sort: 'createTime', order: 'desc'},this.$route.params),
             selection: [],
-            searchParams: {}
+            searchParams: this.customParams
         };
     },
     components: { searchForm },
     props: {
+        // 列表列配置参数
         columns: {
             type: Array,
             default: []
         },
+        // 列表接口地址
         url: {
             type: String
         },
-        // params: {
-        //     type: Object
-        // },
+        // 列表查询参数 如分页
+        params: {
+            type: Object
+        },
+        // 自定义请求方式
         apiType: {
             type: String
+        },
+        // 页面列表自定义查询参数
+        customParams: {
+            default: () => { return {}},
+            type: Object
         },
         search: {
             default: false,
@@ -200,11 +208,11 @@ export default {
         },
         // 传递搜索数据
         searchSubmit(searchForm) {
-            this.searchParams = searchForm
+            this.searchParams = Object.assign({}, this.customParams, searchForm)
             this.loadpage()
         },
         resetSearch() {
-            this.searchParams = {};
+            this.searchParams = Object.assign({}, this.customParams);
             this.loadpage()
         },
         // 获取动态数据字典
