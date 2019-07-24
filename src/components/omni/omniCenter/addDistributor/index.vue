@@ -27,6 +27,18 @@
                     ></Option>
                 </Select>
             </FormItem>
+
+            <FormItem label="所属角色：" prop="sysRoleId">
+                <Select v-model.number="formItem.sysRoleId" style="width:200px">
+                    <Option
+                        v-for="item in sysRoles"
+                        :value="item.value"
+                        :key="item.value"
+                        :label="item.label"
+                    ></Option>
+                </Select>
+            </FormItem>
+            
             <FormItem label="是否启用：" prop="enabled">
                 <i-switch
                     :value="isEnabled"
@@ -119,6 +131,7 @@ import { apiGet } from "@/fetch/api";
 export default {
     data() {
         return {
+            sysRoles: [],
             channelIds: [],
             channelRuleArr: [],
             brokerageRuleArr: [],
@@ -141,7 +154,8 @@ export default {
                 busLicensePicCode: "",
                 busPermitPicCode: "",
                 channelRuleId: "",
-                brokerageRuleId: ""
+                brokerageRuleId: "",
+                sysRoleId: ""
             },
             ruleForm: {
                 validDate: [
@@ -217,7 +231,15 @@ export default {
                     {
                         type: 'number',
                         required: true,
-                        message: "请选择选择返佣规则",
+                        message: "请选择返佣规则",
+                        trigger: "change"
+                    }
+                ],
+                sysRoleId: [
+                    {
+                        type: 'number',
+                        required: true,
+                        message: "请选择所属角色",
                         trigger: "change"
                     }
                 ],
@@ -242,9 +264,10 @@ export default {
     computed: {
         isEnabled() {
             return this.formItem.enabled === 'T'
-        }
+        },
     },
     created() {
+        this.getRoleList();
         this.getChannelList();
         this.getRuleList();
         this.getReBackList();
@@ -314,6 +337,11 @@ export default {
         },
         setEnabled(val) {
             this.formItem.enabled = val ? 'T' : 'F'
+        },
+        getRoleList() {
+            this.apiPostJson(this.adminApi.roleList).then( res => {
+                this.sysRoles = res.data.rows.map( item => ({label: item.roleName, value: item.id}))
+            })
         }
     }
 };

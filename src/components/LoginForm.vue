@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-import { getters, actions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 import store from "@/store";
 import Main from "./main";
 
@@ -102,9 +102,11 @@ export default {
         };
     },
     methods: {
-        // ...actions([
-        //   'setUserIdAction'
-        // ]),
+        ...mapMutations([
+            'setAccType',
+            'setUserInfo'
+        ]),
+        ...mapActions(['setUserIdAction']),
         getCode() {
             this.formInline.key = new Date().getTime();
             this.codeImg =
@@ -135,12 +137,17 @@ export default {
                                 //sesstionstorage缓存登录用户token，vuex中缓存userId，用户后续路由beforeEach中判断也是是刷新还是只是路由变化
                                 this.$cookies.set("token", res.data.sessionId);
                                 this.$cookies.set("userId", res.data.id);
-                                this.$store.dispatch(
-                                    "setUserIdAction",
-                                    res.data.id
-                                );
+                                this.$cookies.set("accType", res.data.accType);
+                                this.setAccType(res.data.accType)
+                                this.setUserIdAction(res.data.id)
                                 await this.$store.dispatch("getMenu"); //获取权限
                                 this.$store.dispatch("formaterRouterHandle"); // 根据权限获取路由
+                                this.setUserInfo({
+                                    name: res.data.name,
+                                    realName: res.data.realName,
+                                    id: res.data.id,
+                                    corpCode: res.data.corpCode
+                                });
                                 this.$router.addRoutes([
                                     {
                                         path: "/wqdwqdwqdwa",

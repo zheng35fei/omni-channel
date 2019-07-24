@@ -147,7 +147,7 @@ const actions = {
       adminApi.sysMenuList,
       userInfoId ? { userInfoId: userInfoId } : {}
     );
-    const defaultMenuList = require('../../data/menu.json');
+    // const defaultMenuList = require('../../data/menu.json');
     let menuParentObj = {
       id: 0,
       list: []

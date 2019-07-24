@@ -1,18 +1,28 @@
 import {apiGet,apiPost} from '../../fetch/api'
 import VueCookies from 'vue-cookies'
+import {localStorage} from '@/common/localStore'
 
 const user = {
   state: {
-    userName: VueCookies.get('userName')
+    accType: VueCookies.get('accType'),
+    userName: VueCookies.get('userName'),
+    userInfo: localStorage.get('userInfo')
   },
   getters: {
-    getUserName: (state) => (username) => {
-      return this.$cookies.get('userName')
+    getUserName: (state) => (realName) => {
+      return localStorage.get('userInfo').realName;
     }
   },
   mutations: {
     setUserName: (state,username) => {
       state.userName = username
+    },
+    setAccType(state, val) {
+      state.accType = val
+    },
+    setUserInfo(state, obj) {
+      state.userInfo = obj
+      localStorage.set('userInfo', obj)
     }
   },
   actions: {

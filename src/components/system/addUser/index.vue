@@ -20,10 +20,10 @@
             <FormItem label="真实姓名：" prop="realName">
                 <Input v-model="formItem.realName" placeholder="填写真实姓名" style="width:33%;"/>
             </FormItem>
-            <FormItem label="所属角色：" prop="accType">
-                <Select v-model.number="formItem.accType" style="width:200px">
+            <FormItem v-if="accType != '0'" label="所属角色：" prop="sysRoleId">
+                <Select v-model.number="formItem.sysRoleId" style="width:200px">
                     <Option
-                        v-for="item in accTypes"
+                        v-for="item in sysRoles"
                         :value="item.value"
                         :key="item.value"
                         :label="item.label"
@@ -42,6 +42,7 @@
             </FormItem>
             <FormItem label="是否管理员：" prop="ifAdmin">
                 <i-switch
+                    :disabled='true'
                     size="large"
                     :value="formItem.ifAdmin === 'T'"
                     @on-change="(val) => {setSwitchVal(val, 'ifAdmin')}"
@@ -73,6 +74,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -86,18 +88,21 @@ export default {
                     label: "售票员"
                 }
             ],
-            accTypes: [],
+            sysRoles: [],
             formItem: {
                 id: "",
                 accName: "",
                 accPass: "",
                 accNo: "",
-                accType: '',
+                sysRoleId: '',
                 realName:'',
                 accStatus: "T",
-                ifAdmin: "F",
+                ifAdmin: "",
                 corpCode: "",
-                userType: 0
+                userType: 0,
+                accType: "",
+                scenicId: this.$route.query.scenicId,
+                scenicCode: this.$route.query.scenicCode
             },
             ruleForm: {
                 accName: [
@@ -119,8 +124,17 @@ export default {
             type: "add"
         };
     },
+    computed: {
+        ...mapState({
+            accType: state => state.user.accType
+        })
+    },
     created() {
-        this.getRoleList()
+        console.log(this.accType)
+        this.formItem.ifAdmin = this.accType == '0' ? 'T' : 'F'
+        this.formItem.accType = this.accType == '0' ? '1' : '2'
+        this.accType != '0' && this.getRoleList()
+        
         if (this.$route.query.id || this.$route.query.id == 0) {
             this.type = "edit";
             this.apiGet(this.adminApi.userToEdit + this.$route.query.id).then(res => {
@@ -128,6 +142,8 @@ export default {
                     for (let key in this.formItem) {
                         this.formItem[key] = res.data[key];
                     }
+                }else {
+                    this.$Message.error(res.message)
                 }
             });
         }
@@ -158,7 +174,7 @@ export default {
         },
         getRoleList() {
             this.apiPostJson(this.adminApi.roleList).then( res => {
-                this.accTypes = res.data.rows.map( item => ({label: item.roleName, value: item.id}))
+                this.sysRoles = res.data.rows.map( item => ({label: item.roleName, value: item.id}))
             })
         }
     }

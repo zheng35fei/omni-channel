@@ -246,7 +246,7 @@ export default {
     store,
     computed: {
         userName() {
-            return this.$store.state.user.userName;
+            return this.$store.state.user.userInfo.realName;
         },
         vexOpenNames() {
             return this.$store.state.menu.openName;

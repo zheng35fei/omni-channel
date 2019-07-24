@@ -1,7 +1,7 @@
 <template>
     <div>
         <gridTable ref="gridTable" :columns="columns" :params="params" :data="data" :url="url">
-            <Button slot="menuLeft" type="primary" @click="showModal">添加</Button>
+            <Button v-if="permission" slot="menuLeft" type="primary" @click="showModal">添加</Button>
         </gridTable>
         <confirm ref="confirmModel" :content="content" :sucessMsg="sucessMsg" :mode="mode"></confirm>
         <Modal
@@ -89,7 +89,10 @@ export default {
                                 action: () => {
                                     this.$router.push({
                                         path: "/user-list",
-                                        query: { id: params.row.id }
+                                        query: { 
+                                            id: params.row.id,
+                                            scenicCode: params.row.scenicCode
+                                        }
                                     });
                                 }
                             },
@@ -127,7 +130,11 @@ export default {
             codeUrl: ""
         };
     },
-    mounted() {},
+    computed: {
+        permission() {
+            return this.$store.state.user.accType == '0'
+        }
+    },
     components: { gridTable, confirm, qrCode },
     methods: {
         showModal() {

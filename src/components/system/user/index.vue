@@ -78,13 +78,26 @@ export default {
                     align: "center",
                     sortable: true,
                     search: true,
-                    dicUrl: this.adminApi.roleList,
-                    props: {
-                        label: "roleName",
-                        value: "id"
-                    },
-                    dicMethod: "apiPostJson",
-                    rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
+                    dicData:[{
+                        label: '超级管理员',
+                        value: '0'
+                    },{
+                        label: '景区管理员',
+                        value: '1'
+                    },{
+                        label: '分销商',
+                        value: '2'
+                    },{
+                        label: '推广员',
+                        value: '3'
+                    }]
+                    // dicUrl: this.adminApi.roleList,
+                    // props: {
+                    //     label: "roleName",
+                    //     value: "id"
+                    // },
+                    // dicMethod: "apiPostJson",
+                    // rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
                 },
                 {
                     title: "用户状态",
@@ -178,10 +191,14 @@ export default {
             }
         };
     },
-    created() {},
-    mounted() {},
     components: { gridTable, confirm },
     computed: {
+        scenicId() {
+            return this.$route.query.id
+        },
+        scenicCode() {
+            return this.$route.query.scenicCode
+        },
         selectedIds() {
             return this.$refs.gridTable.selection.map(item => item.id);
         }
@@ -189,7 +206,13 @@ export default {
     methods: {
         // 添加用户
         showModal() {
-            this.$router.push("/addUser");
+            this.$router.push({
+                path: "/addUser",
+                query: {
+                    scenicId: this.scenicId,
+                    scenicCode: this.scenicCode
+                }
+            });
         },
         // 搜索查询
         searchTable() {
