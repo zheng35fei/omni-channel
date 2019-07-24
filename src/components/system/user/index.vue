@@ -71,33 +71,20 @@ export default {
                 },
                 {
                     title: "用户角色",
-                    key: "accType",
+                    key: "sysRoleId",
                     type: "select",
                     width: 180,
                     minWidth: 180,
                     align: "center",
                     sortable: true,
                     search: true,
-                    dicData:[{
-                        label: '超级管理员',
-                        value: '0'
-                    },{
-                        label: '景区管理员',
-                        value: '1'
-                    },{
-                        label: '分销商',
-                        value: '2'
-                    },{
-                        label: '推广员',
-                        value: '3'
-                    }]
-                    // dicUrl: this.adminApi.roleList,
-                    // props: {
-                    //     label: "roleName",
-                    //     value: "id"
-                    // },
-                    // dicMethod: "apiPostJson",
-                    // rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
+                    dicUrl: this.adminApi.roleList,
+                    props: {
+                        label: "roleName",
+                        value: "id"
+                    },
+                    dicMethod: "apiPostJson",
+                    rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
                 },
                 {
                     title: "用户状态",
@@ -190,6 +177,9 @@ export default {
                 sucessMsg: ""
             }
         };
+    },
+    created() {
+        this.columns[5].search = this.$store.state.user.accType != '0'
     },
     components: { gridTable, confirm },
     computed: {

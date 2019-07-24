@@ -20,7 +20,7 @@
             <FormItem label="真实姓名：" prop="realName">
                 <Input v-model="formItem.realName" placeholder="填写真实姓名" style="width:33%;"/>
             </FormItem>
-            <FormItem v-if="accType != '0'" label="所属角色：" prop="sysRoleId">
+            <FormItem v-if="isSysRole" label="所属角色：" prop="sysRoleId">
                 <Select v-model.number="formItem.sysRoleId" style="width:200px">
                     <Option
                         v-for="item in sysRoles"
@@ -127,7 +127,10 @@ export default {
     computed: {
         ...mapState({
             accType: state => state.user.accType
-        })
+        }),
+        isSysRole() {
+            return this.type === 'add' ? this.accType != '0' : this.formItem.accType != 1
+        }
     },
     created() {
         console.log(this.accType)
