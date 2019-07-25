@@ -78,7 +78,7 @@ export default {
                 },
                 {
                     title: "状态",
-                    key: "proEnabled",
+                    key: "enabled",
                     align: "center",
                     search: true,
                     type: "select",
@@ -250,10 +250,12 @@ export default {
             const ids = this.$refs.proList.$refs.gridTable.selection.map(
                 t => t.id
             );
-            this.modalConfirm = true;
             if(ids.length <= 0) {
                 this.$Message.warning('请选择产品')
                 this.modalConfirm = false;
+                setTimeout(() => {
+                    this.modalConfirm = true;
+                })
                 return
             }
             const url =
