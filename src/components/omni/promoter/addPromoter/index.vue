@@ -93,6 +93,12 @@ export default {
                 idCardPicCode: [
                     { required: true, message: "请上传身份证", trigger: "change" }
                 ],
+                touristCertPicCode: [
+                    { required: true, message: "请上传导游证", trigger: "change" }
+                ],
+                tradeCardPicCode: [
+                    { required: true, message: "请上传营运证", trigger: "change" }
+                ],
                 mobile: [
                     { required: true, message: "请输入手机号", trigger: "blur" },
                     { pattern: /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/, message: '请输入正确格式的手机号'}
@@ -179,13 +185,13 @@ export default {
             }
             axios.post(url, params).then( res => {
                 if (res.status === 200 && (res.data.status === 200 || res.data.success)) {
-                    this.$Message.success(res.data.message);
-                    this.$router.back();
+                    this.$Message.success('推广员提交成功!');
+                    this.$router.push('/promoter-list');
                 } else {
                     this.$Message.error(res.data.message);
                 }
             }).catch( err=> {
-                this.$Message.error(err.response.data.message);
+                this.$Message.error(err);
             })
         },
         getDistributorList() {

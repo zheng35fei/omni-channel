@@ -60,19 +60,19 @@ export default {
                 },
                 {
                     title: "产品名称",
-                    key: "productName",
+                    key: "proName",
                     align: "center",
                     search: true
                 },
                 {
                     title: "渠道编码",
-                    key: "modelCode",
+                    key: "proCode",
                     align: "center",
                     search: true
                 },
                 {
                     title: "产品编码",
-                    key: "proCode",
+                    key: "modelCode",
                     align: "center",
                     search: true
                 },
@@ -264,6 +264,7 @@ export default {
             this.apiPost(url).then(res => {
                 this.$store.state.list.url = this.url;
                 this.$refs.gridTable.loadpage("apiPostJson");
+                this.modal.isShowProduct = false;
             });
         },
         // 设置返佣金额

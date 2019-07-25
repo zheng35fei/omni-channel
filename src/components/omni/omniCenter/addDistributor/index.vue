@@ -222,7 +222,6 @@ export default {
                 channelRuleId: [
                     {
                         type: 'number',
-                        required: true,
                         message: "请选择渠道限制规则",
                         trigger: "change"
                     }
@@ -230,7 +229,6 @@ export default {
                 brokerageRuleId: [
                     {
                         type: 'number',
-                        required: true,
                         message: "请选择返佣规则",
                         trigger: "change"
                     }

@@ -73,7 +73,7 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: "查看渠道商",
+                                title: "查看分销商",
                                 action: () => {
                                     this.showChannelList("view", params.row.id);
                                 }

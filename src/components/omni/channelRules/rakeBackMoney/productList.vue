@@ -18,7 +18,6 @@ import productList from "./productList.vue";
 export default {
     data() {
         return {
-            
             columns: [
                 {
                     type: "selection",
