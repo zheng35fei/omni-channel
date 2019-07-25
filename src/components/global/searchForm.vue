@@ -85,12 +85,15 @@ export default {
         handleSubmit(formName) {
             this.$refs[formName].validate( valid => {
                 if(valid) {
+                    let searchObj = {}
                     for (let item in this.searchForm) {
                         if (typeof this.searchForm[item] === "object") {
-                            this.searchForm[item] = this.searchForm[item].toLocaleDateString();
+                            searchObj[item] = this.searchForm[item].toLocaleDateString();
+                        }else if(this.searchForm[item] && typeof this.searchForm[item] === "string"){
+                            searchObj[item] = this.searchForm[item].trim()
                         }
                     }
-                    this.$emit("search-submit", this.searchForm);
+                    this.$emit("search-submit", searchObj);
                 }
             })
         },
