@@ -142,7 +142,7 @@ export default {
             return (h, params) => {
                 let arr = [];
                 arr =
-                    this.DIC &&
+                    Object.keys(this.DIC).length > 0 &&
                     Object.entries(this.DIC[item.key]).map(t => {
                         if ("" + t[1].value == params.row[item.key]) {
                             return t[1].label;
@@ -151,7 +151,7 @@ export default {
                 if(arr.filter(item => Boolean(item)).length) {
                     return h("div", arr.join(" "));
                 }else {
-                    return h("div", params.row[item.key]);
+                    return h("div", item.showOrigin ? params.row[item.key] : '-');
                 }
             };
         },
