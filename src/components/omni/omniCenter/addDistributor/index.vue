@@ -219,20 +219,6 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                channelRuleId: [
-                    {
-                        type: 'number',
-                        message: "请选择渠道限制规则",
-                        trigger: "change"
-                    }
-                ],
-                brokerageRuleId: [
-                    {
-                        type: 'number',
-                        message: "请选择返佣规则",
-                        trigger: "change"
-                    }
-                ],
                 sysRoleId: [
                     {
                         type: 'number',
