@@ -135,7 +135,7 @@ export default {
     created() {
         console.log(this.accType)
         this.formItem.ifAdmin = this.accType == '0' ? 'T' : 'F'
-        this.formItem.accType = this.accType == '0' ? '1' : '2'
+        this.formItem.accType = this.accType == '0' ? '1' : '4'
         this.accType != '0' && this.getRoleList()
         
         if (this.$route.query.id || this.$route.query.id == 0) {
