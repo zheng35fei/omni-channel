@@ -7,6 +7,7 @@
             :data="data"
             :url="url"
             apiType="apiPostJson"
+            :customParams="customParams"
         >
             <template slot="menuLeft">
                 <Button
@@ -186,6 +187,7 @@ export default {
             ],
             data: "",
             params: { page: 1, limit: 10 },
+            customParams: {brokerageRuleId: this.$route.query.brokerageRuleId},
             url: this.baseinfoApi.brokerageRuleProductList,
             content: "",
             mode: "",
