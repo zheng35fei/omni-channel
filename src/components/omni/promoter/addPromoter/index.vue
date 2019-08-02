@@ -8,13 +8,13 @@
             ref="formItem"
             :rules="ruleForm"
         >
-            <FormItem label="所属分销商Id：" prop="distId">
+            <FormItem label="所属分销商：" prop="distId">
                 <Select v-model="formItem.distId" style="width:33%;">
                     <Option v-for="item in distributors" :key="item.id" :value="item.id" :label="item.name"></Option>
                 </Select>
             </FormItem>
             <FormItem label="姓名:" prop="name">
-                <Input v-model="formItem.name" placeholder="填写分销商Id" style="width:33%;" />
+                <Input v-model="formItem.name" placeholder="填写姓名" style="width:33%;" />
             </FormItem>
             <FormItem label="手机号：" prop="mobile">
                 <Input v-model="formItem.mobile" placeholder="填写手机号" style="width:33%;" />

@@ -8,7 +8,7 @@
             ref="formItem"
             :rules="ruleForm"
         >
-            <FormItem label="渠道名称：" prop="name">
+            <FormItem label="渠道规则名称：" prop="name">
                 <Input v-model="formItem.name" placeholder="填写分销商名称" style="width:33%;" />
             </FormItem>
             <FormItem label="渠道限制规则:" prop="channelRuleId">

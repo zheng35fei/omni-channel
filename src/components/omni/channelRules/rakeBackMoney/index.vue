@@ -163,7 +163,7 @@ export default {
                     render: (h, params) => {
                         const actions = [
                             {
-                                title: params.row.proEnabled === 'T' ? "禁用" : "启用",
+                                title: params.row.enabled === 'T' ? "禁用" : "启用",
                                 action: () => {
                                     this.brokerageEnable(params.row)
                                 }
@@ -298,7 +298,7 @@ export default {
         },
         // 禁启用返佣规则
         brokerageEnable(row) {
-            const proEnabled = row.proEnabled === 'T' ? 'F' : 'T';
+            const proEnabled = row.enabled === 'T' ? 'F' : 'T';
             const message = proEnabled === 'T' ? '启用' : '禁用';
             this.$Modal.confirm({
                 loading: true,

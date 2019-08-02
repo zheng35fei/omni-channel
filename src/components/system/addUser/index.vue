@@ -119,6 +119,9 @@ export default {
                 ],
                 accNo: [
                     { required: true, message: "请输入用户编号", trigger: "blur" }
+                ],
+                sysRoleId: [
+                    { required: true, message: "请选择所属角色", trigger: "change" }
                 ]
             },
             type: "add"

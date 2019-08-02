@@ -89,8 +89,8 @@ export default {
                     for (let item in this.searchForm) {
                         if (typeof this.searchForm[item] === "object") {
                             searchObj[item] = this.searchForm[item].toLocaleDateString();
-                        }else if(this.searchForm[item] && typeof this.searchForm[item] === "string"){
-                            searchObj[item] = this.searchForm[item].trim()
+                        }else if(typeof this.searchForm[item] != 'undefined'){
+                            searchObj[item] = typeof this.searchForm[item] === 'string' ? this.searchForm[item].trim() : this.searchForm[item]
                         }
                     }
                     this.$emit("search-submit", searchObj);

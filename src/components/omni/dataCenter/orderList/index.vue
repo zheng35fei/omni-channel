@@ -36,8 +36,16 @@ export default {
                     title: "所属渠道",
                     key: "channelName",
                     align: "center",
+                    type: 'select',
+                    width: 120
+                },
+                {
+                    title: "所属渠道",
+                    key: "channelId",
+                    align: "center",
                     search: true,
                     type: 'select',
+                    hide:true,
                     dicUrl: this.baseinfoApi.channelList,
                     dicMethod: 'apiPostJson',
                     width: 120

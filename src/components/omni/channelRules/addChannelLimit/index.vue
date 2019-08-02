@@ -70,6 +70,8 @@
                                 style="width:60px;"
                                 v-model="formItem.channelRuleParamDTO.longTermDTO.num"
                                 :placeholder="item.value === 0 ? '天数' : '小时'"
+                                :max="100"
+                                :min="1"
                             />
                             {{item.value === 0 ? '天' : '小时'}}
                         </template>
@@ -175,7 +177,7 @@ export default {
             },
             ruleForm: {
                 name: [
-                    { required: true, message: "请输入景区id", trigger: "blur" }
+                    { required: true, message: "请输入渠道名称", trigger: "blur" }
                 ],
                 distId: [
                     {
@@ -190,10 +192,40 @@ export default {
                         message: "最多可输入200个字符",
                         trigger: "blur"
                     }
+                ],
+                // 自定义规则 blockingTime=1 必填
+                blockingTimeStartEnd: [
+                    {
+
+                    }
                 ]
             },
             type: "add"
         };
+    },
+    watch: {
+        'formItem.relevanceWay': {
+            handler: function(val) {
+                if(val === 1) {
+                    this.formItem.channelRuleParamDTO.longTermDTO.type = this.formItem.channelRuleParamDTO.longTermDTO.type || 0;
+                }else {
+                    this.formItem.channelRuleParamDTO.longTermDTO.type = null
+                }
+            },
+            immediate: true,
+            deep: true
+        },
+        'formItem.channelRuleParamDTO.longTermDTO.type': {
+            handler: function(val, old) {
+                // 编辑状态仍要处理
+                console.log(val, old)
+                if(val != old) {
+                    this.formItem.channelRuleParamDTO.longTermDTO.num = null
+                }
+            },
+            immediate: true,
+            deep: true
+        }
     },
     created() {
         this.getAllScenicList();
@@ -261,6 +293,11 @@ export default {
             let params = {};
             
             // return
+            if(this.formItem.blockingTime === 0) {
+                this.channelRuleParamDTO.blockDateRangeDTO.startDate = null
+                this.channelRuleParamDTO.blockDateRangeDTO.endDate = null
+            }
+
             for (let key in this.formItem) {
                 if (typeof this.formItem[key] === 'number' || this.formItem[key]) {
                     params[key] = this.formItem[key];
