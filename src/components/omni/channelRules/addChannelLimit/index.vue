@@ -89,12 +89,13 @@
                     >{{item.label}}</Radio>
                 </RadioGroup>
             </FormItem>
-            <FormItem label="屏蔽时间:" prop="blockingTimeStartEnd" v-show="formItem.blockingTime === 1">
+            <FormItem label="屏蔽时间:" prop="blockingTimeStartEnd" v-if="formItem.blockingTime === 1">
                 <DatePicker
                     :value="blockingTimeStartEnd"
                     type="datetimerange"
                     placeholder="选择开始结束时间"
                     style="width: 280px"
+                    :editable="false"
                     @on-change="setBlockTime"
                 ></DatePicker>
             </FormItem>
@@ -193,6 +194,11 @@ export default {
                         trigger: "blur"
                     }
                 ],
+                blockingTimeStartEnd: [{
+                    required: true,
+                    message: '请填写屏蔽时间',
+                    trigger: 'blur'
+                }]
             },
             type: "add"
         };
