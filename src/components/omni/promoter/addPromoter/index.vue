@@ -85,10 +85,11 @@ export default {
                     { required: true, message: "请输入推广员姓名", trigger: "blur" }
                 ],
                 distId: [
-                    { type: 'number', required: true, message: "请选择分销商Id", trigger: "change" }
+                    { type: 'number', required: true, message: "请选择分销商", trigger: "change" }
                 ],
                 idCard: [
-                    { required: true, message: "请输入身份证号", trigger: "blur" }
+                    { required: true, message: "请输入身份证号", trigger: "blur" },
+                    { pattern: /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/, message: '请输入正确格式的身份证号'}
                 ],
                 idCardPicCode: [
                     { required: true, message: "请上传身份证", trigger: "change" }
@@ -175,23 +176,27 @@ export default {
             this.$router.back();
         },
         submit() {
-            const url =
-                this.type === "edit" ? this.baseinfoApi.promoterUpdate : this.baseinfoApi.promoterSave;
-            let params = {}
-            for(let key in this.formItem) {
-                if(this.formItem[key] && key !== 'idCardPicUrl' && key !== 'tradeCardPicUrl' && key !== 'touristCertPicUrl') {
-                    params[key] = this.formItem[key];
+            this.$refs.formItem.validate(vaild => {
+                if(vaild) {
+                    const url =
+                        this.type === "edit" ? this.baseinfoApi.promoterUpdate : this.baseinfoApi.promoterSave;
+                    let params = {}
+                    for(let key in this.formItem) {
+                        if(this.formItem[key] && key !== 'idCardPicUrl' && key !== 'tradeCardPicUrl' && key !== 'touristCertPicUrl') {
+                            params[key] = this.formItem[key];
+                        }
+                    }
+                    axios.post(url, params).then( res => {
+                        if (res.status === 200 && (res.data.status === 200 || res.data.success)) {
+                            this.$Message.success('推广员提交成功!');
+                            this.$router.push('/promoter-list');
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
+                    }).catch( err=> {
+                        this.$Message.error(err);
+                    })
                 }
-            }
-            axios.post(url, params).then( res => {
-                if (res.status === 200 && (res.data.status === 200 || res.data.success)) {
-                    this.$Message.success('推广员提交成功!');
-                    this.$router.push('/promoter-list');
-                } else {
-                    this.$Message.error(res.data.message);
-                }
-            }).catch( err=> {
-                this.$Message.error(err);
             })
         },
         getDistributorList() {

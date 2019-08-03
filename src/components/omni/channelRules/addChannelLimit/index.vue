@@ -89,7 +89,7 @@
                     >{{item.label}}</Radio>
                 </RadioGroup>
             </FormItem>
-            <FormItem label="屏蔽时间:" prop="blockingTimeStartEnd" v-if="formItem.blockingTime === 1">
+            <FormItem label="屏蔽时间:" prop="blockingTimeStartEnd" v-show="formItem.blockingTime === 1">
                 <DatePicker
                     :value="blockingTimeStartEnd"
                     type="datetimerange"
@@ -193,12 +193,6 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                // 自定义规则 blockingTime=1 必填
-                blockingTimeStartEnd: [
-                    {
-
-                    }
-                ]
             },
             type: "add"
         };
@@ -294,8 +288,8 @@ export default {
             
             // return
             if(this.formItem.blockingTime === 0) {
-                this.channelRuleParamDTO.blockDateRangeDTO.startDate = null
-                this.channelRuleParamDTO.blockDateRangeDTO.endDate = null
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.startDate = null
+                this.formItem.channelRuleParamDTO.blockDateRangeDTO.endDate = null
             }
 
             for (let key in this.formItem) {
