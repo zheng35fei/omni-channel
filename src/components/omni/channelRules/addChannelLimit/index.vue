@@ -218,6 +218,7 @@ export default {
         'formItem.channelRuleParamDTO.longTermDTO.type': {
             handler: function(val, old) {
                 if(typeof old == 'number' && typeof val == 'number' && val != old) {
+                    console.log('e')
                     this.formItem.channelRuleParamDTO.longTermDTO.num = null
                 }
             },
@@ -237,7 +238,7 @@ export default {
                         this.formItem[key] = res.data[key];
                     }
                 }
-                if(!this.formItem.channelRuleParamDTO.longTermDTO.type) {
+                if(typeof this.formItem.channelRuleParamDTO.longTermDTO.type == 'undefined') {
                     this.formItem.channelRuleParamDTO.longTermDTO = {
                         type: null,
                         num: null
