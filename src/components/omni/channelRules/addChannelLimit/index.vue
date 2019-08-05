@@ -166,7 +166,7 @@ export default {
                         quantityType: ""
                     },
                     longTermDTO: {
-                        type: "",
+                        type: null,
                         num: null
                     },
                     blockDateRangeDTO: {
@@ -206,8 +206,10 @@ export default {
     watch: {
         'formItem.relevanceWay': {
             handler: function(val) {
-                if(val === 1 && this.type === 'add') {
-                    this.formItem.channelRuleParamDTO.longTermDTO.type = 0;
+                if(val === 1) {
+                    if(typeof this.formItem.channelRuleParamDTO.longTermDTO.type != 'number') {
+                        this.formItem.channelRuleParamDTO.longTermDTO.type = 0;   
+                    }
                 }
             },
             immediate: true,
@@ -233,6 +235,12 @@ export default {
                 if (res.status == 200) {
                     for (let key in this.formItem) {
                         this.formItem[key] = res.data[key];
+                    }
+                }
+                if(!this.formItem.channelRuleParamDTO.longTermDTO.type) {
+                    this.formItem.channelRuleParamDTO.longTermDTO = {
+                        type: null,
+                        num: null
                     }
                 }
             });
