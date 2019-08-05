@@ -119,37 +119,11 @@ export default {
                             on: {
                                 "on-click": dom => {
                                     const val = dom.target.parentNode.childNodes[6].value;
-                                    if(+params.row.brokerageSum === +val) {
-                                        this.$Message.warning('金额没有修改')
-                                    }else if(+params.row.proPrice >= +val) {
-                                        this.setRebackMoney(val, params.row.id, params.row);
-                                    }else {
-                                        this.$Modal.confirm({
-                                            loading: true,
-                                            title: '确认',
-                                            content: '返佣金额大于当日价格，确定要设置该金额吗？',
-                                            onOk: () => {
-                                                this.setRebackMoney(val, params.row.id, params.row)
-                                            }
-                                        })
-                                    }
+                                    this.isSetBrokerageSum(val, params);
                                 },
                                 "on-enter": input => {
                                     const val = +input.target.value
-                                    if(+params.row.brokerageSum === +val) {
-                                        this.$Message.warning('金额没有修改')
-                                    }else if(+params.row.proPrice >= +val) {
-                                        this.setRebackMoney(val, params.row.id, params.row);
-                                    }else {
-                                        this.$Modal.confirm({
-                                            loading: true,
-                                            title: '确认',
-                                            content: '返佣金额大于当日价格，确定要设置该金额吗？',
-                                            onOk: () => {
-                                                this.setRebackMoney(val, params.row.id, params.row)
-                                            }
-                                        })
-                                    }
+                                    this.isSetBrokerageSum(val, params)
                                 }
                             }
                         });
@@ -319,6 +293,24 @@ export default {
                     })
                 }
             })
+        },
+        isSetBrokerageSum(val, params) {
+            if(val < 0) {
+                this.$Message.warning('返佣金额不能为负')
+            }else if(+params.row.brokerageSum === +val) {
+                this.$Message.warning('金额没有修改')
+            }else if(+params.row.proPrice >= +val) {
+                this.setRebackMoney(val, params.row.id, params.row);
+            }else {
+                this.$Modal.confirm({
+                    loading: true,
+                    title: '确认',
+                    content: '返佣金额大于当日价格，确定要设置该金额吗？',
+                    onOk: () => {
+                        this.setRebackMoney(val, params.row.id, params.row)
+                    }
+                })
+            }
         }
     }
 };
