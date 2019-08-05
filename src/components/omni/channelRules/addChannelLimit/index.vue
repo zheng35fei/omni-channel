@@ -60,7 +60,7 @@
                     >{{item.label}}</Radio>
                 </RadioGroup>
             </FormItem>
-
+            
             <FormItem label="长期有效时间：" prop="longTermType" v-if="formItem.relevanceWay === 1">
                 <RadioGroup v-model="formItem.channelRuleParamDTO.longTermDTO.type">
                     <Radio v-for="item in longTermTypes" :key="item.value" :label="item.value">
@@ -200,16 +200,14 @@ export default {
                     trigger: 'blur'
                 }]
             },
-            type: "add"
+            type: typeof this.$route.query.id != 'undefined' ? "edit" : "add"
         };
     },
     watch: {
         'formItem.relevanceWay': {
             handler: function(val) {
-                if(val === 1) {
-                    this.formItem.channelRuleParamDTO.longTermDTO.type = this.formItem.channelRuleParamDTO.longTermDTO.type || 0;
-                }else {
-                    this.formItem.channelRuleParamDTO.longTermDTO.type = null
+                if(val === 1 && this.type === 'add') {
+                    this.formItem.channelRuleParamDTO.longTermDTO.type = 0;
                 }
             },
             immediate: true,
@@ -217,9 +215,7 @@ export default {
         },
         'formItem.channelRuleParamDTO.longTermDTO.type': {
             handler: function(val, old) {
-                // 编辑状态仍要处理
-                console.log(val, old)
-                if(val != old) {
+                if(typeof old == 'number' && typeof val == 'number' && val != old) {
                     this.formItem.channelRuleParamDTO.longTermDTO.num = null
                 }
             },
