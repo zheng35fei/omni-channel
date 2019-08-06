@@ -21,7 +21,7 @@
                 <Input v-model="formItem.linkName" clearable placeholder="填写联系人" style="width:42%;" />
             </FormItem>
             <FormItem label="联系人电话：" prop="linkMobile">
-                <Input v-model.number="formItem.linkMobile" clearable placeholder="填写联系人电话" style="width:42%;" />
+                <Input v-model="formItem.linkMobile" clearable placeholder="填写联系人电话" style="width:42%;" />
             </FormItem>
             <FormItem label="电商推广地址：" prop="businessUrl">
                 <Input v-model="formItem.businessUrl" clearable placeholder="填写电商推广地址" style="width:42%;" />
