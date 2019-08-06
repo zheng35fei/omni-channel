@@ -121,7 +121,9 @@ export default {
                         }
                         if(!flag) {
                             callback(new Error('身份证号格式不正确'))
-                        } 
+                        }else {
+                            callback()
+                        }
 
                     }, trigger: 'blur'}
                 ],
