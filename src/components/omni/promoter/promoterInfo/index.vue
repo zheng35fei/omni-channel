@@ -67,7 +67,7 @@ export default {
                         return [
                             h("img", {
                                 attrs: {
-                                    src: params.row.idCardPicUrl
+                                    src: params.row.idCardPicUrl || '/static/images/blank.jpg'
                                 },
                                 style: {
                                     width: "50px",
@@ -92,7 +92,7 @@ export default {
                             [
                                 h("img", {
                                     attrs: {
-                                        src: params.row.touristCertPicUrl
+                                        src: params.row.touristCertPicUrl || '/static/images/blank.jpg'
                                     },
                                     style: {
                                         width: "50px",
@@ -111,7 +111,7 @@ export default {
                         return [
                             h("img", {
                                 attrs: {
-                                    src: params.row.tradeCardPicUrl
+                                    src: params.row.tradeCardPicUrl || '/static/images/blank.jpg'
                                 },
                                 style: {
                                     width: "50px",

@@ -47,7 +47,7 @@ export default {
                     key: "accName",
                     align: "center",
                     search: true,
-                    width: 100
+                    width: 120
                 },
                 {
                     title: "登录密码",
@@ -87,6 +87,28 @@ export default {
                     rules: [{ type: 'number', required: true, message: "请选择用户角色", trigger: "change" }]
                 },
                 {
+                    title: "角色类型",
+                    key: "accType",
+                    width: 120,
+                    align: "center",
+                    dicData: [{
+                        label: '系统管理员',
+                        value: '0'
+                    },{
+                        label: '景区管理员',
+                        value: ''
+                    }, {
+                        label: '分销商',
+                        value: '2'
+                    }, {
+                        label: '推广员',
+                        value: '3'
+                    }, {
+                        label: '操作员',
+                        value: '4'
+                    }]
+                },
+                {
                     title: "用户状态",
                     key: "accStatus",
                     width: 90,
@@ -121,18 +143,6 @@ export default {
                     key: "loginDate",
                     sortable: true,
                     width: 140
-                },
-                {
-                    title: "角色类型",
-                    key: "userType",
-                    width: 120,
-                    align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            this.filter.turn("userType", params.row.userType)
-                        );
-                    }
                 },
                 {
                     title: "操作",
