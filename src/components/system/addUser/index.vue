@@ -20,7 +20,7 @@
             <FormItem label="真实姓名：" prop="realName">
                 <Input v-model="formItem.realName" placeholder="填写真实姓名" style="width:33%;"/>
             </FormItem>
-            <FormItem v-if="isSysRole && isPromoter" label="所属角色：" prop="sysRoleId">
+            <FormItem v-if="isSysRole" label="所属角色：" prop="sysRoleId">
                 <Select v-model.number="formItem.sysRoleId" style="width:200px">
                     <Option
                         v-for="item in sysRoles"
@@ -121,7 +121,7 @@ export default {
                     { required: true, message: "请输入用户编号", trigger: "blur" }
                 ],
                 sysRoleId: [
-                    { required: true, message: "请选择所属角色", trigger: "change" }
+                    { type: 'number', required: true, message: "请选择所属角色", trigger: "change" }
                 ]
             },
             type: "add"
@@ -132,10 +132,7 @@ export default {
             accType: state => state.user.accType
         }),
         isSysRole() {
-            return this.type === 'add' ? this.accType != '0' : this.formItem.accType != 1
-        },
-        isPromoter() {
-            return this.type === 'edit' && this.accType != '3'
+            return this.type === 'add' ? this.accType != '0' &&  this.accType != '3': this.formItem.accType != 1 && this.formItem.accType != 3
         }
     },
     created() {
