@@ -97,10 +97,10 @@ export function apiPost (url, params = {}) {
  * @param data
  * @returns {Promise}
  */
-export function apiPostJson (url, params = {}) {
+export function apiPostJson (url, params = {}, options = {}) {
   axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
   return new Promise((resolve, reject) => {
-    axios.post(url, params)
+    axios.post(url, params, options)
       .then(response => {
         resolve(response.data)
       })

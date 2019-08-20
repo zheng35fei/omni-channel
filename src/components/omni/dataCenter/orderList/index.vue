@@ -8,6 +8,7 @@
             :url="url"
             apiType="apiPostJson"
         >
+            <Button slot="menuLeft" @click="exportExcel">导出excel表格</Button>
         </gridTable>
     </div>
 </template>
@@ -71,7 +72,7 @@ export default {
                     width: 100,
                     type: 'select',
                     search: true,
-                        // 1:门票.2:酒店 3:餐饮,4:套票 
+                    // 1:门票.2:酒店 3:餐饮,4:套票 
                     dicData: [{
                         label: '全部',
                         value: ''
@@ -93,6 +94,7 @@ export default {
                     title: "订单号",
                     key: "orderNo",
                     align: "center",
+                    search: true,
                     width: 150
                 },
                 {
@@ -139,9 +141,46 @@ export default {
                     }]
                 },
                 {
+                    title: "检票号",
+                    key: "checkNo",
+                    search: true,
+                    align: "center",
+                    width: 100
+                },
+                {
+                    title: "是否返佣",
+                    key: "brokerageFlag",
+                    align: "center",
+                    search: true,
+                    type: 'select',
+                    dicData: [{
+                        label: '完全返佣',
+                        value: 'T'
+                    },{
+                        label: '其他',
+                        value: 'F'
+                    }],
+                    hide: true,
+                    width: 100 
+                },
+                {
                     title: "有效佣金",
                     key: "brokerageSum",
                     align: "center",
+                    width: 100
+                },
+                {
+                    title: "购买人",
+                    key: "buyerName",
+                    align: "center",
+                    search: true,
+                    width: 100
+                },
+                {
+                    title: "联系人手机",
+                    key: "linkMobile",
+                    align: "center",
+                    search: true,
                     width: 100
                 },
                 {
@@ -174,6 +213,9 @@ export default {
                     align: "center",
                     width: 100,
                     dicData: [{
+                        label: '全部',
+                        value: ''
+                    },{
                         label: '成功',
                         value: 1
                     }, {
@@ -207,15 +249,25 @@ export default {
             }
         };
     },
-    mounted() {
-        
-    },
     components: { gridTable },
-    computed: {
-        
-    },
     methods: {
-        
+        exportExcel() {
+            console.log(this.$refs.gridTable.searchParams)
+            const params = {
+                ...this.$refs.gridTable.searchParams
+            }
+            this.apiPostJson(this.orderApi.exportExcel, params, {
+                responseType: 'blob',
+                headers: {
+                    'filename': 'utf-8', 
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            }).then( res => {
+                let blob = new Blob([res], {type: 'application/vnd.ms-excel;charset=utf-8'})
+                let objectUrl = URL.createObjectURL(blob)
+                window.location.href = objectUrl;
+            })
+        }
     }
 };
 </script>

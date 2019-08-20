@@ -149,7 +149,7 @@ export default {
                     render: (h, params) => {
                         let actions = [
                             {
-                                title: "查看详情",
+                                title: "修改",
                                 action: () => {
                                     this.$router.push({
                                         path: "/addPromoter",

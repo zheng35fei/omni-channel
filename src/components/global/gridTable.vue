@@ -211,6 +211,7 @@ export default {
             this.searchParams = Object.assign({}, this.customParams, searchForm)
             this.loadpage()
         },
+        // 重置搜索栏
         resetSearch() {
             this.searchParams = Object.assign({}, this.customParams);
             this.loadpage()

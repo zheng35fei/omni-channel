@@ -52,7 +52,7 @@
             </FormItem>
 
             <FormItem>
-                <Button type="primary" @click="submit" v-if="type === 'add'">提交</Button>
+                <Button type="primary" @click="submit">提交</Button>
                 <Button @click="back">取消</Button>
             </FormItem>
         </Form>

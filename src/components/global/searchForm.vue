@@ -73,6 +73,7 @@ export default {
     computed: {},
     methods: {
         dateSelect(val, item) {
+            // 如有searchParams设置，把daterange值分别赋值给对应searchParams； 如未设置,使用','分隔daterange值
             if(item.searchParams && Array.isArray(item.searchParams) && item.searchParams.length > 0) {
                 item.searchParams.forEach( (param, index) => {
                     this.searchForm[param] = val && Array.isArray(val) ? val[index] : val
