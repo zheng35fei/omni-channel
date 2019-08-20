@@ -69,7 +69,8 @@ export default {
                 {
                     title: "联系人电话",
                     key: "linkMobile",
-                    search: true
+                    search: true,
+                    width: 120
                 },
                 {
                     title: "操作",
