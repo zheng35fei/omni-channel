@@ -265,9 +265,22 @@ export default {
             }).then( res => {
                 let blob = new Blob([res], {type: 'application/vnd.ms-excel;charset=utf-8'})
                 let objectUrl = URL.createObjectURL(blob)
-                window.location.href = objectUrl;
+                const link = document.createElement('a');
+                var reader = new FileReader();
+                link.download = '订单列表' + this.formatDate(new Date());
+                link.href = objectUrl;
+                link.click()
             })
-        }
+        },
+        formatDate(now) { 
+            var year=now.getFullYear(); 
+            var month=now.getMonth()+1  > 10 ? now.getMonth()+1 : '0' + (now.getMonth()+1); 
+            var date=now.getDate(); 
+            var hour=now.getHours(); 
+            var minute=now.getMinutes(); 
+            var second=now.getSeconds(); 
+            return year+""+month+""+date+""+hour+""+minute+""+second;
+        } 
     }
 };
 </script>
