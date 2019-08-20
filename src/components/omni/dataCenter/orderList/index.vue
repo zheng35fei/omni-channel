@@ -126,18 +126,18 @@ export default {
                         value: ''
                     },{
                         label: '未检',
-                        value: '1'
+                        value: 1
                     },
                     {
                         label: '部分检',
-                        value: '2'
+                        value: 2
                     },
                     {
                         label: '全检',
-                        value: '3'
+                        value: 3
                     },{
                         label: '过期',
-                        value: '4'
+                        value: 4
                     }]
                 },
                 {
